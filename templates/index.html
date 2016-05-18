@@ -1,0 +1,22 @@
+<html>
+<head>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+
+
+<form id="get">
+    データ種別: <input type="text" name="type"> (例:frameworx:WarehouseActivity)<br>
+    条件キー: <input type="text" name="key"> (例:frameworx:activity)<br>
+    条件値: <input type="text" name="value"> (例:GLASS_PICK_DONE)<br>
+    <span class id="output"></span>
+    <input type="submit">
+</form>
+
+<span id="json">
+</span>
+
+</body>
+</html>
+
