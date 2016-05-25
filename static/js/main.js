@@ -1,6 +1,5 @@
-"use strict";
 
-$(() => {
+$(function() {
     var output = $(document.getElementById('json'));
     var message = $(document.getElementById('message'));
     var secret_key;
@@ -9,15 +8,15 @@ $(() => {
         url: "_get_key",
         type: "GET",
         contentType: 'application/json',
-        success: (result) => {
+        success: function(result) {
             secret_key = result.key;
         },
-        error: (XMLHttpRequest, textStatus, errorThrown) => {
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
             console.log(textStatus);
         }
     });
 
-    $('#get').submit((event) => {
+    $('#get').submit(function(event) {
         var type = document.forms.get.type.value;
         var key = document.forms.get.key.value;
         var value = document.forms.get.value.value;
@@ -33,14 +32,14 @@ $(() => {
             url: "https://api.frameworxopendata.jp/api/v3/datapoints",
             type: "GET",
             data: sendData,
-            success: (result) => {
+            success: function(result) {
                 output.text(JSON.stringify(result, null, '    '));
             },
-            error: (XMLHttpRequest, textStatus, errorThrown) => {
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
             }
         });
     });
-
 });
+
 
