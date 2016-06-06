@@ -17,9 +17,9 @@ $(function() {
     });
 
     $('#get').submit(function(event) {
-        var type = document.forms.get.type.value;
-        var key = document.forms.get.key.value;
-        var value = document.forms.get.value.value;
+        var type = "frameworx:WarehouseVital"
+        var key = "frameworx:workerId"
+        var value =  document.forms.get.value.value;
 
         var sendData = {
             "acl:consumerKey": secret_key,
@@ -33,7 +33,13 @@ $(function() {
             type: "GET",
             data: sendData,
             success: function(result) {
-                output.text(JSON.stringify(result, null, '    '));
+                $.each(result, function(i){
+                    output.append(
+                        result[i]['dc:date'] + " " +
+                        result[i]['frameworx:step'] + " " +
+                        result[i]['frameworx:calorie'] + " " +
+                        "<br>");
+                });
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
