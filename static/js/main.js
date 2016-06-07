@@ -2,7 +2,32 @@
 $(function() {
     var output = $(document.getElementById('json'));
     var message = $(document.getElementById('message'));
+    var ctx = $("#chart").get(0).getContext("2d");
     var secret_key;
+    var dataset_gray = {
+        label: "",
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: []
+    };
+    var dataset_blue = {
+        label: "",
+        fillColor: "rgba(151,187,205,0.2)",
+        strokeColor: "rgba(151,187,205,1)",
+        pointColor: "rgba(151,187,205,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(151,187,205,1)",
+        data: []
+    };
+    var data = {
+        labels: [],
+        datasets: []
+    };
 
     $.ajax({
         url: "_get_key",
@@ -50,6 +75,14 @@ $(function() {
                         heartrates.push(result[i]['frameworx:heartrate']);
                     }
                 });
+                data.labels = times;
+                dataset_gray.label = "step";
+                dataset_gray.data = steps;
+                data.datasets.push(dataset_gray);
+
+                var lineChart = new Chart(ctx, {
+                    type: "line",
+                    data: data,
                 });
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
