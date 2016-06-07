@@ -33,12 +33,23 @@ $(function() {
             type: "GET",
             data: sendData,
             success: function(result) {
+                var times = [];
+                var steps = [];
+                var calories = [];
+                var heartrates = [];
+                var date;
+                var time;
+
                 $.each(result, function(i){
-                    output.append(
-                        result[i]['dc:date'] + " " +
-                        result[i]['frameworx:step'] + " " +
-                        result[i]['frameworx:calorie'] + " " +
-                        "<br>");
+                    date = new Date(result[i]['dc:date']);
+                    time = ("0"+date.getHours()).slice(-2) + ":" + ("0"+date.getMinutes()).slice(-2)
+                    if (time != times[times.length - 1]){
+                        times.push(time);
+                        steps.push(result[i]['frameworx:step']);
+                        calories.push(result[i]['frameworx:calorie']);
+                        heartrates.push(result[i]['frameworx:heartrate']);
+                    }
+                });
                 });
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
