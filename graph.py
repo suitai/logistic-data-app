@@ -7,10 +7,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
 
-param = sys.argv
-key = param[1]
 
-def getVitalData():
+def getVitalData(key):
     r = getReuqest('frameworx:WarehouseVital', key)
     jsList = r.json()
     workerIdSet = set([])
@@ -35,7 +33,7 @@ def getVitalData():
     print totalCalDict, totalStepDict
     return [totalCalDict, totalStepDict]
 
-def getLogData():
+def getLogData(key):
     r = getReuqest('frameworx:WarehouseActivity', key)
     jsList = r.json()
     workerIdSet = set([])
@@ -60,7 +58,10 @@ def getReuqest(type, key):
 
 
 if __name__ == "__main__":
-    itemNum = getLogData()
+    param = sys.argv
+    key = param[1]
+
+    itemNum = getLogData(key)
     itemNumX = itemNum.keys()
     itemNumY = itemNum.values()
     plt.bar(itemNumX, itemNumY,)
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     plt.ylabel("total item num", fontsize=22)
     plt.show()
 
-    vitalData = getVitalData()
+    vitalData = getVitalData(key)
 
     totalCal = vitalData[0]
     totalCalX  = totalCal.keys()
