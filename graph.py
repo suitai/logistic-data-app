@@ -5,6 +5,7 @@ import pandas
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import sys
 
 param = sys.argv
 key = param[1]
