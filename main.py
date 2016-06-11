@@ -33,6 +33,12 @@ def requires_auth(f):
     return decorated
 
 
+@app.route('/_step_graph', methods=["GET", "POST"])
+@requires_auth
+def _step_graph():
+    return jsonify({})
+
+
 @app.route('/_get_key', methods=["GET"])
 @requires_auth
 def _get_key():

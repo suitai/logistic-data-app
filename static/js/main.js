@@ -31,7 +31,7 @@ $(function() {
 
     $.ajax({
         url: "_get_key",
-        type: "GET",
+        type: "get",
         contentType: 'application/json',
         success: function(result) {
             secret_key = result.key;
@@ -50,12 +50,12 @@ $(function() {
             "acl:consumerKey": secret_key,
             "rdf:type": type
         }
-        sendData[key] = value
+        sendData[key] = value;
 
         event.preventDefault();
         $.ajax({
             url: "https://api.frameworxopendata.jp/api/v3/datapoints",
-            type: "GET",
+            type: "get",
             data: sendData,
             success: function(result) {
                 var times = [];
@@ -84,6 +84,23 @@ $(function() {
                     type: "line",
                     data: data,
                 });
+
+                // pythonへデータ転送
+                step_data = JSON.stringify(result);
+                output.text(step_data);
+                $.ajax({
+                    url: "_step_graph",
+                    data: step_data,
+                    dataType: "JSON",
+                    type: "post",
+                    contentType: 'application/json',
+                    success: function(result) {
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(textStatus);
+                    }
+                });
+                
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
