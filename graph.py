@@ -1,3 +1,4 @@
+# coding:utf-8
 import requests
 from pylab import *
 import pandas
@@ -5,29 +6,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+param = sys.argv
+key = param[1]
+
 def getVitalData():
-    payload = {'rdf:type':'frameworx:WarehouseVital', 'acl:consumerKey':''}
-    r = requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
+    r = getReuqest('frameworx:WarehouseVital', key)
     jsList = r.json()
     workerIdSet = set([])
-    maxcalDict = {}
+    totalCalDict = {}
+    totalStepDict = {}
     for js in jsList:
         workerIdSet.add(js["frameworx:workerId"])
 
     for workerId in workerIdSet:
-        maxcalDict[workerId] = 0
+        totalCalDict[workerId] = 0
+        totalStepDict[workerId] = 0
 
     for js in jsList:
         cal = js["frameworx:calorie"]
+        step = js["frameworx:step"]
         workerId = js["frameworx:workerId"]
-        if maxcalDict[workerId] < cal:
-            maxcalDict[workerId] = cal
-    print maxcalDict
-    return maxcalDict
+        if totalCalDict[workerId] < cal:
+            totalCalDict[workerId] = cal
+        if totalStepDict[workerId] < step:
+            totalStepDict[workerId] = step
+
+    print totalCalDict, totalStepDict
+    return [totalCalDict, totalStepDict]
 
 def getLogData():
-    payload = {'rdf:type':'frameworx:WarehouseActivity', 'acl:consumerKey':''}
-    r = requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
+    r = getReuqest('frameworx:WarehouseActivity', key)
     jsList = r.json()
     workerIdSet = set([])
     totalItemNumDict = {}
@@ -45,19 +53,35 @@ def getLogData():
     print totalItemNumDict
     return totalItemNumDict
 
+def getReuqest(type, key):
+    payload = {'rdf:type': type, 'acl:consumerKey':key}
+    return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
 itemNum = getLogData()
 itemNumX = itemNum.keys()
 itemNumY = itemNum.values()
 plt.bar(itemNumX, itemNumY,)
+plt.title("title", fontsize=22)
 plt.xlabel("worker Id", fontsize=22)
 plt.ylabel("total item num", fontsize=22)
 plt.show()
 
-maxCal = getVitalData()
-maxCalX = maxCal.keys()
-maxCalY = maxCal.values()
-plt.bar(maxCalX, maxCalY)
+vitalData = getVitalData()
+
+totalCal = vitalData[0]
+totalCalX  = totalCal.keys()
+totalCalY = totalCal.values()
+plt.bar(totalCalX , totalCalY)
+plt.title("title", fontsize=22)
 plt.xlabel("worker Id", fontsize=22)
 plt.ylabel("total calories", fontsize=22)
+plt.show()
+
+totalStep = vitalData[1]
+totalStepX  = totalStep.keys()
+totalStepY = totalStep.values()
+plt.bar(totalStepX , totalStepY)
+plt.title("title", fontsize=22)
+plt.xlabel("worker Id", fontsize=22)
+plt.ylabel("total step", fontsize=22)
 plt.show()
