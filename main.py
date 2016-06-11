@@ -36,7 +36,7 @@ def requires_auth(f):
 @app.route('/_step_graph', methods=["GET", "POST"])
 @requires_auth
 def _step_graph():
-    return jsonify({})
+    return jsonify({"test": "aaa"})
 
 
 @app.route('/_get_key', methods=["GET"])
