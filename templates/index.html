@@ -6,6 +6,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
 
@@ -27,7 +28,7 @@
             </div>
         </div>
 
-        <div class="canvas">
+        <div class="canvas" id="canvas_wrapper">
             <canvas id="chart" width="300" height="250"></canvas>
         </div>
     </body>
