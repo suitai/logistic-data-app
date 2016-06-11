@@ -6,10 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
+import json
 
 
 def getVitalData(key):
-    r = getReuqest('frameworx:WarehouseVital', key)
+    r = getRequest('frameworx:WarehouseVital', key)
     jsList = r.json()
     workerIdSet = set([])
     totalCalDict = {}
@@ -34,7 +35,7 @@ def getVitalData(key):
     return [totalCalDict, totalStepDict]
 
 def getLogData(key):
-    r = getReuqest('frameworx:WarehouseActivity', key)
+    r = getRequest('frameworx:WarehouseActivity', key)
     jsList = r.json()
     workerIdSet = set([])
     totalItemNumDict = {}
@@ -52,7 +53,8 @@ def getLogData(key):
     print totalItemNumDict
     return totalItemNumDict
 
-def getReuqest(type, key):
+
+def getRequest(type, key):
     payload = {'rdf:type': type, 'acl:consumerKey':key}
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
