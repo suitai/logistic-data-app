@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, Response, url_for
 from functools import wraps
+import requests
 import json
 import sys
 import logging
@@ -10,6 +11,18 @@ import os
 DEBUG = True
 
 app = Flask(__name__)
+
+
+def get_request(data_type):
+    payload = {'rdf:type': "frameworx:" + data_type,
+               'acl:consumerKey': os.environ["FRAMEWORX_KEY"]}
+    return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
+
+
+def write_data(data_type):
+    data = get_request(data_type)
+    with open(data_type + ".json", 'w') as f:
+        json.dump(data.json(), f)
 
 
 def check_auth(username, password):
@@ -52,6 +65,9 @@ def index():
 
 
 if __name__ == "__main__":
+    for data_type in ["WarehouseVital", "WarehouseActivity"]:
+        write_data(data_type)
+
     app.debug = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     if DEBUG:
