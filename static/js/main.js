@@ -1,3 +1,5 @@
+var ctx;
+
 function get_data(sendData) {
     return $.ajax({
         url: "https://api.frameworxopendata.jp/api/v3/datapoints",
@@ -6,38 +8,13 @@ function get_data(sendData) {
     });
 }
 
-function draw_graph(result) {
+function show_personal_data(result) {
     var times = [];
     var steps = [];
     var calories = [];
     var heartrates = [];
     var date;
     var time;
-
-    var dataset_gray = {
-        label: "",
-        fillColor: "rgba(220,220,220,0.2)",
-        strokeColor: "rgba(220,220,220,1)",
-        pointColor: "rgba(220,220,220,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(220,220,220,1)",
-        data: []
-    };
-    var dataset_blue = {
-        label: "",
-        fillColor: "rgba(151,187,205,0.2)",
-        strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(151,187,205,1)",
-        data: []
-    };
-    var data = {
-        labels: [],
-        datasets: []
-    };
 
     $.each(result, function(i){
         date = new Date(result[i]['dc:date']);
@@ -49,15 +26,8 @@ function draw_graph(result) {
             heartrates.push(result[i]['frameworx:heartrate']);
         }
     });
-    data.labels = times;
-    dataset_gray.label = "step";
-    dataset_gray.data = steps;
-    data.datasets.push(dataset_gray);
 
-    var lineChart = new Chart(ctx, {
-        type: "line",
-        data: data,
-    });
+    draw_line_graph(times, "steps", steps)
 
     // pythonへデータ転送
     step_data = JSON.stringify(result);
@@ -70,18 +40,37 @@ function draw_graph(result) {
     });
 }
 
+function draw_line_graph(labels, label, value) {
+    var dataset = {
+        label: label,
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: value
+    };
+    var data = {
+        labels: labels,
+        datasets: [dataset,]
+    };
+    var lineChart = new Chart(ctx, {
+        type: "line",
+        data: data,
+    });
+}
+
 function fini(data) {
     console.log("success");
 }
 
-var ctx;
 
 $(function() {
     var output = $(document.getElementById('json'));
     var message = $(document.getElementById('message'));
     ctx = $("#chart").get(0).getContext("2d");
     var secret_key;
-
 
     $.ajax({
         url: "_get_key",
@@ -109,9 +98,8 @@ $(function() {
         event.preventDefault();
 
         get_data(sendData)
-            .then(draw_graph)
+            .then(show_personal_data)
             .then(fini);
-
     });
 });
 
