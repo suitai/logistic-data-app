@@ -92,6 +92,7 @@ $(function() {
         var type = "frameworx:WarehouseVital"
         var key = "frameworx:workerId"
         var value =  document.forms.get.value.value;
+        var item =  document.forms.get.item.value;
 
         var sendData = {
             "acl:consumerKey": secret_key,
@@ -99,7 +100,7 @@ $(function() {
         }
         sendData[key] = value;
 
-        post_data = JSON.stringify({'workerId': value})
+        post_data = JSON.stringify({'workerId': value, 'item': item});
 
         event.preventDefault();
         $.ajax({
