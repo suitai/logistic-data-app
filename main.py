@@ -57,7 +57,7 @@ def requires_auth(f):
 @requires_auth
 def _get_personal_data():
     worker_id = int(request.json['workerId'])
-    data_item = "calorie"
+    data_item = request.json['item']
     data_type = "WarehouseVital"
     times = [""]
     values = []
@@ -72,7 +72,8 @@ def _get_personal_data():
 
     del times[0]
 
-    data = {'labels': times,
+    data = {'label': data_item,
+            'labels': times,
             'data': values}
 
     return jsonify(json.dumps(data))

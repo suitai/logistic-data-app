@@ -27,10 +27,11 @@ function show_personal_data(result) {
         }
     });
 
-    var data = {'labels': times,
+    var data = {'label': "steps",
+                'labels': times,
                 'data': steps }
 
-    draw_line_graph("steps", data)
+    draw_line_graph(data)
 
     // pythonへデータ転送
     step_data = JSON.stringify(result);
@@ -43,9 +44,9 @@ function show_personal_data(result) {
     });
 }
 
-function draw_line_graph(label, chart) {
+function draw_line_graph(chart) {
     var dataset = {
-        label: label,
+        label: chart['label'],
         fillColor: "rgba(220,220,220,0.2)",
         strokeColor: "rgba(220,220,220,1)",
         pointColor: "rgba(220,220,220,1)",
@@ -98,16 +99,16 @@ $(function() {
         }
         sendData[key] = value;
 
-        event.preventDefault();
         post_data = JSON.stringify({'workerId': value})
 
+        event.preventDefault();
         $.ajax({
             url: "_get_personal_data",
             type: "post",
             data: post_data,
             contentType: 'application/json',
             success: function(result) {
-                draw_line_graph("calories", JSON.parse(result));
+                draw_line_graph(JSON.parse(result));
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
