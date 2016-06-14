@@ -13,14 +13,14 @@ DEBUG = True
 app = Flask(__name__)
 
 
-def get_request(data_type):
-    payload = {'rdf:type': "frameworx:" + data_type,
-               'acl:consumerKey': os.environ["FRAMEWORX_KEY"]}
+def get_request(payload):
+    payload['acl:consumerKey'] = os.environ["FRAMEWORX_KEY"]
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
 
 def write_data(data_type):
-    data = get_request(data_type)
+    payload = {'rdf:type': "frameworx:" + data_type}
+    data = get_request(payload)
     with open(data_type + ".json", 'w') as f:
         json.dump(data.json(), f)
 
