@@ -66,7 +66,8 @@ def index():
 
 if __name__ == "__main__":
     for data_type in ["WarehouseVital", "WarehouseActivity"]:
-        write_data(data_type)
+        if not os.path.exists(data_type + ".json"):
+            write_data(data_type)
 
     app.debug = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
