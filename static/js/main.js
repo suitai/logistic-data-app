@@ -89,8 +89,8 @@ $(function() {
     });
 
     $('#get').submit(function(event) {
-        var type = "frameworx:WarehouseVital"
-        var key = "frameworx:workerId"
+        var type = "frameworx:WarehouseVital";
+        var key = "frameworx:workerId";
         var value =  document.forms.get.value.value;
         var item =  document.forms.get.item.value;
 
