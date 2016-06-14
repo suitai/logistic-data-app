@@ -25,6 +25,12 @@ def write_data(data_type):
         json.dump(data.json(), f)
 
 
+def read_data(data_type):
+    with open(data_type + ".json", 'r') as f:
+        data = json.load(f)
+    return data
+
+
 def check_auth(username, password):
     return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
 
