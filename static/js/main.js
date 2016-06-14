@@ -27,7 +27,10 @@ function show_personal_data(result) {
         }
     });
 
-    draw_line_graph(times, "steps", steps)
+    var data = {'labels': times,
+                'data': steps }
+
+    draw_line_graph("steps", data)
 
     // pythonへデータ転送
     step_data = JSON.stringify(result);
@@ -40,7 +43,7 @@ function show_personal_data(result) {
     });
 }
 
-function draw_line_graph(labels, label, value) {
+function draw_line_graph(label, chart) {
     var dataset = {
         label: label,
         fillColor: "rgba(220,220,220,0.2)",
@@ -49,10 +52,10 @@ function draw_line_graph(labels, label, value) {
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(220,220,220,1)",
-        data: value
+        data: chart['data']
     };
     var data = {
-        labels: labels,
+        labels: chart['labels'],
         datasets: [dataset,]
     };
     var lineChart = new Chart(ctx, {
