@@ -99,10 +99,25 @@ $(function() {
         sendData[key] = value;
 
         event.preventDefault();
+        post_data = JSON.stringify({'workerId': value})
 
+        $.ajax({
+            url: "_get_personal_data",
+            type: "post",
+            data: post_data,
+            contentType: 'application/json',
+            success: function(result) {
+                draw_line_graph("calories", JSON.parse(result));
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+        /*
         get_data(sendData)
             .then(show_personal_data)
             .then(fini);
+        */
     });
 });
 

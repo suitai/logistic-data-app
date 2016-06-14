@@ -5,6 +5,7 @@ import json
 import sys
 import logging
 import os
+import dateutil.parser
 
 
 #DEBUG = False
@@ -50,6 +51,31 @@ def requires_auth(f):
             return authenticate()
         return f(*args, **kwargs)
     return decorated
+
+
+@app.route('/_get_personal_data', methods=["POST"])
+@requires_auth
+def _get_personal_data():
+    worker_id = int(request.json['workerId'])
+    data_item = "calorie"
+    data_type = "WarehouseVital"
+    times = [""]
+    values = []
+
+    for d in read_data(data_type):
+        if d['frameworx:workerId'] == worker_id:
+            date = dateutil.parser.parse(d['dc:date'])
+            time = str(date.hour).zfill(2) + ":" + str((date.minute//10)*10).zfill(2)
+            if time != times[-1]:
+                times.append(time)
+                values.append(d["frameworx:" + data_item])
+
+    del times[0]
+
+    data = {'labels': times,
+            'data': values}
+
+    return jsonify(json.dumps(data))
 
 
 @app.route('/_step_graph', methods=["GET", "POST"])
