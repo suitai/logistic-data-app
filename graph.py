@@ -59,10 +59,7 @@ def getRequest(type, key):
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
 
-if __name__ == "__main__":
-    param = sys.argv
-    key = param[1]
-
+def drawItemNumRanking(key):
     itemNum = getLogData(key)
     itemNumX = itemNum.keys()
     itemNumY = itemNum.values()
@@ -70,8 +67,9 @@ if __name__ == "__main__":
     plt.title("title", fontsize=22)
     plt.xlabel("worker Id", fontsize=22)
     plt.ylabel("total item num", fontsize=22)
-    plt.show()
+    plt.savefig("itemnum.png")
 
+def drawVitalRanking(key):
     vitalData = getVitalData(key)
 
     totalCal = vitalData[0]
