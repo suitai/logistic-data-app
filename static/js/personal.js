@@ -23,7 +23,7 @@ function draw_line_graph(chart) {
 
 $(function() {
     $('#get').submit(function(event) {
-        var worker_id =  document.forms.get.value.value;
+        var worker_id =  document.forms.get.worker_id.value;
         var item =  document.forms.get.item.value;
 
         post_data = JSON.stringify({'workerId': worker_id, 'item': item});
