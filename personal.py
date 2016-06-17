@@ -6,6 +6,7 @@ import dateutil.parser
 
 def get_requests(payload):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
+    print "get:", payload
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
 def get_chart_data(worker_id, item):
