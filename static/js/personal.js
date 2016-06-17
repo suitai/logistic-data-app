@@ -8,17 +8,17 @@ function draw_line_graph(chart) {
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(220,220,220,1)",
-        data: chart['data']
+        data: chart['value_y']
     };
     var data = {
-        labels: chart['labels'],
+        labels: chart['value_x'],
         datasets: [dataset,]
     };
     var lineChart = new Chart(ctx, {
         type: "line",
         data: data,
     });
-    console.log("draw:", chart['label'])
+    console.log("draw:", chart['label']);
 }
 
 $(function() {

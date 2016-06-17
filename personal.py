@@ -26,8 +26,8 @@ def get_chart_data(worker_id, item):
     del times[0]    # ダミーを削除
 
     data = {'label': item,
-            'labels': times,
-            'data': values}
+            'value_x': times,
+            'value_y': values}
 
     return data
 
