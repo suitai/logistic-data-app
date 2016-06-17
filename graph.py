@@ -1,10 +1,10 @@
 # coding:utf-8
+#from pylab import *
+#import pandas
+#import numpy as np
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 import requests
-from pylab import *
-import pandas
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import sys
 import json
 
