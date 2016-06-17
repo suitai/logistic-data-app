@@ -23,6 +23,14 @@
                     </form>
                     
                     <form id="rank">
+                    	<div class="rank-group">
+                            <label for="condition-value">ランキング</label>
+							<p>
+								<input type="radio" name="ranktitle" value="itemNum" checked="checked">ピッキングした商品数ランキング
+								<input type="radio" name="ranktitle" value="totalCalorie">消費カロリーランキング
+								<input type="radio" name="ranktitle" value="totalStepNum">歩数ランキング
+							</p>
+                        </div>
                         <input type="submit" class="btn btn-info">
                     </form>
 
@@ -35,9 +43,6 @@
 
         <div class="canvas" id="canvas_wrapper">
             <canvas id="chart" width="300" height="250"></canvas>
-        </div>
-        <div class="canvas" id="canvas_wrapper2">
-            <canvas id="chart2" width="300" height="250"></canvas>
         </div>
     </body>
 </html>

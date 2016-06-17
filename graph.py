@@ -57,35 +57,3 @@ def getLogData(key):
 def getRequest(type, key):
     payload = {'rdf:type': type, 'acl:consumerKey':key}
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
-
-
-def drawItemNumRanking(key):
-    itemNum = getLogData(key)
-    itemNumX = itemNum.keys()
-    itemNumY = itemNum.values()
-    plt.bar(itemNumX, itemNumY,)
-    plt.title("title", fontsize=22)
-    plt.xlabel("worker Id", fontsize=22)
-    plt.ylabel("total item num", fontsize=22)
-    plt.savefig("itemnum.png")
-
-def drawVitalRanking(key):
-    vitalData = getVitalData(key)
-
-    totalCal = vitalData[0]
-    totalCalX  = totalCal.keys()
-    totalCalY = totalCal.values()
-    plt.bar(totalCalX , totalCalY)
-    plt.title("title", fontsize=22)
-    plt.xlabel("worker Id", fontsize=22)
-    plt.ylabel("total calories", fontsize=22)
-    plt.show()
-
-    totalStep = vitalData[1]
-    totalStepX  = totalStep.keys()
-    totalStepY = totalStep.values()
-    plt.bar(totalStepX , totalStepY)
-    plt.title("title", fontsize=22)
-    plt.xlabel("worker Id", fontsize=22)
-    plt.ylabel("total step", fontsize=22)
-    plt.show()
