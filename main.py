@@ -5,6 +5,7 @@ import sys
 import logging
 import os
 import graph
+import personal
 import dateutil.parser
 import requests
 
@@ -59,24 +60,7 @@ def requires_auth(f):
 def _get_personal_data():
     worker_id = int(request.json[u'workerId'])
     data_item = request.json[u'item']
-    data_type = "WarehouseVital"
-    times = [""]
-    values = []
-
-    for d in read_data(data_type):
-        if d['frameworx:workerId'] == worker_id:
-            date = dateutil.parser.parse(d['dc:date'])
-            time = str(date.hour).zfill(2) + ":" + str((date.minute//10)*10).zfill(2)
-            if time != times[-1]:
-                times.append(time)
-                values.append(d["frameworx:" + data_item])
-
-    del times[0]
-
-    data = {'label': data_item,
-            'labels': times,
-            'data': values}
-
+    data = personal.get_chart_data(worker_id, data_item)
     return jsonify(data=json.dumps(data))
 
 
