@@ -4,6 +4,7 @@ import json
 import sys
 import logging
 import os
+import graph
 
 
 #DEBUG = False
@@ -38,6 +39,15 @@ def requires_auth(f):
 def _step_graph():
     return jsonify({"test": "aaa"})
 
+@app.route('/_item_ranking', methods=["GET", "POST"])
+@requires_auth
+def _item_ranking():
+    return jsonify(graph.getLogData(os.environ["FRAMEWORX_KEY"]))
+
+@app.route('/_vital_ranking', methods=["GET", "POST"])
+@requires_auth
+def _vital_ranking():
+    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"]))
 
 @app.route('/_get_key', methods=["GET"])
 @requires_auth
