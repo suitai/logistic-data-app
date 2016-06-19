@@ -42,6 +42,23 @@ def get_average_in_interval(requests, category, interval=10):
     return times[1:], values
 
 
+def get_sum_at_interval(requests, category, interval=10):
+    times = [""]    # ダミー
+    values = []
+    tmp_value = 0
+
+    for d in requests.json():
+        date = dateutil.parser.parse(d['dc:date'])
+        time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+        if d["frameworx:" + category].isdigit():
+            tmp_value += int(d["frameworx:" + category])
+        if time != times[-1]:
+            times.append(time)
+            values.append(tmp_value)
+
+    return times[1:], values
+
+
 def get_chart_data(workerId, category):
     type_list = {'step': "frameworx:WarehouseVital",
                  'calorie': "frameworx:WarehouseVital",
