@@ -68,6 +68,10 @@ def get_chart_data(workerId, category):
                         {'data_type': "frameworx:WarehouseVital", 'get_values': get_first_in_interval},
                      'heartrate':
                         {'data_type': "frameworx:WarehouseVital", 'get_values': get_average_in_interval},
+                     'temperature':
+                        {'data_type': "frameworx:WarehouseSensor", 'get_values': get_average_in_interval},
+                     'humidity':
+                        {'data_type': "frameworx:WarehouseSensor", 'get_values': get_average_in_interval},
                      'itemNum':
                         {'data_type': "frameworx:WarehouseActivity", 'get_values': get_sum_at_interval}
                     }
