@@ -1,16 +1,52 @@
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-         <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-
+        <section id="banner-section" role="banner">
+            <div class="container">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="text-center" id="banner-text">
+                        <h1>logistic-data-app</h1>
+                        <p>カロリー消費量を確認しよう！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="features section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 text-center col-md-offset-1">
+                        <div class="feature-content">
+                            <div id="icon">
+                                <img src="{{url_for('static', filename='images/log_icon.png')}}">
+                            </div>
+                            <h5>カロリー消費量の確認</h5>
+                            <p>
+                                あなたのカロリー消費量を確認しませんか？<br>
+                                1日のカロリー消費量を確認して、仕事であなたの運動量を振り返ってみましょう。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 text-center col-md-offset-2">
+                        <div class="feature-content">
+                            <h5>カロリー消費量ランキング</h5>
+                            <p>
+                                あなたのカロリー消費量と他の方のカロリー消費量を比べてみましょう。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-sm-9 col-md-8 col-lg-6">

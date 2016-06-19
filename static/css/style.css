@@ -1,6 +1,49 @@
+#section {
+    padding: 100px 0;
+}
+
 #canvas_wrapper {
     width: 600px;
     height: 450px;
     margin-left: auto;
     margin-right: auto;
+}
+
+h5 {
+    color: #de6a0b;
+}
+
+p {
+    color: #666666;
+}
+
+#banner-section {
+    background-color: #de6a0b;
+    min-height: 300px;
+}
+
+#banner-text h1 {
+    color: #FFFFFF;
+    font-size: 65px;
+    padding-top: 40px;
+}
+
+#banner-text p {
+    color: #FFFFFF;
+    font-size: 22px;
+    margin-bottom: 50px;
+}
+
+.feature-content #icon {
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature-content #icon img {
+    width: auto;
+    height: auto;
+    max-width: 80%;
 }
