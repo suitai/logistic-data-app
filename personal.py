@@ -21,9 +21,8 @@ def get_first_in_interval(requests, category, interval=10):
             if time != times[-1]:
                 times.append(time)
                 values.append(int(d["frameworx:" + category]))
-    del times[0]    # ダミーを削除
 
-    return times, values
+    return times[1:], values
 
 
 def get_average_in_interval(requests, category, interval=10):
