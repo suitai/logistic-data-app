@@ -25,7 +25,7 @@ def get_first_in_interval(requests, category, interval=10):
     return times, values
 
 
-def get_avarage_in_interval(requests, category, interval=10):
+def get_average_in_interval(requests, category, interval=10):
     times = [""]    # ダミー
     values = []
     tmp_values = []
