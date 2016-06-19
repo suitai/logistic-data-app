@@ -62,10 +62,12 @@ def get_sum_at_interval(requests, category, interval=10):
 def get_chart_data(workerId, category):
     type_list = {'step': "frameworx:WarehouseVital",
                  'calorie': "frameworx:WarehouseVital",
-                 'heartrate': "frameworx:WarehouseVital"}
+                 'heartrate': "frameworx:WarehouseVital",
+                 'itemNum': "frameworx:WarehouseActivity"}
     get_values = {'step': get_first_in_interval,
                  'calorie': get_first_in_interval,
-                 'heartrate': get_average_in_interval}
+                 'heartrate': get_average_in_interval,
+                 'itemNum': get_sum_at_interval}
     payload = {'rdf:type': type_list[category],
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
