@@ -9,12 +9,12 @@ def get_requests(payload):
     print "get:", payload
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
 
-def get_chart_data(worker_id, item):
+def get_chart_data(workerId, category):
     type_list = {'step': "frameworx:WarehouseVital",
                  'calorie': "frameworx:WarehouseVital",
                  'heartrate': "frameworx:WarehouseVital"}
-    payload = {'rdf:type': type_list[item],
-               'frameworx:workerId': worker_id}
+    payload = {'rdf:type': type_list[category],
+               'frameworx:workerId': workerId}
     times = [""]    # ダミー
     values = []
 
@@ -23,10 +23,10 @@ def get_chart_data(worker_id, item):
         time = str(date.hour).zfill(2) + ":" + str((date.minute//10)*10).zfill(2)
         if time != times[-1]:
             times.append(time)
-            values.append(d["frameworx:" + item])
+            values.append(d["frameworx:" + category])
     del times[0]    # ダミーを削除
 
-    data = {'label': item,
+    data = {'label': category,
             'value_x': times,
             'value_y': values}
 

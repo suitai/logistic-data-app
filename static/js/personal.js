@@ -23,10 +23,10 @@ function draw_line_graph(chart) {
 
 $(function() {
     $('#get').submit(function(event) {
-        var worker_id =  document.forms.get.worker_id.value;
-        var item =  document.forms.get.item.value;
-
-        post_data = JSON.stringify({'workerId': worker_id, 'item': item});
+        var post_data = JSON.stringify({
+            workerId: document.forms.get.workerId.value,
+            category: document.forms.get.category.value
+        });
         console.log("post:", post_data);
 
         event.preventDefault();

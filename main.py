@@ -58,9 +58,9 @@ def requires_auth(f):
 @app.route('/_get_personal_data', methods=["POST"])
 @requires_auth
 def _get_personal_data():
-    worker_id = int(request.json[u'workerId'])
-    data_item = request.json[u'item']
-    data = personal.get_chart_data(worker_id, data_item)
+    workerId = int(request.json[u'workerId'])
+    category = request.json[u'category']
+    data = personal.get_chart_data(workerId, category)
     return jsonify(data=json.dumps(data))
 
 
