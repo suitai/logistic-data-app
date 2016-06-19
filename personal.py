@@ -46,11 +46,14 @@ def get_chart_data(workerId, category):
     type_list = {'step': "frameworx:WarehouseVital",
                  'calorie': "frameworx:WarehouseVital",
                  'heartrate': "frameworx:WarehouseVital"}
+    get_values = {'step': get_first_in_interval,
+                 'calorie': get_first_in_interval,
+                 'heartrate': get_average_in_interval}
     payload = {'rdf:type': type_list[category],
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
 
-    value_x, value_y = get_first_in_interval(requests, category)
+    value_x, value_y = get_values[category](requests, category)
 
     data = {'label': category,
             'value_x': value_x,
