@@ -25,6 +25,23 @@ def get_first_in_interval(requests, category, interval=10):
     return times, values
 
 
+def get_avarage_in_interval(requests, category, interval=10):
+    times = [""]    # ダミー
+    values = []
+    tmp_values = []
+
+    for d in requests.json():
+        date = dateutil.parser.parse(d['dc:date'])
+        time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+        tmp_values.append(d["frameworx:" + category])
+        if time != times[-1]:
+            times.append(time)
+            values.append(sum(tmp_values)/len(tmp_values))
+            tmp_values = []
+
+    return times[1:], values
+
+
 def get_chart_data(workerId, category):
     type_list = {'step': "frameworx:WarehouseVital",
                  'calorie': "frameworx:WarehouseVital",
