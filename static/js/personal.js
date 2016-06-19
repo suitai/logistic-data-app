@@ -1,5 +1,12 @@
 function draw_line_graph(chart) {
     var ctx = $("#chart").get(0).getContext("2d");
+    var output = $(document.getElementById('json'));
+
+    if(chart['value_x'].length == 0){
+        output.text("Cannot get data. Please check the worker ID.");
+    }else{
+        output.text("Get data.");
+    }
     var dataset = {
         label: chart['label'],
         fillColor: "rgba(220,220,220,0.2)",
