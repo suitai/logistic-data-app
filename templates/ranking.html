@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <section class="banner-section" role="banner">
+            <div class="container">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="text-center" id="banner-text">
+                        <h1>logistic-data-app</h1>
+                        <p>カロリー消費量を確認しよう！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="log-section section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 rank_1st">
+                        ID: 34
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 rank_2nd">
+                        ID: 24
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 rank_3rd">
+                        ID: 1
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
+                        <table class="table">
+                            <tr>
+                                <td>4th</td>
+                                <td>ID: 32</td>
+                                <td>178 steps</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
+

@@ -107,6 +107,18 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/log.html")
+@requires_auth
+def log_page():
+    return render_template("log.html")
+
+
+@app.route("/ranking.html")
+@requires_auth
+def ranking_page():
+    return render_template("ranking.html")
+
+
 if __name__ == "__main__":
     for data_type in ["WarehouseVital", "WarehouseActivity"]:
         if not os.path.exists(data_type + ".json"):

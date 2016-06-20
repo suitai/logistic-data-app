@@ -92,7 +92,8 @@ $(function() {
         var type = "frameworx:WarehouseVital";
         var key = "frameworx:workerId";
         var value =  document.forms.get.value.value;
-        var item =  document.forms.get.item.value;
+        //var item =  document.forms.get.item.value;
+        var item = "step";
 
         var sendData = {
             "acl:consumerKey": secret_key,

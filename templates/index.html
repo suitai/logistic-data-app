@@ -4,14 +4,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <section id="banner-section" role="banner">
+        <section class="banner-section" role="banner">
             <div class="container">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="text-center" id="banner-text">
@@ -21,13 +19,15 @@
                 </div>
             </div>
         </section>
-        <section id="features section">
+        <section class="features section">
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 col-sm-6 text-center col-md-offset-1">
                         <div class="feature-content">
                             <div id="icon">
-                                <img src="{{url_for('static', filename='images/log_icon.png')}}">
+                                <a href="ranking.html">
+                                    <img src="{{url_for('static', filename='images/log_icon.png')}}">
+                                </a>
                             </div>
                             <h5>カロリー消費量の確認</h5>
                             <p>
@@ -38,6 +38,11 @@
                     </div>
                     <div class="col-md-4 col-sm-6 text-center col-md-offset-2">
                         <div class="feature-content">
+                            <div id="icon">
+                                <a href="log.html">
+                                    <img src="{{url_for('static', filename='images/ranking_icon.png')}}">
+                                </a>
+                            </div>
                             <h5>カロリー消費量ランキング</h5>
                             <p>
                                 あなたのカロリー消費量と他の方のカロリー消費量を比べてみましょう。
@@ -47,47 +52,6 @@
                 </div>
             </div>
         </section>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-8 col-sm-9 col-md-8 col-lg-6">
-                    <form id="get">
-                        <div class="form-group">
-                            <label for="worker-id">Worker ID</label>
-                            <input type="text" class="form-control" id="condition-value" name="value" placeholder="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="items">項目</label><br>
-                            <select name="item">
-                                <option value="step">step</option>
-                                <option value="calorie">calorie</option>
-                                <option value="heartrate">heartrate</option>
-                            </select></p>
-                        </div>
-                        <input type="submit" class="btn btn-info">
-                    </form>
-                    
-                    <form id="rank">
-                    	<div class="rank-group">
-                            <label for="condition-value">ランキング</label>
-							<p>
-								<input type="radio" name="ranktitle" value="itemNum" checked="checked">ピッキングした商品数ランキング
-								<input type="radio" name="ranktitle" value="totalCalorie">消費カロリーランキング
-								<input type="radio" name="ranktitle" value="totalStepNum">歩数ランキング
-							</p>
-                        </div>
-                        <input type="submit" class="btn btn-info">
-                    </form>
-
-                    <span class id="output"></span>
-                    <span id="json">
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="canvas" id="canvas_wrapper">
-            <canvas id="chart" width="300" height="250"></canvas>
-        </div>
     </body>
 </html>
 
