@@ -1,38 +1,31 @@
 # coding:utf-8
-#from pylab import *
-#import pandas
-#import numpy as np
-#import matplotlib.pyplot as plt
-#import seaborn as sns
+# from pylab import *
+# import pandas
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import seaborn as sns
 import requests
 import sys
 import json
 
-
-def getVitalData(key):
+def getVitalData(key, targetData):
     r = getRequest('frameworx:WarehouseVital', key)
     jsList = r.json()
     workerIdSet = set([])
-    totalCalDict = {}
-    totalStepDict = {}
+    totalVitalData = {}
     for js in jsList:
         workerIdSet.add(js["frameworx:workerId"])
 
     for workerId in workerIdSet:
-        totalCalDict[workerId] = 0
-        totalStepDict[workerId] = 0
+        totalVitalData[workerId] = [0]
 
     for js in jsList:
-        cal = js["frameworx:calorie"]
-        step = js["frameworx:step"]
+        cal = js["frameworx:" + targetData]
         workerId = js["frameworx:workerId"]
-        if totalCalDict[workerId] < cal:
-            totalCalDict[workerId] = cal
-        if totalStepDict[workerId] < step:
-            totalStepDict[workerId] = step
+        if totalVitalData[workerId][0] < cal:
+            totalVitalData[workerId][0] = cal
 
-    print totalCalDict, totalStepDict
-    return [totalCalDict, totalStepDict]
+    return totalVitalData
 
 def getLogData(key):
     r = getRequest('frameworx:WarehouseActivity', key)
