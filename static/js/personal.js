@@ -1,4 +1,4 @@
-function draw_line_graph(chart, ctx, output) {
+function draw_line_graph(chart, ctx, color, output) {
 
     if(chart['value_x'].length == 0){
         output.text("Cannot get data. Please check the worker ID.");
@@ -7,14 +7,9 @@ function draw_line_graph(chart, ctx, output) {
     }
     var dataset = {
         label: chart['label'],
-        fillColor: "rgba(220,220,220,0.2)",
-        strokeColor: "rgba(220,220,220,1)",
-        pointColor: "rgba(220,220,220,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(220,220,220,1)",
         data: chart['value_y']
     };
+    $.extend(dataset, color);
     var data = {
         labels: chart['value_x'],
         datasets: [dataset,]
@@ -31,9 +26,17 @@ function draw_line_graphs(charts) {
                $("#chart2").get(0).getContext("2d"),
                $("#chart3").get(0).getContext("2d")]
     var output = $(document.getElementById('json'));
+    var colors = [
+        {borderColor: "rgba(255,204,51,0.6)",
+         backgroundColor: "rgba(255,204,102,0.4)"},
+        {borderColor: "rgba(0,102,255,0.6)",
+         backgroundColor: "rgba(0,153,255,0.4)"},
+        {borderColor: "rgba(255,0,102,0.6)",
+         backgroundColor: "rgba(255,51,102,0.4)"},
+    ]
 
     for (var i = 0; i < ctx.length; i++) {
-        draw_line_graph(charts[i], ctx[i], output);
+        draw_line_graph(charts[i], ctx[i], colors[i], output);
     }
 }
 
