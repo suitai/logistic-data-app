@@ -104,5 +104,61 @@ def get_chart_data(workerId, category):
 
     return data
 
+
+def get_vital_data(workerId, interval=10):
+    times = [""]
+    calories = []
+    steps = []
+    heartrates = []
+    tmp_heartrates = []
+
+    payload = {'rdf:type': "frameworx:WarehouseVital",
+               'frameworx:workerId': workerId}
+    requests = get_requests(payload)
+
+    for d in requests.json():
+        if d['dc:date']:
+            date = dateutil.parser.parse(d['dc:date'])
+            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            tmp_heartrates.append(d["frameworx:heartrate"])
+            if time != times[-1]:
+                times.append(time)
+                calories.append(int(d["frameworx:calorie"]))
+                steps.append(int(d["frameworx:step"]))
+                heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
+                tmp_heartrates = []
+
+    return times[1:], calories, steps, heartrates
+
+
+def get_item_num(workerId, interval=10):
+    times = [""]
+    itemNums = []
+    tmp_itemNums = []
+
+    payload = {'rdf:type': "frameworx:WarehouseVital",
+               'frameworx:workerId': workerId}
+    requests = get_requests(payload)
+
+    for d in requests.json():
+        if d['dc:date']:
+            date = dateutil.parser.parse(d['dc:date'])
+            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            tmp_itemNums += int(d["frameworx:itemNum"])
+            if time != times[-1]:
+                times.append(time)
+                itemNums.append(tmp_itemNums)
+
+
+def get_data(workerId):
+
+    times, calories, steps, heartrates = get_vital_data(workerId)
+
+    data = [{'label': "カロリー", 'value_x': times, 'value_y': calories},
+            {'label': "歩数", 'value_x': times, 'value_y': steps},
+            {'label': "脈拍", 'value_x': times, 'value_y': heartrates}]
+
+    return data
+
 if __name__ == '__main__':
     pass

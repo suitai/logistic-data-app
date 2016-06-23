@@ -1,6 +1,4 @@
-function draw_line_graph(chart) {
-    var ctx = $("#chart").get(0).getContext("2d");
-    var output = $(document.getElementById('json'));
+function draw_line_graph(chart, ctx, output) {
 
     if(chart['value_x'].length == 0){
         output.text("Cannot get data. Please check the worker ID.");
@@ -28,11 +26,21 @@ function draw_line_graph(chart) {
     console.log("draw:", chart['label']);
 }
 
+function draw_line_graphs(charts) {
+    var ctx = [$("#chart1").get(0).getContext("2d"),
+               $("#chart2").get(0).getContext("2d"),
+               $("#chart3").get(0).getContext("2d")]
+    var output = $(document.getElementById('json'));
+
+    for (var i = 0; i < ctx.length; i++) {
+        draw_line_graph(charts[i], ctx[i], output);
+    }
+}
+
 $(function() {
     $('#get').submit(function(event) {
         var post_data = JSON.stringify({
             workerId: document.forms.get.workerId.value,
-            category: document.forms.get.category.value
         });
         console.log("post:", post_data);
 
@@ -44,7 +52,7 @@ $(function() {
             contentType: 'application/json',
             success: function(result) {
                 console.log("get:", result['data']);
-                draw_line_graph(JSON.parse(result['data']));
+                draw_line_graphs(JSON.parse(result['data']));
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);

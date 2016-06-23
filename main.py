@@ -59,8 +59,7 @@ def requires_auth(f):
 @requires_auth
 def _get_personal_data():
     workerId = int(request.json[u'workerId'])
-    category = request.json[u'category']
-    data = personal.get_chart_data(workerId, category)
+    data = personal.get_data(workerId)
     return jsonify(data=json.dumps(data))
 
 
