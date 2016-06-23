@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 import requests
 import dateutil.parser
 
-def get_requests(payload):
-    payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
-    print "get:", payload
-    return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
+URL = "https://api.frameworxopendata.jp/"
 
+def get_requests(payload, path="api/v3/datapoints"):
+    payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
+    data =  requests.get(URL+path, params=payload)
+    print "get:", payload
+    with open("requests.json", 'w') as f:
+        json.dump(data.json(), f)
+    return data
 
 def get_first_in_interval(requests, category, interval=10):
     times = [""]    # ダミー
