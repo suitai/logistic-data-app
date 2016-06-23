@@ -43,6 +43,7 @@ $(function() {
             data: post_data,
             contentType: 'application/json',
             success: function(result) {
+                console.log("get:", result['data']);
                 draw_line_graph(JSON.parse(result['data']));
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
