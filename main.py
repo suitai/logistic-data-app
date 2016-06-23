@@ -10,7 +10,7 @@ import dateutil.parser
 import requests
 
 
-#DEBUG = False
+# DEBUG = False
 DEBUG = True
 
 app = Flask(__name__)
@@ -68,15 +68,20 @@ def _get_personal_data():
 def _step_graph():
     return jsonify({"test": "aaa"})
 
-@app.route('/_item_ranking', methods=["GET", "POST"])
+@app.route('/_item_ranking', methods=["GET"])
 @requires_auth
 def _item_ranking():
     return jsonify(graph.getLogData(os.environ["FRAMEWORX_KEY"]))
 
-@app.route('/_vital_ranking', methods=["GET", "POST"])
+@app.route('/_cal_ranking', methods=["GET"])
 @requires_auth
-def _vital_ranking():
-    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"]))
+def _cal_ranking():
+    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie"))
+
+@app.route('/_step_ranking', methods=["GET"])
+@requires_auth
+def _step_ranking():
+    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"]), "step")
 
 @app.route('/_get_key', methods=["GET"])
 @requires_auth
