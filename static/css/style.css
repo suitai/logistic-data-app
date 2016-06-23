@@ -5,6 +5,12 @@
   margin-left: auto;
   margin-right: auto; }
 
+#canvas_wrapper_personal {
+  width: 600px;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto; }
+
 p {
   color: #666666; }
 
