@@ -1,12 +1,4 @@
-function draw_line_graph(chart, ctx, output) {
-
-    if(chart['value_x'].length == 0){
-        output.text("Cannot get data. Please check the worker ID.");
-        return;
-    }else{
-        output.text("Get data.");
-    }
-
+function draw_line_graph(chart, ctx) {
     var colors = {
         "カロリー": {borderColor: "rgba(255,204,51,0.6)",
                      backgroundColor: "rgba(255,204,102,0.4)"},
@@ -44,12 +36,14 @@ function draw_line_graphs(charts) {
     $('#canvas_content').css("width", "60%");
 
     for (var i = 0; i < charts.length; i++) {
-        var title = "<h2>" + charts[i]['label'] + "</h2>";
-        $('#canvas_content').append(title);
-        var canvas = $('<canvas>').attr("id", "chart" + String(i));
-        $('#canvas_content').append(canvas);
+        if(charts[i]['value_x'].length == 0){
+            output.text("Cannot get data. Please check the worker ID.");
+            continue;
+        }
+        $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
+        $('#canvas_content').append($('<canvas>').attr('id', "chart" + String(i)));
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
-        draw_line_graph(charts[i], ctx, output);
+        draw_line_graph(charts[i], ctx);
     }
 }
 
