@@ -39,6 +39,7 @@ function draw_line_graph(chart, ctx, output) {
 function draw_line_graphs(charts) {
     var output = $(document.getElementById('json'));
     $('#canvas_content').html("");
+    $('#canvas_content').css("width", "60%");
 
     for (var i = 0; i < charts.length; i++) {
         var title = "<h2>" + charts[i]['label'] + "</h2>";
