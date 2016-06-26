@@ -26,7 +26,6 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
                         <form id="get">
                             <div class="form-group">
-                                
                                 <div class="input-group input-group-lg log-input-id">
                                     <span class="input-group-addon" id="basic-addon1">👤</span>
                                     <input type="text" class="form-control" id="condition-value" name="workerId" placeholder="IDを入力してください。" area-describedby="basic-addon1">
@@ -34,14 +33,12 @@
                                         <button class="btn btn-default" id="display_log_btn" type="button">Go</button>
                                     </span>
                                 </div>
-
                                 <div class="btn-group log-select-output" data-toggle="buttons-radio" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-default active">歩数</button>
-                                    <button type="button" class="btn btn-default">カロリー消費量</button>
-                                    <button type="button" class="btn btn-default">脈拍</button>
-                                </div>
+                                     <button type="button" id="歩数ボタン" class="btn btn-default active" aria-pressed="true">歩数</button>
+                                     <button type="button" id="カロリーボタン" class="btn btn-default active" aria-pressed="true">カロリー消費量</button>
+                                     <button type="button" id="脈拍ボタン" class="btn btn-default active" aria-pressed="true">脈拍</button>
+                                 </div>
                             </div>
-                            <input type="submit" class="btn btn-info">
                         </form>
                         <div class="loading" id="loading">
                             <img src="{{url_for('static', filename='images/ajax-loader.gif')}}">

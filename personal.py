@@ -127,8 +127,12 @@ def get_vital_data(workerId, interval=10):
                 steps.append(int(d["frameworx:step"]))
                 heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
+    vital_data = {u'時間': times[1:],
+                  u'カロリー': calories,
+                  u'歩数': steps,
+                  u'脈拍': heartrates}
 
-    return times[1:], calories, steps, heartrates
+    return vital_data
 
 
 def get_item_num(workerId, interval=10):
@@ -150,13 +154,17 @@ def get_item_num(workerId, interval=10):
                 itemNums.append(tmp_itemNums)
 
 
-def get_data(workerId):
+def get_data(workerId, category):
+    data = []
+    print "workerId:", workerId
+    print "category:", category
 
-    times, calories, steps, heartrates = get_vital_data(workerId)
+    vital_data = get_vital_data(workerId)
 
-    data = [{'label': "カロリー", 'value_x': times, 'value_y': calories},
-            {'label': "歩数", 'value_x': times, 'value_y': steps},
-            {'label': "脈拍", 'value_x': times, 'value_y': heartrates}]
+    for c in category:
+        data.append({'label': c,
+                     'value_x': vital_data[u'時間'],
+                     'value_y': vital_data[c]})
 
     return data
 

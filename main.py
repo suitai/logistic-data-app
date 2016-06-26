@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, jsonify, request, Response, url_for
 from functools import wraps
 import json
@@ -6,7 +8,6 @@ import logging
 import os
 import graph
 import personal
-import dateutil.parser
 import requests
 
 
@@ -59,7 +60,8 @@ def requires_auth(f):
 @requires_auth
 def _get_personal_data():
     workerId = int(request.json[u'workerId'])
-    data = personal.get_data(workerId)
+    category = request.json[u'category']
+    data = personal.get_data(workerId, category)
     return jsonify(data=json.dumps(data))
 
 

@@ -34,11 +34,14 @@ function draw_line_graph(chart, ctx, output) {
 
 function draw_line_graphs(charts) {
     var output = $(document.getElementById('json'));
+    $('#canvas_content').html("");
 
     for (var i = 0; i < charts.length; i++) {
-        var canvas = $('<canvas>').attr("id", "chart" + String(i))
-        $('#canvas_content').append(canvas)
-        var ctx = $("#chart" + String(i)).get(0).getContext("2d")
+        var title = "<h2>" + charts[i]['label'] + "</h2>";
+        $('#canvas_content').append(title);
+        var canvas = $('<canvas>').attr("id", "chart" + String(i));
+        $('#canvas_content').append(canvas);
+        var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx, output);
     }
 }
@@ -47,9 +50,17 @@ function draw_line_graphs(charts) {
 $(function() {
     $("#loading").hide();
 
-    $('#get').submit(function(event) {
+    $('#display_log_btn').on('click', function(event) {
+        var all_categories = ["カロリー", "歩数", "脈拍"];
+        var category = [];
+        for (var i = 0; i < all_categories.length; i++){
+            if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
+                category.push(all_categories[i]);
+            }
+        }
         var post_data = JSON.stringify({
             workerId: document.forms.get.workerId.value,
+            category: category
         });
         console.log("post:", post_data);
 
