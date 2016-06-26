@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="text-center" id="banner-text">
-                        <h1>logistic-data-app</h1>
+                        <h1><a href="index.html">logistic-data-app</a></h1>
                         <p>カロリー消費量を確認しよう！</p>
                     </div>
                 </div>
@@ -31,23 +31,29 @@
                                     <span class="input-group-addon" id="basic-addon1">👤</span>
                                     <input type="text" class="form-control" id="condition-value" name="value" placeholder="IDを入力してください。" area-describedby="basic-addon1">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Go</button>
+                                        <button class="btn btn-default" id="display_log_btn" type="button">Go</button>
                                     </span>
                                 </div>
-
-                                <div class="btn-group log-select-output" data-toggle="buttons-radio" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-default active">歩数</button>
-                                    <button type="button" class="btn btn-default">カロリー消費量</button>
-                                    <button type="button" class="btn btn-default">脈拍</button>
-                                </div>
                             </div>
-                            <input type="submit" class="btn btn-info">
                         </form>
-                        
-                        <div class="canvas" id="canvas_wrapper">
-                            <canvas id="chart"></canvas>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 log-bg">
+                        <h2>歩数</h2>
+                        <div class="canvas_step" id="canvas_step_wrapper">
+                            <canvas id="chart_step"></canvas>
                         </div>
-                        
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 log-bg">
+                        <h2>カロリー消費量</h2>
+                        <div class="canvas_calorie" id="canvas_calorie_wrapper">
+                            <canvas id="chart_calorie"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 log-bg">
+                        <h2>脈拍</h2>
+                        <div class="canvas_pulse" id="canvas_pulse_wrapper">
+                            <canvas id="chart_pulse"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>

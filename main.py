@@ -107,6 +107,12 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/index.html")
+@requires_auth
+def index_2():
+    return render_template("index.html")
+
+
 @app.route("/log.html")
 @requires_auth
 def log_page():

@@ -73,7 +73,7 @@ function fini(data) {
 $(function() {
     var output = $(document.getElementById('json'));
     var message = $(document.getElementById('message'));
-    ctx = $("#chart").get(0).getContext("2d");
+    ctx = $("#chart_step").get(0).getContext("2d");
     var secret_key;
 
     $.ajax({
@@ -88,11 +88,10 @@ $(function() {
         }
     });
 
-    $('#get').submit(function(event) {
+    $('#display_log_btn').on('click', function(event) {
         var type = "frameworx:WarehouseVital";
         var key = "frameworx:workerId";
         var value =  document.forms.get.value.value;
-        //var item =  document.forms.get.item.value;
         var item = "step";
 
         var sendData = {
@@ -116,11 +115,6 @@ $(function() {
                 console.log(textStatus);
             }
         });
-        /*
-        get_data(sendData)
-            .then(show_personal_data)
-            .then(fini);
-        */
     });
 });
 
