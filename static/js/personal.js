@@ -41,11 +41,15 @@ function draw_line_graphs(charts) {
 }
 
 $(function() {
+    $("#loading").hide();
+
     $('#get').submit(function(event) {
         var post_data = JSON.stringify({
             workerId: document.forms.get.workerId.value,
         });
         console.log("post:", post_data);
+
+        $("#loading").show();
 
         event.preventDefault();
         $.ajax({
@@ -55,6 +59,7 @@ $(function() {
             contentType: 'application/json',
             success: function(result) {
                 console.log("get:", result['data']);
+                $("#loading").hide();
                 draw_line_graphs(JSON.parse(result['data']));
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {

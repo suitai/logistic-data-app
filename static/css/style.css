@@ -56,4 +56,10 @@ p {
   margin-left: 20px;
   margin-right: 20px; }
 
+.loading img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /*# sourceMappingURL=style.css.map */
