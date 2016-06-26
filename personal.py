@@ -166,23 +166,29 @@ def get_sensor_data(workerId, interval=10):
     return sensor_data
 
 
-def get_item_num(workerId, interval=10):
+def get_activity_data(workerId, interval=10):
     times = [""]
     itemNums = []
-    tmp_itemNums = []
+    tmp_itemNums = 0
 
-    payload = {'rdf:type': "frameworx:WarehouseVital",
+    payload = {'rdf:type': "frameworx:WarehouseActivity",
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
 
-    for d in requests.json():
+    for d in sorted(requests.json(), key=lambda x: x['dc:date']):
         if d['dc:date']:
             date = dateutil.parser.parse(d['dc:date'])
             time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
-            tmp_itemNums += int(d["frameworx:itemNum"])
+            if d["frameworx:itemNum"]:
+                tmp_itemNums += int(d["frameworx:itemNum"])
             if time != times[-1]:
                 times.append(time)
                 itemNums.append(tmp_itemNums)
+
+    activity_data = {u'時間': times[1:],
+                     u'商品数': itemNums}
+
+    return activity_data
 
 
 def get_data(workerId, category):
@@ -205,6 +211,14 @@ def get_data(workerId, category):
                 data.append({'label': c,
                              'value_x': sensor_data[u'時間'],
                              'value_y': sensor_data[c]})
+
+    if u"商品数" in category:
+        activity_data = get_activity_data(workerId)
+        for c in category:
+            if c in [u"商品数"]:
+                data.append({'label': c,
+                             'value_x': activity_data[u'時間'],
+                             'value_y': activity_data[c]})
 
     return data
 

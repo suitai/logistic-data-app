@@ -18,6 +18,8 @@ function draw_line_graph(chart, ctx, output) {
                  backgroundColor: "rgba(204,255,15,0.4)"},
         "湿度": {borderColor: "rgba(153,255,255,0.6)",
                  backgroundColor: "rgba(204,255,255,0.4)"},
+        "商品数": {borderColor: "rgba(153,153,153,0.6)",
+                   backgroundColor: "rgba(204,204,204,0.4)"},
     };
 
     var dataset = {
@@ -56,7 +58,7 @@ $(function() {
     $("#loading").hide();
 
     $('#display_log_btn').on('click', function(event) {
-        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度"];
+        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数"];
         var category = [];
         for (var i = 0; i < all_categories.length; i++){
             if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
