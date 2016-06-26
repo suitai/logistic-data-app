@@ -127,12 +127,43 @@ def get_vital_data(workerId, interval=10):
                 steps.append(int(d["frameworx:step"]))
                 heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
+
     vital_data = {u'時間': times[1:],
                   u'カロリー': calories,
                   u'歩数': steps,
                   u'脈拍': heartrates}
 
     return vital_data
+
+def get_sensor_data(workerId, interval=10):
+    times = [""]
+    temperature = []
+    humidity = []
+    tmp_temperature = []
+    tmp_humidity = []
+
+    payload = {'rdf:type': "frameworx:WarehouseSensor",
+               'frameworx:workerId': workerId}
+    requests = get_requests(payload)
+
+    for d in requests.json():
+        if d['dc:date']:
+            date = dateutil.parser.parse(d['dc:date'])
+            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            tmp_temperature.append(d["frameworx:temperature"])
+            tmp_humidity.append(d["frameworx:humidity"])
+            if time != times[-1]:
+                times.append(time)
+                temperature.append(sum(tmp_temperature)/len(tmp_temperature))
+                humidity.append(sum(tmp_humidity)/len(tmp_humidity))
+                tmp_temperature = []
+                tmp_humidity = []
+
+    sensor_data = {u'時間': times[1:],
+                   u'気温': temperature,
+                   u'湿度': humidity}
+
+    return sensor_data
 
 
 def get_item_num(workerId, interval=10):
@@ -159,12 +190,21 @@ def get_data(workerId, category):
     print "workerId:", workerId
     print "category:", category
 
-    vital_data = get_vital_data(workerId)
+    if u"カロリー" in category or u"歩数" in category or u"脈拍" in category:
+        vital_data = get_vital_data(workerId)
+        for c in category:
+            if c in [u"カロリー", u"歩数", u"脈拍"]:
+                data.append({'label': c,
+                             'value_x': vital_data[u'時間'],
+                             'value_y': vital_data[c]})
 
-    for c in category:
-        data.append({'label': c,
-                     'value_x': vital_data[u'時間'],
-                     'value_y': vital_data[c]})
+    if u"気温" in category or u"湿度" in category:
+        sensor_data = get_sensor_data(workerId)
+        for c in category:
+            if c in [u"気温", u"湿度"]:
+                data.append({'label': c,
+                             'value_x': sensor_data[u'時間'],
+                             'value_y': sensor_data[c]})
 
     return data
 
