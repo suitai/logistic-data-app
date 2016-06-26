@@ -1,15 +1,26 @@
-function draw_line_graph(chart, ctx, color, output) {
+function draw_line_graph(chart, ctx, output) {
 
     if(chart['value_x'].length == 0){
         output.text("Cannot get data. Please check the worker ID.");
+        return;
     }else{
         output.text("Get data.");
     }
+
+    var colors = {
+        "カロリー": {borderColor: "rgba(255,204,51,0.6)",
+                     backgroundColor: "rgba(255,204,102,0.4)"},
+        "歩数": {borderColor: "rgba(0,102,255,0.6)",
+                 backgroundColor: "rgba(0,153,255,0.4)"},
+        "脈拍": {borderColor: "rgba(255,0,102,0.6)",
+                 backgroundColor: "rgba(255,51,102,0.4)"},
+    };
+
     var dataset = {
         label: chart['label'],
         data: chart['value_y']
     };
-    $.extend(dataset, color);
+    $.extend(dataset, colors[chart['label']]);
     var data = {
         labels: chart['value_x'],
         datasets: [dataset,]
@@ -22,23 +33,16 @@ function draw_line_graph(chart, ctx, color, output) {
 }
 
 function draw_line_graphs(charts) {
-    var ctx = [$("#chart1").get(0).getContext("2d"),
-               $("#chart2").get(0).getContext("2d"),
-               $("#chart3").get(0).getContext("2d")]
     var output = $(document.getElementById('json'));
-    var colors = [
-        {borderColor: "rgba(255,204,51,0.6)",
-         backgroundColor: "rgba(255,204,102,0.4)"},
-        {borderColor: "rgba(0,102,255,0.6)",
-         backgroundColor: "rgba(0,153,255,0.4)"},
-        {borderColor: "rgba(255,0,102,0.6)",
-         backgroundColor: "rgba(255,51,102,0.4)"},
-    ]
 
-    for (var i = 0; i < ctx.length; i++) {
-        draw_line_graph(charts[i], ctx[i], colors[i], output);
+    for (var i = 0; i < charts.length; i++) {
+        var canvas = $('<canvas>').attr("id", "chart" + String(i))
+        $('#canvas_content').append(canvas)
+        var ctx = $("#chart" + String(i)).get(0).getContext("2d")
+        draw_line_graph(charts[i], ctx, output);
     }
 }
+
 
 $(function() {
     $("#loading").hide();
