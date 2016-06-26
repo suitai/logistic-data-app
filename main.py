@@ -5,11 +5,12 @@ import sys
 import logging
 import os
 import graph
+import personal
 import dateutil.parser
 import requests
 
 
-#DEBUG = False
+# DEBUG = False
 DEBUG = True
 
 app = Flask(__name__)
@@ -57,26 +58,8 @@ def requires_auth(f):
 @app.route('/_get_personal_data', methods=["POST"])
 @requires_auth
 def _get_personal_data():
-    worker_id = int(request.json[u'workerId'])
-    data_item = request.json[u'item']
-    data_type = "WarehouseVital"
-    times = [""]
-    values = []
-
-    for d in read_data(data_type):
-        if d['frameworx:workerId'] == worker_id:
-            date = dateutil.parser.parse(d['dc:date'])
-            time = str(date.hour).zfill(2) + ":" + str((date.minute//10)*10).zfill(2)
-            if time != times[-1]:
-                times.append(time)
-                values.append(d["frameworx:" + data_item])
-
-    del times[0]
-
-    data = {'label': data_item,
-            'labels': times,
-            'data': values}
-
+    workerId = int(request.json[u'workerId'])
+    data = personal.get_data(workerId)
     return jsonify(data=json.dumps(data))
 
 
@@ -85,15 +68,20 @@ def _get_personal_data():
 def _step_graph():
     return jsonify({"test": "aaa"})
 
-@app.route('/_item_ranking', methods=["GET", "POST"])
+@app.route('/_item_ranking', methods=["GET"])
 @requires_auth
 def _item_ranking():
     return jsonify(graph.getLogData(os.environ["FRAMEWORX_KEY"]))
 
-@app.route('/_vital_ranking', methods=["GET", "POST"])
+@app.route('/_cal_ranking', methods=["GET"])
 @requires_auth
-def _vital_ranking():
-    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"]))
+def _cal_ranking():
+    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie"))
+
+@app.route('/_step_ranking', methods=["GET"])
+@requires_auth
+def _step_ranking():
+    return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"]), "step")
 
 @app.route('/_get_key', methods=["GET"])
 @requires_auth

@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/personal.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -29,7 +29,7 @@
                                 
                                 <div class="input-group input-group-lg log-input-id">
                                     <span class="input-group-addon" id="basic-addon1">👤</span>
-                                    <input type="text" class="form-control" id="condition-value" name="value" placeholder="IDを入力してください。" area-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="condition-value" name="workerId" placeholder="IDを入力してください。" area-describedby="basic-addon1">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" id="display_log_btn" type="button">Go</button>
                                     </span>
