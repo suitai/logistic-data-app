@@ -9,7 +9,7 @@ import os
 import graph
 import personal
 import requests
-
+import shutil
 
 # DEBUG = False
 DEBUG = True
@@ -29,10 +29,21 @@ def write_data(data_type):
         json.dump(data.json(), f)
 
 
+def write_map(map_name):
+    payload = {'acl:consumerKey': os.environ["FRAMEWORX_KEY"]}
+    r = requests.get("https://api.frameworxopendata.jp/api/v3/files/" + map_name, params=payload, stream=True)
+    if r.status_code == 200:
+        with open(map_name, 'wb') as f:
+            r.raw.decode_content = True
+            shutil.copyfileobj(r.raw, f)
+
+
 def read_data(data_type):
     with open(data_type + ".json", 'r') as f:
         data = json.load(f)
     return data
+
+
 
 
 def check_auth(username, password):
@@ -119,6 +130,10 @@ if __name__ == "__main__":
     for data_type in ["WarehouseVital", "WarehouseActivity"]:
         if not os.path.exists(data_type + ".json"):
             write_data(data_type)
+
+    for map_name in ["warehouse_map_1.jpg", "warehouse_map_2.jpg"]:
+        if not os.path.exists(map_name):
+            write_map(map_name)
 
     app.debug = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
