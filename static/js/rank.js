@@ -1,80 +1,85 @@
+var DESC = -1;
+var ASCE = 1;
+
 $(function() {
-	var ctx = $("#rankingCanvas").get(0).getContext("2d");
+	$('#rank').submit(
+			function(event) {
+				event.preventDefault();
+				var ctx = $("#rankingCanvas").get(0).getContext("2d");
+				var obtainedData;
+				var rank1Id, rank2Id, rank3Id;
+				var url;
+				var sortType;
+				var rankingText;
+				var targetRanking = $('#ranking-select').children(':selected')
+						.attr('value');
 
-	var itemData;
-	var vitalData;
+				switch (targetRanking) {
+				case 'item':
+					url = "_item_ranking";
+					sortType = DESC;
+					rankingText = "ピッキング商品数";
+					break;
+				case 'calorie':
+					url = "_cal_ranking";
+					sortType = DESC;
+					rankingText = "消費カロリー";
+					break;
+				case 'step':
+					url = "_step_ranking";
+					sortType = DESC;
+					rankingText = "歩数";
+					break;
+				default:
+					console.log('error');
+					break;
+				}
 
-	getData("_item_ranking").done(function(result) {
-		itemData = result;
-		console.log(result);
-		var datasets = setData(itemData)
-		totalItemNumChartData = setChartData(datasets[0], datasets[1])
+				getData(url).done(function(result) {
+					obtainedData = result;
+					console.log(obtainedData);
+				}).fail(function(result) {
+					console.log("error");
+				});
+				var datasets = setData(obtainedData)
+				chartData = setChartData(datasets[0], datasets[1])
 
-		$("#result").text("ピッキングした商品数");
-		$("#employee1").text(datasets[0][0]);
-		$("#result1").text(datasets[1][0]);
-		$("#employee2").text(datasets[0][1]);
-		$("#result2").text(datasets[1][1]);
-		$("#employee3").text(datasets[0][2]);
-		$("#result3").text(datasets[1][2]);
+				var chart = new Chart(ctx, {
+					type : "bar",
+					data : chartData,
+				});
 
-		var totalItemNumChart = new Chart(ctx, {
-			type : "bar",
-			data : totalItemNumChartData,
-		});
-	}).fail(function(result) {
-		console.log("error");
-	});
+				datasets[1].sort(function(a, b) {
+					if (a > b)
+						return sortType;
+					if (a < b)
+						return -1 * sortType;
+					return 0;
+				});
 
-	$('#rank').submit(function(event) {
-		event.preventDefault();
-		getData("_item_ranking").done(function(result) {
-			itemData = result;
-			console.log(result);
-		}).fail(function(result) {
-			console.log("error");
-		});
-		var datasets = setData(itemData)
-		totalItemNumChartData = setChartData(datasets[0], datasets[1])
+				var rank1Id, rank2Id, rank3Id;
 
-		var totalItemNumChart = new Chart(ctx, {
-			type : "bar",
-			data : totalItemNumChartData,
-		});
+				for ( var key in obtainedData) {
+					var datay = obtainedData[key];
+					if (datay == datasets[1][0]) {
+						rank1Id = key;
+					} else if (datay == datasets[1][1]) {
+						rank2Id = key;
+					} else if (datay == datasets[1][2]) {
+						rank3Id = key;
+					}
+				}
 
-		datasets[1].sort(function(a, b) {
-			if (a > b)
-				return -1;
-			if (a < b)
-				return 1;
-			return 0;
-		});
-		console.log(datasets[1]);
+				$("#rankingtable").attr("style","visibility:visible")
+				$("#result").text(rankingText);
+				$("#employee1").text(rank1Id);
+				$("#result1").text(datasets[1][0]);
+				$("#employee2").text(rank2Id);
+				$("#result2").text(datasets[1][1]);
+				$("#employee3").text(rank3Id);
+				$("#result3").text(datasets[1][2]);
 
-		var rank1Id;
-		var rank2Id;
-		var rank3Id;
-
-		for ( var key in itemData) {
-			var datay = itemData[key];
-			if (datay = datasets[1][0]) {
-				rank1Id = key;
-			} else if (datay = datasets[1][1]) {
-				rank2Id = key;
-			} else if (datay = datasets[1][2]) {
-				rank3Id = key;
-			}
-		}
-
-		$("#result").text("ピッキングした商品数");
-		$("#employee1").text(rank1Id);
-		$("#result1").text(datasets[1][0]);
-		$("#employee2").text(rank2Id);
-		$("#result2").text(datasets[1][1]);
-		$("#employee3").text(rank3Id);
-		$("#result3").text(datasets[1][2]);
-
-	})
+			})
 });
 
 function setData(resuestResult) {
@@ -103,6 +108,7 @@ function getData(url) {
 	return $.ajax({
 		url : url,
 		type : "get",
-		contentType : 'application/json',
+		async : false,
+		contentType : 'application/json'
 	});
 }
