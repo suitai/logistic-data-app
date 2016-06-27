@@ -5,7 +5,9 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
+        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
@@ -20,41 +22,52 @@
                 </div>
             </div>
         </section>
-        <section class="ranking-section section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
-                        <table class="table">
-                            <tr class="rank_title">
-                                <th>Rank</th>
-                                <th>ID</th>
-                                <th>Step(s)</th>
-                            </tr>
-                            <tr class="rank_1st">
-                                <td><img src="{{ url_for('static', filename='images/rank01_01.png') }}"></td>
-                                <td>32</td>
-                                <td>3,780</td>
-                            </tr>
-                            <tr class="rank_2nd">
-                                <td><img src="{{ url_for('static', filename='images/rank01_02.png') }}"></td>
-                                <td>24</td>
-                                <td>2,976</td>
-                            </tr>
-                            <tr class="rank_3rd">
-                                <td><img src="{{ url_for('static', filename='images/rank01_03.png') }}"></td>
-                                <td>1</td>
-                                <td>2,709</td>
-                            </tr>
-                            <tr class="unranked">
-                                <td>4</td>
-                                <td>15</td>
-                                <td>1,908</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </body>
+	<form id="rank">
+		<div class="rank-group">
+			<select class="selectpicker" id="ranking-select">
+				<option value="item">ピッキング商品数</option>
+				<option value="calorie">消費カロリー</option>
+				<option value="step">歩数</option>
+			</select><input type="submit" class="btn btn-info" value="ランキング表示" />
+		</div>
+	</form>
+	<div id="rankingtable" style="visibility: hidden">
+		<section class="ranking-section section">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
+						<table class="table">
+							<tr>
+								<td></td>
+								<td>従業員ID</td>
+								<td id="result"></td>
+							</tr>
+							<tr>
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_01.png') }}"
+									width="40" height="40" alt="1位" /></td>
+								<td id="employee1"></td>
+								<td id="result1"></td>
+							</tr>
+							<tr>
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_02.png') }}"
+									width="40" height="40" alt="2位" /></td>
+								<td id="employee2"></td>
+								<td id="result2"></td>
+							</tr>
+							<tr>
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_03.png') }}"
+									width="40" height="40" alt="3位" /></td>
+								<td id="employee3"></td>
+								<td id="result3"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
 </html>
-
