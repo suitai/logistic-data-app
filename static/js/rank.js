@@ -70,6 +70,7 @@ $(function() {
 					}
 				}
 
+				$("#rankingtable").attr("style","visibility:visible")
 				$("#result").text(rankingText);
 				$("#employee1").text(rank1Id);
 				$("#result1").text(datasets[1][0]);
