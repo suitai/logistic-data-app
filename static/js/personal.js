@@ -1,22 +1,24 @@
-function draw_line_graph(chart) {
-    var ctx = $("#chart").get(0).getContext("2d");
-    var output = $(document.getElementById('json'));
+function draw_line_graph(chart, ctx) {
+    var colors = {
+        "カロリー": {borderColor: "rgba(255,204,51,0.6)",
+                     backgroundColor: "rgba(255,204,102,0.4)"},
+        "歩数": {borderColor: "rgba(0,102,255,0.6)",
+                 backgroundColor: "rgba(0,153,255,0.4)"},
+        "脈拍": {borderColor: "rgba(255,0,102,0.6)",
+                 backgroundColor: "rgba(255,51,102,0.4)"},
+        "気温": {borderColor: "rgba(153,255,153,0.6)",
+                 backgroundColor: "rgba(204,255,15,0.4)"},
+        "湿度": {borderColor: "rgba(153,255,255,0.6)",
+                 backgroundColor: "rgba(204,255,255,0.4)"},
+        "商品数": {borderColor: "rgba(153,153,153,0.6)",
+                   backgroundColor: "rgba(204,204,204,0.4)"},
+    };
 
-    if(chart['value_x'].length == 0){
-        output.text("Cannot get data. Please check the worker ID.");
-    }else{
-        output.text("Get data.");
-    }
     var dataset = {
         label: chart['label'],
-        fillColor: "rgba(220,220,220,0.2)",
-        strokeColor: "rgba(220,220,220,1)",
-        pointColor: "rgba(220,220,220,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(220,220,220,1)",
         data: chart['value_y']
     };
+    $.extend(dataset, colors[chart['label']]);
     var data = {
         labels: chart['value_x'],
         datasets: [dataset,]
@@ -28,13 +30,42 @@ function draw_line_graph(chart) {
     console.log("draw:", chart['label']);
 }
 
+function draw_line_graphs(charts) {
+    var output = $(document.getElementById('json'));
+    $('#canvas_content').html("");
+    $('#canvas_content').css("width", "60%");
+
+    for (var i = 0; i < charts.length; i++) {
+        if(charts[i]['value_x'].length == 0){
+            output.text("Cannot get data. Please check the worker ID.");
+            continue;
+        }
+        $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
+        $('#canvas_content').append($('<canvas>').attr('id', "chart" + String(i)));
+        var ctx = $("#chart" + String(i)).get(0).getContext("2d");
+        draw_line_graph(charts[i], ctx);
+    }
+}
+
+
 $(function() {
-    $('#get').submit(function(event) {
+    $("#loading").hide();
+
+    $('#display_log_btn').on('click', function(event) {
+        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数"];
+        var category = [];
+        for (var i = 0; i < all_categories.length; i++){
+            if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
+                category.push(all_categories[i]);
+            }
+        }
         var post_data = JSON.stringify({
             workerId: document.forms.get.workerId.value,
-            category: document.forms.get.category.value
+            category: category
         });
         console.log("post:", post_data);
+
+        $("#loading").show();
 
         event.preventDefault();
         $.ajax({
@@ -44,7 +75,8 @@ $(function() {
             contentType: 'application/json',
             success: function(result) {
                 console.log("get:", result['data']);
-                draw_line_graph(JSON.parse(result['data']));
+                $("#loading").hide();
+                draw_line_graphs(JSON.parse(result['data']));
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);

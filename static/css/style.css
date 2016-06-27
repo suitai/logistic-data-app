@@ -5,21 +5,28 @@
   margin-left: auto;
   margin-right: auto; }
 
+#canvas_content {
+  margin-left: auto;
+  margin-right: auto; }
+
 p {
   color: #666666; }
 
 .banner-section {
   background-color: #de6a0b;
-  min-height: 300px; }
+  min-height: 250px; }
 
 #banner-text h1 {
-  color: #FFFFFF;
-  font-size: 65px;
   padding-top: 40px; }
+  #banner-text h1 a {
+    color: #FFFFFF;
+    font-size: 65px; }
+  #banner-text h1 a:hover {
+    text-decoration: none; }
 #banner-text p {
   color: #FFFFFF;
   font-size: 22px;
-  margin-bottom: 50px; }
+  margin-bottom: 30px; }
 
 .feature-content #icon {
   width: 180px;
@@ -49,5 +56,36 @@ p {
   margin-top: 30px;
   margin-left: 20px;
   margin-right: 20px; }
+.log-section h2 {
+  text-align: center;
+  color: #de6a0b; }
+
+.ranking-section .rank_1st {
+  background-color: #de6a0b;
+  color: #FFFFFF;
+  padding: 10px;
+  font-size: 30px;
+  margin-bottom: 20px; }
+.ranking-section .rank_2nd {
+  background-color: #de8842;
+  color: #FFFFFF;
+  padding: 10px;
+  font-size: 25px;
+  margin-bottom: 20px; }
+.ranking-section .rank_3rd {
+  background-color: #deab81;
+  color: #FFFFFF;
+  padding: 10px;
+  font-size: 20px;
+  margin-bottom: 20px; }
+.ranking-section .unranked {
+  padding: 10px;
+  font-size: 15px; }
+
+.loading img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /*# sourceMappingURL=style.css.map */
