@@ -4,6 +4,7 @@ import os
 import json
 import requests
 import dateutil.parser
+import numpy
 
 URL = "https://api.frameworxopendata.jp/"
 
@@ -170,9 +171,19 @@ def get_sensor_data(workerId, interval=10):
 
 
 def get_activity_data(workerId, interval=10):
+    location = {}
     times = [""]
     itemNums = []
-    tmp_itemNums = 0
+    distances = []
+    locations = [numpy.array([2500, 2500])]
+    tmp_itemNum = 0
+    tmp_shelfId = 0
+    tmp_distance = 0
+
+    payload = {'rdf:type': "frameworx:WarehouseLocation"}
+    requests = get_requests(payload)
+    for d in requests.json():
+        location[(d['frameworx:shelfId'])] = numpy.array([int(d['frameworx:x']), int(d['frameworx:y'])])
 
     payload = {'rdf:type': "frameworx:WarehouseActivity",
                'frameworx:workerId': workerId}
@@ -182,12 +193,27 @@ def get_activity_data(workerId, interval=10):
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             if d["frameworx:itemNum"]:
-                tmp_itemNums += int(d["frameworx:itemNum"])
+                tmp_itemNum += int(d["frameworx:itemNum"])
+            if d["frameworx:shelfId"]:
+                if d["frameworx:shelfId"] != tmp_shelfId:
+                    if d["frameworx:shelfId"] in location:
+                        tmp_distance += numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])
+                        tmp_shelfId = d["frameworx:shelfId"]
+                        locations.append(location[d["frameworx:shelfId"]])
+                    else:
+                        print "Can not find the shelfId ", d["frameworx:shelfId"]
+
             if time != times[-1]:
                 times.append(time)
-                itemNums.append(tmp_itemNums)
+                itemNums.append(tmp_itemNum)
+                distances.append(tmp_distance)
 
     activity_data = {u'時間': times[1:],
+                     u'商品数': itemNums,
+                     u'総商品数': tmp_itemNum,
+                     u'距離': distances,
+                     u'総距離': tmp_distance,
+                     u'座標': locations[1:]}
 
     return activity_data
 
@@ -213,10 +239,10 @@ def get_data(workerId, category):
                              'value_x': sensor_data[u'時間'],
                              'value_y': sensor_data[c]})
 
-    if u"商品数" in category:
+    if u"商品数" in category or u"距離" in category:
         activity_data = get_activity_data(workerId)
         for c in category:
-            if c in [u"商品数"]:
+            if c in [u"商品数", u"距離"]:
                 data.append({'label': c,
                              'value_x': activity_data[u'時間'],
                              'value_y': activity_data[c]})
