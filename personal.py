@@ -105,6 +105,11 @@ def get_chart_data(workerId, category):
     return data
 
 
+def get_time(date_org, interval):
+    date = dateutil.parser.parse(date_org)
+    return str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+
+
 def get_vital_data(workerId, interval=10):
     times = [""]
     calories = []
@@ -118,8 +123,7 @@ def get_vital_data(workerId, interval=10):
 
     for d in requests.json():
         if d['dc:date']:
-            date = dateutil.parser.parse(d['dc:date'])
-            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            time = get_time(d['dc:date'], interval)
             tmp_heartrates.append(d["frameworx:heartrate"])
             if time != times[-1]:
                 times.append(time)
@@ -148,8 +152,7 @@ def get_sensor_data(workerId, interval=10):
 
     for d in requests.json():
         if d['dc:date']:
-            date = dateutil.parser.parse(d['dc:date'])
-            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            time = get_time(d['dc:date'], interval)
             tmp_temperature.append(d["frameworx:temperature"])
             tmp_humidity.append(d["frameworx:humidity"])
             if time != times[-1]:
@@ -177,8 +180,7 @@ def get_activity_data(workerId, interval=10):
 
     for d in sorted(requests.json(), key=lambda x: x['dc:date']):
         if d['dc:date']:
-            date = dateutil.parser.parse(d['dc:date'])
-            time = str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+            time = get_time(d['dc:date'], interval)
             if d["frameworx:itemNum"]:
                 tmp_itemNums += int(d["frameworx:itemNum"])
             if time != times[-1]:
@@ -186,7 +188,6 @@ def get_activity_data(workerId, interval=10):
                 itemNums.append(tmp_itemNums)
 
     activity_data = {u'時間': times[1:],
-                     u'商品数': itemNums}
 
     return activity_data
 
