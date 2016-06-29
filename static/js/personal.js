@@ -34,7 +34,6 @@ function draw_line_graph(chart, ctx) {
 
 function draw_line_graphs(charts) {
     var output = $(document.getElementById('json'));
-    $('#canvas_content').html("");
     $('#canvas_content').css("width", "60%");
 
     for (var i = 0; i < charts.length; i++) {
@@ -67,6 +66,7 @@ $(function() {
         });
         console.log("post:", post_data);
 
+        $('#canvas_content').html("");
         $("#loading").show();
 
         event.preventDefault();
