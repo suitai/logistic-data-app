@@ -126,17 +126,22 @@ def get_vital_data(workerId, interval=10):
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             tmp_heartrates.append(d["frameworx:heartrate"])
+            tmp_calorie = int(d["frameworx:calorie"])
+            tmp_step = int(d["frameworx:step"])
             if time != times[-1]:
                 times.append(time)
-                calories.append(int(d["frameworx:calorie"]))
-                steps.append(int(d["frameworx:step"]))
+                calories.append(tmp_calorie)
+                steps.append(tmp_step)
                 heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
 
     vital_data = {u'時間': times[1:],
                   u'カロリー': calories,
+                  u'総カロリー': tmp_calorie,
                   u'歩数': steps,
-                  u'脈拍': heartrates}
+                  u'総歩数': tmp_step,
+                  u'脈拍': heartrates,
+                  u'平均脈拍': sum(heartrates)/len(heartrates)}
 
     return vital_data
 
@@ -165,7 +170,9 @@ def get_sensor_data(workerId, interval=10):
 
     sensor_data = {u'時間': times[1:],
                    u'気温': temperature,
-                   u'湿度': humidity}
+                   u'平均気温': sum(temperature)/len(temperature),
+                   u'湿度': humidity,
+                   u'平均湿度': sum(humidity)/len(humidity)}
 
     return sensor_data
 
