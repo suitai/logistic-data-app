@@ -52,6 +52,15 @@ function draw_line_graphs(charts) {
     }
 }
 
+function get_data(url, post_data){
+    return $.ajax({
+        url: "_get_personal_data",
+        type: 'post',
+        data: post_data,
+        contentType: 'application/json',
+    });
+}
+
 
 $(function() {
     $("#loading").hide();
@@ -82,19 +91,12 @@ $(function() {
         $("#loading").show();
 
         event.preventDefault();
-        $.ajax({
-            url: "_get_personal_data",
-            type: 'post',
-            data: post_data,
-            contentType: 'application/json',
-            success: function(result) {
-                console.log("get:", result['data']);
-                $("#loading").hide();
-                draw_line_graphs(JSON.parse(result['data']));
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
+        get_data("_get_personal_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_line_graphs(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
         });
     });
 });
