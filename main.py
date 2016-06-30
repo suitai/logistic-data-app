@@ -115,14 +115,6 @@ def ranking_page():
     return render_template("ranking.html")
 
 if __name__ == "__main__":
-    for data_type in ["WarehouseVital", "WarehouseActivity"]:
-        if not os.path.exists(data_type + ".json"):
-            write_data(data_type)
-
-    for map_name in ["warehouse_map_1.jpg", "warehouse_map_2.jpg"]:
-        if not os.path.exists(map_name):
-            write_map(map_name)
-
     app.debug = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     if DEBUG:
