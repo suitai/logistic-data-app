@@ -58,11 +58,20 @@ $(function() {
 
     $('#display_log_btn').on('click', function(event) {
         var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
+        var workerId = document.forms.get.workerId.value;
         var category = [];
+
         for (var i = 0; i < all_categories.length; i++){
             if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
                 category.push(all_categories[i]);
             }
+        }
+
+        $('#canvas_content').html("");
+        if (!workerId) {
+            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
+            console.log("error: invalid worker ID", workerId);
+            return;
         }
         var post_data = JSON.stringify({
             workerId: document.forms.get.workerId.value,
@@ -70,7 +79,6 @@ $(function() {
         });
         console.log("post:", post_data);
 
-        $('#canvas_content').html("");
         $("#loading").show();
 
         event.preventDefault();
