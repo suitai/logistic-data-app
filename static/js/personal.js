@@ -34,7 +34,6 @@ function draw_line_graph(chart, ctx) {
 
 function draw_line_graphs(charts) {
     var output = $(document.getElementById('json'));
-    $('#canvas_content').css("width", "60%");
 
     for (var i = 0; i < charts.length; i++) {
         if(charts[i]['value_x'].length == 0){
@@ -42,7 +41,12 @@ function draw_line_graphs(charts) {
             continue;
         }
         $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
-        $('#canvas_content').append($('<canvas>').attr('id', "chart" + String(i)));
+        $('#canvas_content').append($('<div>').attr('id', "chart_content" + String(i)));
+        $('#chart_content' + String(i)).attr('class', "chart-section");
+        $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
+        $('#chart_content' + String(i)).append($("<p>" + charts[i]['message'] + "</p>"));
+        $('#canvas_content').append($('</div>'));
+
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx);
     }

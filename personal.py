@@ -135,13 +135,12 @@ def get_vital_data(workerId, interval=10):
                 heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
 
+    ave_heartrate = sum(heartrates)/len(heartrates)
+
     vital_data = {u'時間': times[1:],
-                  u'カロリー': calories,
-                  u'総カロリー': tmp_calorie,
-                  u'歩数': steps,
-                  u'総歩数': tmp_step,
-                  u'脈拍': heartrates,
-                  u'平均脈拍': sum(heartrates)/len(heartrates)}
+            u'カロリー': [calories, ("total: %d" % tmp_calorie)],
+            u'歩数': [steps, ("total: %d" % tmp_step)],
+            u'脈拍': [heartrates, ("avarage: %d" % ave_heartrate)]}
 
     return vital_data
 
@@ -168,11 +167,12 @@ def get_sensor_data(workerId, interval=10):
                 tmp_temperature = []
                 tmp_humidity = []
 
+    ave_temperature = sum(temperature)/len(temperature)
+    ave_humidity = sum(humidity)/len(humidity)
+
     sensor_data = {u'時間': times[1:],
-                   u'気温': temperature,
-                   u'平均気温': sum(temperature)/len(temperature),
-                   u'湿度': humidity,
-                   u'平均湿度': sum(humidity)/len(humidity)}
+            u'気温': [temperature, ("average: %d" % ave_temperature)],
+            u'湿度': [humidity, ("average: %d" % ave_humidity)]}
 
     return sensor_data
 
@@ -216,11 +216,9 @@ def get_activity_data(workerId, interval=10):
                 distances.append(tmp_distance)
 
     activity_data = {u'時間': times[1:],
-                     u'商品数': itemNums,
-                     u'総商品数': tmp_itemNum,
-                     u'距離': distances,
-                     u'総距離': tmp_distance,
-                     u'座標': locations[1:]}
+            u'商品数': [itemNums, ("total: %d" % tmp_itemNum)],
+            u'距離': [distances, ("total: %d" % tmp_distance)],
+            u'座標': locations[1:]}
 
     return activity_data
 
@@ -236,7 +234,8 @@ def get_data(workerId, category):
             if c in [u"カロリー", u"歩数", u"脈拍"]:
                 data.append({'label': c,
                              'value_x': vital_data[u'時間'],
-                             'value_y': vital_data[c]})
+                             'value_y': vital_data[c][0],
+                             'message': vital_data[c][1]})
 
     if u"気温" in category or u"湿度" in category:
         sensor_data = get_sensor_data(workerId)
@@ -244,7 +243,8 @@ def get_data(workerId, category):
             if c in [u"気温", u"湿度"]:
                 data.append({'label': c,
                              'value_x': sensor_data[u'時間'],
-                             'value_y': sensor_data[c]})
+                             'value_y': sensor_data[c][0],
+                             'message': sensor_data[c][1]})
 
     if u"商品数" in category or u"距離" in category:
         activity_data = get_activity_data(workerId)
@@ -252,7 +252,8 @@ def get_data(workerId, category):
             if c in [u"商品数", u"距離"]:
                 data.append({'label': c,
                              'value_x': activity_data[u'時間'],
-                             'value_y': activity_data[c]})
+                             'value_y': activity_data[c][0],
+                             'message': activity_data[c][1]})
 
     return data
 
