@@ -24,9 +24,9 @@ def get_time(date_org, interval):
 
 def get_vital_data(workerId, interval=10):
     times = [""]
-    calories = []
-    steps = []
-    heartrates = []
+    calorie = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"kcal"}
+    step = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"歩"}
+    heartrate = {'log': [], 'title': u"平均", 'result': 0, 'unit': "bpm"}
     tmp_heartrates = []
 
     payload = {'rdf:type': "frameworx:WarehouseVital",
@@ -37,29 +37,30 @@ def get_vital_data(workerId, interval=10):
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             tmp_heartrates.append(d["frameworx:heartrate"])
-            tmp_calorie = int(d["frameworx:calorie"])
-            tmp_step = int(d["frameworx:step"])
+            calorie['result'] = int(d["frameworx:calorie"])
+            step['result'] = int(d["frameworx:step"])
             if time != times[-1]:
                 times.append(time)
-                calories.append(tmp_calorie)
-                steps.append(tmp_step)
-                heartrates.append(sum(tmp_heartrates)/len(tmp_heartrates))
+                calorie['log'].append(calorie['result'])
+                step['log'].append(step['result'])
+                heartrate['log'].append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
 
-    ave_heartrate = sum(heartrates)/len(heartrates)
+    heartrate['result'] = sum(heartrate['log'])/len(heartrate['log'])
 
-    vital_data = {u'時間': times[1:],
-            u'カロリー': [calories, ("total: %d" % tmp_calorie)],
-            u'歩数': [steps, ("total: %d" % tmp_step)],
-            u'脈拍': [heartrates, ("avarage: %d" % ave_heartrate)]}
+    vital_data = {
+            u'時間': times[1:],
+            u'カロリー': calorie,
+            u'歩数': step,
+            u'脈拍': heartrate}
 
     return vital_data
 
 
 def get_sensor_data(workerId, interval=10):
     times = [""]
-    temperature = []
-    humidity = []
+    temperature = {'log': [], 'title': u"平均", 'result': 0, 'unit': u"℃"}
+    humidity = {'log': [], 'title': u"平均", 'result': 0, 'unit': "%"}
     tmp_temperature = []
     tmp_humidity = []
 
@@ -74,35 +75,35 @@ def get_sensor_data(workerId, interval=10):
             tmp_humidity.append(d["frameworx:humidity"])
             if time != times[-1]:
                 times.append(time)
-                temperature.append(sum(tmp_temperature)/len(tmp_temperature))
-                humidity.append(sum(tmp_humidity)/len(tmp_humidity))
+                temperature['log'].append(sum(tmp_temperature)/len(tmp_temperature))
+                humidity['log'].append(sum(tmp_humidity)/len(tmp_humidity))
                 tmp_temperature = []
                 tmp_humidity = []
 
-    ave_temperature = sum(temperature)/len(temperature)
-    ave_humidity = sum(humidity)/len(humidity)
+    temperature['result'] = round(sum(temperature['log'])/len(temperature['log']), 1)
+    humidity['result'] = round(sum(humidity['log'])/len(humidity['log']), 1)
 
-    sensor_data = {u'時間': times[1:],
-            u'気温': [temperature, ("average: %d" % ave_temperature)],
-            u'湿度': [humidity, ("average: %d" % ave_humidity)]}
+    sensor_data = {
+            u'時間': times[1:],
+            u'気温': temperature,
+            u'湿度': humidity}
 
     return sensor_data
 
 
 def get_activity_data(workerId, interval=10):
     location = {}
-    times = [""]
-    itemNums = []
-    distances = []
-    locations = [numpy.array([2500, 2500])]
-    tmp_itemNum = 0
-    tmp_shelfId = 0
-    tmp_distance = 0
 
     payload = {'rdf:type': "frameworx:WarehouseLocation"}
     requests = get_requests(payload)
     for d in requests.json():
         location[(d['frameworx:shelfId'])] = numpy.array([int(d['frameworx:x']), int(d['frameworx:y'])])
+
+    times = [""]
+    itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
+    distance = {'log': [], 'title': u"合計", 'result': 0, 'unit': "m"}
+    locations = [numpy.array([2500, 2500])]
+    shelfIds = [""]
 
     payload = {'rdf:type': "frameworx:WarehouseActivity",
                'frameworx:workerId': workerId}
@@ -112,28 +113,41 @@ def get_activity_data(workerId, interval=10):
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             if d["frameworx:itemNum"]:
-                tmp_itemNum += int(d["frameworx:itemNum"])
+                itemNum['result'] += int(d["frameworx:itemNum"])
+
             if d["frameworx:shelfId"]:
-                if d["frameworx:shelfId"] != tmp_shelfId:
+                if d["frameworx:shelfId"] != shelfIds[-1]:
                     if d["frameworx:shelfId"] in location:
-                        tmp_distance += numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])
-                        tmp_shelfId = d["frameworx:shelfId"]
+                        distance['result'] += int(numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])/100)
+                        shelfIds.append(d["frameworx:shelfId"])
                         locations.append(location[d["frameworx:shelfId"]])
                     else:
                         print "Can not find the shelfId ", d["frameworx:shelfId"]
 
             if time != times[-1]:
                 times.append(time)
-                itemNums.append(tmp_itemNum)
-                distances.append(tmp_distance)
+                itemNum['log'].append(itemNum['result'])
+                distance['log'].append(distance['result'])
 
-    activity_data = {u'時間': times[1:],
-            u'商品数': [itemNums, ("total: %d" % tmp_itemNum)],
-            u'距離': [distances, ("total: %d" % tmp_distance)],
-            u'座標': locations[1:]}
+    activity_data = {
+            u'時間': times[1:],
+            u'商品数': itemNum,
+            u'距離': distance,
+            u'座標': locations[1:],
+            u'シェルフ': shelfIds[1:]}
 
     return activity_data
 
+def set_data(data, tmp_data, category, member):
+    for c in category:
+        if c in member:
+            data.append({
+                'label': c,
+                'value_x': tmp_data[u'時間'],
+                'value_y': tmp_data[c]['log'],
+                'title': tmp_data[c]['title'],
+                'result': tmp_data[c]['result'],
+                'unit': tmp_data[c]['unit']})
 
 def get_data(workerId, category):
     data = []
@@ -141,31 +155,16 @@ def get_data(workerId, category):
     print "category:", category
 
     if u"カロリー" in category or u"歩数" in category or u"脈拍" in category:
-        vital_data = get_vital_data(workerId)
-        for c in category:
-            if c in [u"カロリー", u"歩数", u"脈拍"]:
-                data.append({'label': c,
-                             'value_x': vital_data[u'時間'],
-                             'value_y': vital_data[c][0],
-                             'message': vital_data[c][1]})
-
-    if u"気温" in category or u"湿度" in category:
-        sensor_data = get_sensor_data(workerId)
-        for c in category:
-            if c in [u"気温", u"湿度"]:
-                data.append({'label': c,
-                             'value_x': sensor_data[u'時間'],
-                             'value_y': sensor_data[c][0],
-                             'message': sensor_data[c][1]})
+        tmp_data = get_vital_data(workerId)
+        set_data(data, tmp_data, category, [u"カロリー", u"歩数", u"脈拍"])
 
     if u"商品数" in category or u"距離" in category:
-        activity_data = get_activity_data(workerId)
-        for c in category:
-            if c in [u"商品数", u"距離"]:
-                data.append({'label': c,
-                             'value_x': activity_data[u'時間'],
-                             'value_y': activity_data[c][0],
-                             'message': activity_data[c][1]})
+        tmp_data = get_activity_data(workerId)
+        set_data(data, tmp_data, category, [u"商品数", u"距離"])
+
+    if u"気温" in category or u"湿度" in category:
+        tmp_data = get_sensor_data(workerId)
+        set_data(data, tmp_data, category, [u"気温", u"湿度"])
 
     return data
 

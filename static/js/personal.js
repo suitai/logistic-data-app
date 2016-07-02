@@ -40,11 +40,14 @@ function draw_line_graphs(charts) {
             $('#canvas_content').append("<p>Can not find data.</p>");
             continue;
         }
+        var message = charts[i]['title'] + ": " + charts[i]['result'] + " " + charts[i]['unit'];
+
         $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
         $('#canvas_content').append($('<div>').attr('id', "chart_content" + String(i)));
         $('#chart_content' + String(i)).attr('class', "chart-section");
         $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
-        $('#chart_content' + String(i)).append($("<p>" + charts[i]['message'] + "</p>"));
+        $("#chart" + String(i)).attr('width', 250);
+        $('#chart_content' + String(i)).append($("<p>" + message + "</p>"));
         $('#canvas_content').append($('</div>'));
 
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
