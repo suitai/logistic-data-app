@@ -96,68 +96,78 @@ function get_data(url, post_data){
     });
 }
 
+function get_workerId(){
+    var workerId = document.forms.get.workerId.value;
+
+    if (!workerId) {
+        $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
+        console.log("error: invalid worker ID", workerId);
+        return;
+    }
+    return workerId;
+}
+
+function get_category(){
+    var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
+    var category = [];
+
+    for (var i = 0; i < all_categories.length; i++){
+        if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
+            category.push(all_categories[i]);
+        }
+    }
+    return category;
+}
+
+function log_event(event) {
+    $('#canvas_content').html("");
+
+    var workerId = get_workerId();
+    var category = get_category();
+    var post_data = JSON.stringify({
+        workerId: workerId,
+        category: category
+    });
+    console.log("post:", post_data);
+
+    $("#loading").show();
+
+    event.preventDefault();
+    get_data("_get_personal_log_data", post_data).done(function(result) {
+        console.log("get:", result['data']);
+        $("#loading").hide();
+        draw_log_graph(JSON.parse(result['data']));
+    }).fail(function(result) {
+        console.log("error: ", result);
+    });
+};
+
+function summary_event(event){
+    $('#canvas_content').html("");
+
+    var workerId = get_workerId();
+    var post_data = JSON.stringify({
+        workerId: workerId,
+    });
+    console.log("post:", post_data);
+
+    $("#loading").show();
+
+    event.preventDefault();
+    get_data("_get_personal_summary_data", post_data).done(function(result) {
+        console.log("get:", result['data']);
+        $("#loading").hide();
+        draw_summary_graph(JSON.parse(result['data']));
+    }).fail(function(result) {
+        console.log("error: ", result);
+    });
+};
 
 $(function() {
     $("#loading").hide();
+    console.log("welcome to personal page");
 
-    $('#display_log_btn').on('click', function(event) {
-        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
-        var workerId = document.forms.get.workerId.value;
-        var category = [];
+    $('#display_log_btn').on('click', log_event);
 
-        for (var i = 0; i < all_categories.length; i++){
-            if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
-                category.push(all_categories[i]);
-            }
-        }
-
-        $('#canvas_content').html("");
-        if (!workerId) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
-            return;
-        }
-        var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
-            category: category
-        });
-        console.log("post:", post_data);
-
-        $("#loading").show();
-
-        event.preventDefault();
-        get_data("_get_personal_log_data", post_data).done(function(result) {
-            console.log("get:", result['data']);
-            $("#loading").hide();
-            draw_log_graph(JSON.parse(result['data']));
-        }).fail(function(result) {
-            console.log("error: ", result);
-        });
-    });
-
-    $('#display_summary_btn').on('click', function(event) {
-        var workerId = document.forms.get.workerId.value;
-
-        $('#canvas_content').html("");
-        if (!workerId) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
-            return;
-        }
-        var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
-        });
-        console.log("post:", post_data);
-
-        $("#loading").show();
-
-        event.preventDefault();
-        get_data("_get_personal_summary_data", post_data).done(function(result) {
-            console.log("get:", result['data']);
-            $("#loading").hide();
-            draw_summary_graph(JSON.parse(result['data']));
-        }).fail(function(result) {
-            console.log("error: ", result);
-        });
-    });
+    $('#display_summary_btn').on('click', summary_event);
 });
