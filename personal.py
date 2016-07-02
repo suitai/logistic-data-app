@@ -46,7 +46,8 @@ def get_vital_data(workerId, interval=10):
                 heartrate['log'].append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
 
-    heartrate['result'] = sum(heartrate['log'])/len(heartrate['log'])
+    if len(heartrate['log']):
+        heartrate['result'] = sum(heartrate['log'])/len(heartrate['log'])
 
     vital_data = {
             u'時間': times[1:],
@@ -80,8 +81,10 @@ def get_sensor_data(workerId, interval=10):
                 tmp_temperature = []
                 tmp_humidity = []
 
-    temperature['result'] = round(sum(temperature['log'])/len(temperature['log']), 1)
-    humidity['result'] = round(sum(humidity['log'])/len(humidity['log']), 1)
+    if len(temperature['log']):
+        temperature['result'] = round(sum(temperature['log'])/len(temperature['log']), 1)
+    if len(humidity['log']):
+        humidity['result'] = round(sum(humidity['log'])/len(humidity['log']), 1)
 
     sensor_data = {
             u'時間': times[1:],
