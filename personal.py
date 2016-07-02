@@ -95,17 +95,9 @@ def get_sensor_data(workerId, interval=10):
 
 
 def get_activity_data(workerId, interval=10):
-    location = {}
-
-    payload = {'rdf:type': "frameworx:WarehouseLocation"}
-    requests = get_requests(payload)
-    for d in requests.json():
-        location[(d['frameworx:shelfId'])] = numpy.array([int(d['frameworx:x']), int(d['frameworx:y'])])
 
     times = [""]
     itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
-    distance = {'log': [], 'title': u"合計", 'result': 0, 'unit': "m"}
-    locations = [numpy.array([2500, 2500])]
     shelfIds = [""]
 
     payload = {'rdf:type': "frameworx:WarehouseActivity",
@@ -120,23 +112,15 @@ def get_activity_data(workerId, interval=10):
 
             if d["frameworx:shelfId"]:
                 if d["frameworx:shelfId"] != shelfIds[-1]:
-                    if d["frameworx:shelfId"] in location:
-                        distance['result'] += int(numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])/100)
-                        shelfIds.append(d["frameworx:shelfId"])
-                        locations.append(location[d["frameworx:shelfId"]])
-                    else:
-                        print "Can not find the shelfId ", d["frameworx:shelfId"]
+                    shelfIds.append(d["frameworx:shelfId"])
 
             if time != times[-1]:
                 times.append(time)
                 itemNum['log'].append(itemNum['result'])
-                distance['log'].append(distance['result'])
 
     activity_data = {
             u'時間': times[1:],
             u'商品数': itemNum,
-            u'距離': distance,
-            u'座標': locations[1:],
             u'シェルフ': shelfIds[1:]}
 
     return activity_data
