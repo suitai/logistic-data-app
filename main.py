@@ -60,7 +60,7 @@ def requires_auth(f):
 
 @app.route('/_get_personal_log_data', methods=["POST"])
 @requires_auth
-def _get_personal_data():
+def _get_personal_log_data():
     workerId = int(request.json[u'workerId'])
     category = request.json[u'category']
     data = personal.get_log_data(workerId, category)
