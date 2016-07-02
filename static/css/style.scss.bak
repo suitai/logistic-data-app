@@ -9,28 +9,6 @@
     margin-right: auto;
 }
 
-#canvas_content {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.chart-section {
-    display: box;
-    display: -webkit-box;
-    display: -moz-box;
-    box-align:center;
-    -moz-box-align:center;
-    -moz-box-pack: center;
-    canvas {
-        margin-left: 30px;
-    }
-    p {
-        width: 200px;
-        margin-left: 30px;
-        font-size: 22px;
-    }
-}
-
 p {
     color: #666666;
 }

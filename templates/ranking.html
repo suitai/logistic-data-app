@@ -6,6 +6,7 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
         <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/jquery.oncssanimationend.js') }}"></script>
         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -15,7 +16,7 @@
             <div class="container">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="text-center" id="banner-text">
-                        <h1><a href="index.html">logistic-data-app</a></h1>
+                        <h1><a href="index.html">MyWorx</a></h1>
                         <p>カロリー消費量を確認しよう！</p>
                     </div>
                 </div>
@@ -42,21 +43,21 @@
 								<td>従業員ID</td>
 								<td id="result"></td>
 							</tr>
-							<tr>
+							<tr class="rank_1st">
 								<td><img
 									src="{{ url_for('static', filename='images/rank01_01.png') }}"
 									width="40" height="40" alt="1位" /></td>
 								<td id="employee1"></td>
 								<td id="result1"></td>
 							</tr>
-							<tr>
+							<tr class="rank_2nd">
 								<td><img
 									src="{{ url_for('static', filename='images/rank01_02.png') }}"
 									width="40" height="40" alt="2位" /></td>
 								<td id="employee2"></td>
 								<td id="result2"></td>
 							</tr>
-							<tr>
+							<tr class="rank_3rd">
 								<td><img
 									src="{{ url_for('static', filename='images/rank01_03.png') }}"
 									width="40" height="40" alt="3位" /></td>
