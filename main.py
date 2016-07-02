@@ -66,6 +66,13 @@ def _get_personal_log_data():
     data = personal.get_log_data(workerId, category)
     return jsonify(data=json.dumps(data))
 
+@app.route('/_get_personal_summary_data', methods=["POST"])
+@requires_auth
+def _get_personal_summary_data():
+    workerId = int(request.json[u'workerId'])
+    data = personal.get_summary_data(workerId)
+    return jsonify(data=json.dumps(data))
+
 @app.route('/_step_graph', methods=["GET", "POST"])
 @requires_auth
 def _step_graph():

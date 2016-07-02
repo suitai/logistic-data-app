@@ -172,5 +172,24 @@ def get_log_data(workerId, category):
     return data
 
 
+def get_summary_data(workerId):
+    data = {}
+    calorie = 2000.0
+    step = 5000.0
+    itemNum = 500.0
+    distance = 1000.0
+
+    print "workerId:", workerId
+
+    tmp_data = get_vital_data(workerId)
+    data[u'カロリー'] = int(((tmp_data[u'カロリー']['result']/calorie)*100))
+    data[u'歩数'] = int(((tmp_data[u'歩数']['result']/step)*100))
+
+    tmp_data = get_activity_data(workerId)
+    data[u'商品数'] = int(((tmp_data[u'商品数']['result']/itemNum)*100))
+    data[u'距離'] = int(((tmp_data[u'距離']['result']/distance)*100))
+
+    return data
+
 if __name__ == '__main__':
     pass

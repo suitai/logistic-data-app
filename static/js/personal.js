@@ -32,6 +32,30 @@ function draw_line_graph(chart, ctx) {
     console.log("draw:", chart['label']);
 }
 
+function draw_radar_graph(chart, ctx) {
+    var labels = [];
+    var data = [];
+
+    for(d in chart){
+        labels.push(d);
+        data.push(chart[d]);
+    }
+
+    var dataset = {
+        label: "summary",
+        data: data
+    };
+    var data = {
+        labels: labels,
+        datasets: [dataset,]
+    };
+    var radarChart = new Chart(ctx, {
+        type: "radar",
+        data: data,
+    });
+    console.log("draw: summary");
+}
+
 function draw_line_graphs(charts) {
 
     for (var i = 0; i < charts.length; i++) {
@@ -53,6 +77,14 @@ function draw_line_graphs(charts) {
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx);
     }
+}
+
+function draw_summary_graph(chart) {
+    $('#canvas_content').append($('<canvas>').attr('id', "chart_summary"));
+    $("#chart_summary").attr('width', 250);
+
+    var ctx = $("#chart_summary").get(0).getContext("2d");
+    draw_radar_graph(chart, ctx);
 }
 
 function get_data(url, post_data){
@@ -98,6 +130,32 @@ $(function() {
             console.log("get:", result['data']);
             $("#loading").hide();
             draw_line_graphs(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
+        });
+    });
+
+    $('#display_summary_btn').on('click', function(event) {
+        var workerId = document.forms.get.workerId.value;
+
+        $('#canvas_content').html("");
+        if (!workerId) {
+            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
+            console.log("error: invalid worker ID", workerId);
+            return;
+        }
+        var post_data = JSON.stringify({
+            workerId: document.forms.get.workerId.value,
+        });
+        console.log("post:", post_data);
+
+        $("#loading").show();
+
+        event.preventDefault();
+        get_data("_get_personal_summary_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_summary_graph(JSON.parse(result['data']));
         }).fail(function(result) {
             console.log("error: ", result);
         });
