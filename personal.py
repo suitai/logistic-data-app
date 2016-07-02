@@ -141,6 +141,40 @@ def get_activity_data(workerId, interval=10):
 
     return activity_data
 
+
+def get_position_data(workerId, interval=10):
+
+    times = [""]
+    positions = []
+    distance = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"m"}
+
+    payload = {'rdf:type': "frameworx:WarehousePosition",
+               'frameworx:workerId': workerId}
+    requests = get_requests(payload)
+
+    for d in sorted(requests.json(), key=lambda x: x['dc:date']):
+        if d['dc:date']:
+            time = get_time(d['dc:date'], interval)
+            tmp_position = [d['frameworx:x'], d['frameworx:y']]
+
+            if len(positions) == 0:
+                positions.append(tmp_position)
+
+            distance['result'] += int(numpy.sqrt((tmp_position[0] - positions[-1][0]) ** 2 + (tmp_position[1] - positions[-1][1]) ** 2))
+            positions.append(tmp_position)
+
+            if time != times[-1]:
+                times.append(time)
+                distance['log'].append(distance['result'])
+
+    activity_data = {
+            u'時間': times[1:],
+            u'距離': distance,
+            u'位置': positions[1:]}
+
+    return activity_data
+
+
 def set_data(data, tmp_data, category, member):
     for c in category:
         if c in member:
@@ -152,6 +186,7 @@ def set_data(data, tmp_data, category, member):
                 'result': tmp_data[c]['result'],
                 'unit': tmp_data[c]['unit']})
 
+
 def get_log_data(workerId, category):
     data = []
     print "workerId:", workerId
@@ -161,9 +196,13 @@ def get_log_data(workerId, category):
         tmp_data = get_vital_data(workerId)
         set_data(data, tmp_data, category, [u"カロリー", u"歩数", u"脈拍"])
 
-    if u"商品数" in category or u"距離" in category:
+    if u"商品数" in category:
         tmp_data = get_activity_data(workerId)
-        set_data(data, tmp_data, category, [u"商品数", u"距離"])
+        set_data(data, tmp_data, category, [u"商品数"])
+
+    if u"距離" in category:
+        tmp_data = get_position_data(workerId)
+        set_data(data, tmp_data, category, [u"距離"])
 
     if u"気温" in category or u"湿度" in category:
         tmp_data = get_sensor_data(workerId)
@@ -187,6 +226,8 @@ def get_summary_data(workerId):
 
     tmp_data = get_activity_data(workerId)
     data[u'商品数'] = int(((tmp_data[u'商品数']['result']/itemNum)*100))
+
+    tmp_data = get_position_data(workerId)
     data[u'距離'] = int(((tmp_data[u'距離']['result']/distance)*100))
 
     return data
