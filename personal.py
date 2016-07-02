@@ -46,7 +46,7 @@ def get_vital_data(workerId, interval=10):
                 heartrate['log'].append(sum(tmp_heartrates)/len(tmp_heartrates))
                 tmp_heartrates = []
 
-    if len(heartrate['log']):
+    if len(heartrate['log']) > 0:
         heartrate['result'] = sum(heartrate['log'])/len(heartrate['log'])
 
     vital_data = {
@@ -81,9 +81,9 @@ def get_sensor_data(workerId, interval=10):
                 tmp_temperature = []
                 tmp_humidity = []
 
-    if len(temperature['log']):
+    if len(temperature['log']) > 0:
         temperature['result'] = round(sum(temperature['log'])/len(temperature['log']), 1)
-    if len(humidity['log']):
+    if len(humidity['log']) > 0:
         humidity['result'] = round(sum(humidity['log'])/len(humidity['log']), 1)
 
     sensor_data = {
