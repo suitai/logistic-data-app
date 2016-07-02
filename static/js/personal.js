@@ -57,7 +57,7 @@ function draw_line_graphs(charts) {
 
 function get_data(url, post_data){
     return $.ajax({
-        url: "_get_personal_data",
+        url: url,
         type: 'post',
         data: post_data,
         contentType: 'application/json',
@@ -94,7 +94,7 @@ $(function() {
         $("#loading").show();
 
         event.preventDefault();
-        get_data("_get_personal_data", post_data).done(function(result) {
+        get_data("_get_personal_log_data", post_data).done(function(result) {
             console.log("get:", result['data']);
             $("#loading").hide();
             draw_line_graphs(JSON.parse(result['data']));

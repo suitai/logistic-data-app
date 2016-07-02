@@ -58,12 +58,12 @@ def requires_auth(f):
         return f(*args, **kwargs)
     return decorated
 
-@app.route('/_get_personal_data', methods=["POST"])
+@app.route('/_get_personal_log_data', methods=["POST"])
 @requires_auth
 def _get_personal_data():
     workerId = int(request.json[u'workerId'])
     category = request.json[u'category']
-    data = personal.get_data(workerId, category)
+    data = personal.get_log_data(workerId, category)
     return jsonify(data=json.dumps(data))
 
 @app.route('/_step_graph', methods=["GET", "POST"])

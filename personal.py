@@ -149,7 +149,7 @@ def set_data(data, tmp_data, category, member):
                 'result': tmp_data[c]['result'],
                 'unit': tmp_data[c]['unit']})
 
-def get_data(workerId, category):
+def get_log_data(workerId, category):
     data = []
     print "workerId:", workerId
     print "category:", category
