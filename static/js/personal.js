@@ -33,11 +33,11 @@ function draw_line_graph(chart, ctx) {
 }
 
 function draw_line_graphs(charts) {
-    var output = $(document.getElementById('json'));
 
     for (var i = 0; i < charts.length; i++) {
         if(charts[i]['value_x'].length == 0){
-            output.text("Cannot get data. Please check the worker ID.");
+            $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
+            $('#canvas_content').append("<p>Can not find data.</p>");
             continue;
         }
         $('#canvas_content').append("<h2>" + charts[i]['label'] + "</h2>");
