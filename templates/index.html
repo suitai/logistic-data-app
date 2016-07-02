@@ -5,6 +5,8 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/jquery.oncssanimationend.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
@@ -25,9 +27,11 @@
                     <div class="col-md-4 col-sm-6 text-center col-md-offset-1">
                         <div class="feature-content">
                             <div id="icon">
-                                <a href="log.html">
-                                    <img src="{{url_for('static', filename='images/log_icon.png')}}">
-                                </a>
+                                <div class="icon-img">
+                                    <a href="log.html">
+                                        <img src="{{url_for('static', filename='images/log_icon.png')}}">
+                                    </a>
+                                </div>
                             </div>
                             <h5>カロリー消費量の確認</h5>
                             <p>
@@ -39,9 +43,11 @@
                     <div class="col-md-4 col-sm-6 text-center col-md-offset-2">
                         <div class="feature-content">
                             <div id="icon">
-                                <a href="ranking.html">
-                                    <img src="{{url_for('static', filename='images/ranking_icon.png')}}">
-                                </a>
+                                <div class="icon-img">
+                                    <a href="ranking.html">
+                                        <img src="{{url_for('static', filename='images/ranking_icon.png')}}">
+                                    </a>
+                                </div>
                             </div>
                             <h5>カロリー消費量ランキング</h5>
                             <p>

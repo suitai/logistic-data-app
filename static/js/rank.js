@@ -1,10 +1,15 @@
-var DESC = -1;
-var ASCE = 1;
 
 $(function() {
+    var DESC = -1;
+    var ASCE = 1;
 	$('#rank').submit(
 			function(event) {
 				event.preventDefault();
+                $(".rank_1st").removeClass("on");
+                $(".rank_2nd").removeClass("on");
+                $(".rank_3rd").removeClass("on");
+
+
 				var ctx = $("#rankingCanvas").get(0).getContext("2d");
 				var obtainedData;
 				var rank1Id, rank2Id, rank3Id;
@@ -13,6 +18,8 @@ $(function() {
 				var rankingText;
 				var targetRanking = $('#ranking-select').children(':selected')
 						.attr('value');
+				var rank1Id, rank2Id, rank3Id;
+
 
 				switch (targetRanking) {
 				case 'item':
@@ -37,6 +44,9 @@ $(function() {
 
 				getData(url).done(function(result) {
 					obtainedData = result;
+                    $(".rank_1st").toggleClass("on");
+                    $(".rank_2nd").toggleClass("on");
+                    $(".rank_3rd").toggleClass("on");
 					console.log(obtainedData);
 				}).fail(function(result) {
 					console.log("error");
@@ -50,16 +60,17 @@ $(function() {
 				});
 
 				datasets[1].sort(function(a, b) {
-					if (a > b)
+					if (a > b) {
 						return sortType;
-					if (a < b)
+                    }
+                    else if (a < b) {
 						return -1 * sortType;
+                    }
 					return 0;
 				});
 
-				var rank1Id, rank2Id, rank3Id;
 
-				for ( var key in obtainedData) {
+				for (var key in obtainedData) {
 					var datay = obtainedData[key];
 					if (datay == datasets[1][0]) {
 						rank1Id = key;
@@ -69,6 +80,7 @@ $(function() {
 						rank3Id = key;
 					}
 				}
+
 
 				$("#rankingtable").attr("style","visibility:visible")
 				$("#result").text(rankingText);
