@@ -14,9 +14,7 @@ $(function() {
 				var unit;
 				var sortType;
 				var rankingText;
-				var targetRanking = $('#ranking-select').children(':selected')
-						.attr('value');
-
+				var targetRanking = $('#ranking-select').children(':selected').attr('value');
 				switch (targetRanking) {
 				case 'item':
 					url = "_item_ranking";
@@ -33,6 +31,11 @@ $(function() {
 					sortType = DESC;
 					rankingText = "歩数(歩)";
 					break;
+				case 'distance':
+					url = "_distance_ranking";
+					sortType = DESC;
+					rankingText = "従業員移動距離";
+					break;
 				default:
 					console.log('error');
 					break;
@@ -45,7 +48,7 @@ $(function() {
 					console.log("error");
 				});
 				var datasets = setData(obtainedData)
-				chartData = setChartData(datasets[0], datasets[1])
+				chartData = setChartData(datasets[0], datasets[1], rankingText)
 
 				if (typeof(chart) != "undefined") {
 					chart.destroy();
@@ -106,13 +109,16 @@ function setData(resuestResult) {
 	return [ datax, datay ]
 }
 
-function setChartData(datax, datay) {
+function setChartData(datax, datay, text) {
 	var chartData = {
 		labels : datax,
 		datasets : [ {
+			label: text,
 			fillColor : "blue",
 			strokeColor : "blue",
-			data : datay
+			data : datay,
+			borderColor: "rgba(255,204,51,0.6)",
+            backgroundColor: "rgba(255,204,102,0.4)"
 		}, ]
 	};
 	return chartData;

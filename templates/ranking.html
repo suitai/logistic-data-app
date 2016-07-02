@@ -8,7 +8,6 @@
         <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
@@ -24,11 +23,11 @@
         </section>
 	<form id="rank">
 		<div class="rank-group">
-			<!--  select class="selectpicker" id="ranking-select" -->
-			<select  id="ranking-select">
+			<select  id="ranking-select" >
 				<option value="item">ピッキング商品数</option>
 				<option value="calorie">消費カロリー</option>
 				<option value="step">歩数</option>
+				<option value="distance">従業員移動距離</option>
 			</select><input type="submit" class="btn btn-info" value="ランキング表示" />
 		</div>
 	</form>
