@@ -81,6 +81,11 @@ def _item_ranking():
 def _cal_ranking():
     return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie"))
 
+@app.route('/_distance_ranking', methods=["GET"])
+@requires_auth
+def _distance_ranking():
+    return jsonify(graph.getMoveDistance(os.environ["FRAMEWORX_KEY"]))
+
 @app.route('/_step_ranking', methods=["GET"])
 @requires_auth
 def _step_ranking():

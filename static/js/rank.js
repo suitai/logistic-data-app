@@ -1,34 +1,40 @@
-var DESC = -1;
-var ASCE = 1;
-
 $(function() {
+	var DESC = -1;
+	var ASCE = 1;
+	var chart;
 	$('#rank').submit(
 			function(event) {
 				event.preventDefault();
 				var ctx = $("#rankingCanvas").get(0).getContext("2d");
 				var obtainedData;
-				var rank1Id, rank2Id, rank3Id;
+				var rank1Id = [ ];
+				var rank2Id = [ ];
+				var rank3Id = [ ];
 				var url;
+				var unit;
 				var sortType;
 				var rankingText;
-				var targetRanking = $('#ranking-select').children(':selected')
-						.attr('value');
-
+				var targetRanking = $('#ranking-select').children(':selected').attr('value');
 				switch (targetRanking) {
 				case 'item':
 					url = "_item_ranking";
 					sortType = DESC;
-					rankingText = "ピッキング商品数";
+					rankingText = "ピッキング商品数(個)";
 					break;
 				case 'calorie':
 					url = "_cal_ranking";
 					sortType = DESC;
-					rankingText = "消費カロリー";
+					rankingText = "消費カロリー(KCal)";
 					break;
 				case 'step':
 					url = "_step_ranking";
 					sortType = DESC;
-					rankingText = "歩数";
+					rankingText = "歩数(歩)";
+					break;
+				case 'distance':
+					url = "_distance_ranking";
+					sortType = DESC;
+					rankingText = "従業員移動距離";
 					break;
 				default:
 					console.log('error');
@@ -42,42 +48,53 @@ $(function() {
 					console.log("error");
 				});
 				var datasets = setData(obtainedData)
-				chartData = setChartData(datasets[0], datasets[1])
+				chartData = setChartData(datasets[0], datasets[1], rankingText)
 
-				var chart = new Chart(ctx, {
+				if (typeof(chart) != "undefined") {
+					chart.destroy();
+				}
+				chart = new Chart(ctx, {
 					type : "bar",
 					data : chartData,
+				    options: {
+				        title: {
+				            display: true,
+				            text: ''
+				        }
+				    }
 				});
 
-				datasets[1].sort(function(a, b) {
+				var sortdata = datasets[1].concat();
+				sortdata.sort(function(a, b) {
 					if (a > b)
 						return sortType;
 					if (a < b)
 						return -1 * sortType;
 					return 0;
 				});
-
-				var rank1Id, rank2Id, rank3Id;
+				var filtersortdata = sortdata.filter(function (value, index, self) {
+					  return self.indexOf(value) === index;
+				});
 
 				for ( var key in obtainedData) {
 					var datay = obtainedData[key];
-					if (datay == datasets[1][0]) {
-						rank1Id = key;
-					} else if (datay == datasets[1][1]) {
-						rank2Id = key;
-					} else if (datay == datasets[1][2]) {
-						rank3Id = key;
+					if (datay == filtersortdata[0]) {
+						rank1Id.push(key);
+					} else if (datay == filtersortdata[1]) {
+						rank2Id.push(key);
+					} else if (datay == filtersortdata[2]) {
+						rank3Id.push(key);
 					}
 				}
 
 				$("#rankingtable").attr("style","visibility:visible")
 				$("#result").text(rankingText);
 				$("#employee1").text(rank1Id);
-				$("#result1").text(datasets[1][0]);
+				$("#result1").text(sortdata[0]);
 				$("#employee2").text(rank2Id);
-				$("#result2").text(datasets[1][1]);
+				$("#result2").text(sortdata[1]);
 				$("#employee3").text(rank3Id);
-				$("#result3").text(datasets[1][2]);
+				$("#result3").text(sortdata[2]);
 
 			})
 });
@@ -92,13 +109,16 @@ function setData(resuestResult) {
 	return [ datax, datay ]
 }
 
-function setChartData(datax, datay) {
+function setChartData(datax, datay, text) {
 	var chartData = {
 		labels : datax,
 		datasets : [ {
+			label: text,
 			fillColor : "blue",
 			strokeColor : "blue",
-			data : datay
+			data : datay,
+			borderColor: "rgba(255,204,51,0.6)",
+            backgroundColor: "rgba(255,204,102,0.4)"
 		}, ]
 	};
 	return chartData;
