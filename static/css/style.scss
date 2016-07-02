@@ -1,203 +1,152 @@
-/* line 3, ../sass/style.scss */
+@import 'compass';
+
 .section {
-  padding-top: 30px;
+    padding-top: 30px;
 }
 
-/* line 7, ../sass/style.scss */
 #canvas_wrapper {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* line 12, ../sass/style.scss */
 p {
-  color: #666666;
+    color: #666666;
 }
 
-/* line 16, ../sass/style.scss */
 .banner-section {
-  background-color: #de6a0b;
-  min-height: 250px;
+    background-color: #de6a0b;
+    min-height: 250px;
 }
 
-/* line 22, ../sass/style.scss */
-#banner-text h1 {
-  padding-top: 40px;
-}
-/* line 24, ../sass/style.scss */
-#banner-text h1 a {
-  color: #FFFFFF;
-  font-size: 65px;
-}
-/* line 28, ../sass/style.scss */
-#banner-text h1 a:hover {
-  text-decoration: none;
-}
-/* line 32, ../sass/style.scss */
-#banner-text p {
-  color: #FFFFFF;
-  font-size: 22px;
-  margin-bottom: 30px;
+#banner-text {
+    h1 {
+        padding-top: 40px;
+        a {
+            color: #FFFFFF;
+            font-size: 65px;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
+    p {
+        color: #FFFFFF;
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
 }
 
-/* line 40, ../sass/style.scss */
-.feature-content #icon {
-  width: 180px;
-  height: 130px;
-  text-align: center;
-  vertical-align: middle;
-  margin-left: auto;
-  margin-right: auto;
-}
-/* line 47, ../sass/style.scss */
-.feature-content #icon img {
-  width: auto;
-  height: auto;
-  max-width: 80%;
-}
-/* line 53, ../sass/style.scss */
-.feature-content .icon-img {
-  width: 100%;
-  height: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  vertical-align: middle;
-  -moz-transition-property: width, height;
-  -o-transition-property: width, height;
-  -webkit-transition-property: width, height;
-  transition-property: width height;
-  -moz-transition-duration: 0.1s;
-  -o-transition-duration: 0.1s;
-  -webkit-transition-duration: 0.1s;
-  transition-duration: 0.1s;
-  -moz-transition-timing-function: ease-out;
-  -o-transition-timing-function: ease-out;
-  -webkit-transition-timing-function: ease-out;
-  transition-timing-function: ease-out;
-}
-/* line 63, ../sass/style.scss */
-.feature-content .icon-img.mouseover {
-  width: 95%;
-  height: 95%;
-}
-/* line 67, ../sass/style.scss */
-.feature-content h5 {
-  color: #de6a0b;
-  font-size: 20px;
-}
-/* line 71, ../sass/style.scss */
-.feature-content p {
-  margin-left: 30px;
-  margin-right: 30px;
-  font-size: 12px;
-  text-align: left;
+.feature-content {
+    #icon {
+        width: 180px;
+        height: 130px;
+        text-align: center;
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        img {
+            width: auto;
+            height: auto;
+            max-width: 80%;
+        }
+    }
+    .icon-img {
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        vertical-align: middle;
+        @include transition-property(width height);
+        @include transition-duration(0.1s);
+        @include transition-timing-function(ease-out);
+    }
+    .icon-img.mouseover {
+        width: 95%;
+        height:  95%;
+    }
+    h5 {
+        color: #de6a0b;
+        font-size: 20px;
+    }
+    p {
+        margin-left: 30px;
+        margin-right: 30px;
+        font-size: 12px;
+        text-align: left;
+    }
 }
 
-/* line 84, ../sass/style.scss */
-.log-section .log-input-id {
-  margin-top: 30px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-/* line 89, ../sass/style.scss */
-.log-section .log-select-output {
-  margin-top: 30px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-/* line 94, ../sass/style.scss */
-.log-section h2 {
-  text-align: center;
-  color: #de6a0b;
+
+.log-section {
+    .log-bg {
+        //background-color: #de6a0b;
+    }
+    .log-input-id {
+        margin-top: 30px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .log-select-output {
+        margin-top: 30px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    h2 {
+        text-align: center;
+        color: #de6a0b;
+    }
 }
 
-/* line 101, ../sass/style.scss */
-.ranking-section .rank_1st {
-  background-color: #de6a0b;
-  color: #FFFFFF;
-  padding: 10px;
-  font-size: 30px;
-  margin-bottom: 20px;
-  padding-left: 120px;
-  opacity: 0;
-  -moz-transition-property: opacity, padding-left;
-  -o-transition-property: opacity, padding-left;
-  -webkit-transition-property: opacity, padding-left;
-  transition-property: opacity, padding-left;
-  -moz-transition-duration: 0.3s;
-  -o-transition-duration: 0.3s;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -moz-transition-timing-function: linear;
-  -o-transition-timing-function: linear;
-  -webkit-transition-timing-function: linear;
-  transition-timing-function: linear;
+.ranking-section {
+    .rank_1st {
+        background-color: #de6a0b;
+        color: #FFFFFF;
+        padding: 10px;
+        font-size: 30px;
+        margin-bottom: 20px;
+        padding-left: 120px;
+        opacity: 0;
+        @include transition-property(opacity, padding-left);
+        @include transition-duration(0.3s);
+        @include transition-timing-function(linear);
+    }
+    .rank_1st.on {
+        padding-left: 0px;
+        opacity: 1;
+    }
+    .rank_2nd {
+        background-color: #de8842;
+        color: #FFFFFF;
+        padding: 10px;
+        font-size: 25px;
+        margin-bottom: 20px;
+        opacity: 0;
+        @include transition-property(opacity);
+        @include transition-duration(0.3s);
+        @include transition-delay(0.1s);
+        @include transition-timing-function(linear);
+    }
+    .rank_2nd.on {
+        opacity: 1;
+    }
+    .rank_3rd {
+        background-color: #deab81;
+        color: #FFFFFF;
+        padding: 10px;
+        font-size: 20px;
+        margin-bottom: 20px;
+        opacity: 0;
+        @include transition-property(opacity);
+        @include transition-duration(0.3s);
+        @include transition-delay(0.2s);
+        @include transition-timing-function(linear);
+    }
+    .rank_3rd.on {
+        opacity: 1;
+    }
+    .unranked {
+        padding: 10px;
+        font-size: 15px;
+    }
 }
-/* line 113, ../sass/style.scss */
-.ranking-section .rank_1st.on {
-  padding-left: 0px;
-  opacity: 1;
-}
-/* line 117, ../sass/style.scss */
-.ranking-section .rank_2nd {
-  background-color: #de8842;
-  color: #FFFFFF;
-  padding: 10px;
-  font-size: 25px;
-  margin-bottom: 20px;
-  opacity: 0;
-  -moz-transition-property: opacity;
-  -o-transition-property: opacity;
-  -webkit-transition-property: opacity;
-  transition-property: opacity;
-  -moz-transition-duration: 0.3s;
-  -o-transition-duration: 0.3s;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -moz-transition-delay: 0.1s;
-  -o-transition-delay: 0.1s;
-  -webkit-transition-delay: 0.1s;
-  transition-delay: 0.1s;
-  -moz-transition-timing-function: linear;
-  -o-transition-timing-function: linear;
-  -webkit-transition-timing-function: linear;
-  transition-timing-function: linear;
-}
-/* line 129, ../sass/style.scss */
-.ranking-section .rank_2nd.on {
-  opacity: 1;
-}
-/* line 132, ../sass/style.scss */
-.ranking-section .rank_3rd {
-  background-color: #deab81;
-  color: #FFFFFF;
-  padding: 10px;
-  font-size: 20px;
-  margin-bottom: 20px;
-  opacity: 0;
-  -moz-transition-property: opacity;
-  -o-transition-property: opacity;
-  -webkit-transition-property: opacity;
-  transition-property: opacity;
-  -moz-transition-duration: 0.3s;
-  -o-transition-duration: 0.3s;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -moz-transition-delay: 0.2s;
-  -o-transition-delay: 0.2s;
-  -webkit-transition-delay: 0.2s;
-  transition-delay: 0.2s;
-  -moz-transition-timing-function: linear;
-  -o-transition-timing-function: linear;
-  -webkit-transition-timing-function: linear;
-  transition-timing-function: linear;
-}
-/* line 144, ../sass/style.scss */
-.ranking-section .rank_3rd.on {
-  opacity: 1;
-}
-/* line 147, ../sass/style.scss */
-.ranking-section .unranked {
-  padding: 10px;
-  font-size: 15px;
-}
+
