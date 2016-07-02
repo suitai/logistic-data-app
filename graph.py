@@ -32,30 +32,21 @@ def getMoveDistance(key):
     jsList = r.json()
     workerIdSet = set([])
     totalDistanceDict = {}
+    beforePointDict = {}
     for js in jsList:
-        workerIdSet.add(js["frameworx:workerId"])
-    for workerId in workerIdSet:
-        rPerson = getPersonRequest('frameworx:WarehousePosition', key, workerId)
-        jsPersonList = rPerson.json()
-        pointxBefore = None
-        pointyBefore = None
-        totalDistance = 0
-        for jsPerson in jsPersonList:
-            pointx = jsPerson["frameworx:x"]
-            pointy = jsPerson["frameworx:y"]
-            if (pointxBefore is None) or (pointyBefore is None):
-                pointxBefore = pointx
-                pointyBefore = pointy
-            distance = numpy.sqrt((pointx - pointxBefore) ** 2 + (pointy - pointyBefore) ** 2)
-            totalDistance += distance
-        totalDistanceDict[workerId] = int(totalDistance)
+        workerId = js["frameworx:workerId"]
+        pointx = js["frameworx:x"]
+        pointy = js["frameworx:y"]
+        if workerId not in beforePointDict :
+            beforePointDict[workerId]  = [pointx,pointy]
+        distance = int(numpy.sqrt((pointx - beforePointDict[workerId][0]) ** 2 + (pointy - beforePointDict[workerId][1]) ** 2))
+        if workerId not in totalDistanceDict :
+            totalDistanceDict[workerId] = distance
+        else:
+            totalDistanceDict[workerId] += distance
+        beforePointDict[workerId]  = [pointx,pointy]
     return totalDistanceDict
-
 
 def getRequest(type, key):
     payload = {'rdf:type': type, 'acl:consumerKey':key}
-    return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
-
-def getPersonRequest(type, key , id):
-    payload = {'rdf:type': type, 'acl:consumerKey':key, 'frameworx:workerId':id}
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
