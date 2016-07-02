@@ -136,7 +136,7 @@ def get_position_data(workerId, interval=10):
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
 
-    for d in sorted(requests.json(), key=lambda x: x['dc:date']):
+    for d in requests.json():
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             tmp_position = [d['frameworx:x'], d['frameworx:y']]
@@ -149,7 +149,9 @@ def get_position_data(workerId, interval=10):
 
             if time != times[-1]:
                 times.append(time)
-                distance['log'].append(distance['result'])
+                distance['log'].append(distance['result']/100)
+
+    distance['result'] /= 100
 
     activity_data = {
             u'時間': times[1:],
