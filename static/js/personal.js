@@ -56,7 +56,7 @@ function draw_radar_graph(chart, ctx) {
     console.log("draw: summary");
 }
 
-function draw_line_graphs(charts) {
+function draw_log_graph(charts) {
 
     for (var i = 0; i < charts.length; i++) {
         if(charts[i]['value_x'].length == 0){
@@ -129,7 +129,7 @@ $(function() {
         get_data("_get_personal_log_data", post_data).done(function(result) {
             console.log("get:", result['data']);
             $("#loading").hide();
-            draw_line_graphs(JSON.parse(result['data']));
+            draw_log_graph(JSON.parse(result['data']));
         }).fail(function(result) {
             console.log("error: ", result);
         });
