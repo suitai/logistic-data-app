@@ -1,3 +1,6 @@
 *.pyc
 *.pyo
 app.json
+WarehouseActivity.json
+WarehouseVital.json
+.sass-cache

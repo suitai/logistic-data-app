@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
+        <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/jquery.oncssanimationend.js') }}"></script>
+        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <section class="banner-section" role="banner">
+            <div class="container">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="text-center" id="banner-text">
+                        <h1><a href="index.html">MyWorx</a></h1>
+                        <p>カロリー消費量を確認しよう！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+	<form id="rank">
+		<div class="rank-group">
+			<select  id="ranking-select" >
+				<option value="item">ピッキング商品数</option>
+				<option value="calorie">消費カロリー</option>
+				<option value="step">歩数</option>
+				<option value="distance">従業員移動距離</option>
+			</select><input type="submit" class="btn btn-info" value="ランキング表示" />
+		</div>
+	</form>
+	<div id="rankingtable" style="visibility: hidden">
+		<section class="ranking-section section">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
+						<table class="table">
+							<tr>
+								<td></td>
+								<td>従業員ID</td>
+								<td id="result"></td>
+							</tr>
+							<tr class="rank_1st">
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_01.png') }}"
+									width="40" height="40" alt="1位" /></td>
+								<td id="employee1"></td>
+								<td id="result1"></td>
+							</tr>
+							<tr class="rank_2nd">
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_02.png') }}"
+									width="40" height="40" alt="2位" /></td>
+								<td id="employee2"></td>
+								<td id="result2"></td>
+							</tr>
+							<tr class="rank_3rd">
+								<td><img
+									src="{{ url_for('static', filename='images/rank01_03.png') }}"
+									width="40" height="40" alt="3位" /></td>
+								<td id="employee3"></td>
+								<td id="result3"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="canvas" id="canvas_wrapper">
+		<canvas id="rankingCanvas" width="300" height="250"></canvas>
+	</div>
+</body>
+</html>
