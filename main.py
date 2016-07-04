@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, jsonify, request, Response, url_for
+from flask import Flask, session, redirect, render_template, jsonify, request, Response, url_for
 from functools import wraps
 import json
 import sys
@@ -14,6 +14,36 @@ import shutil
 DEBUG = True
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'XXXXXX'
+
+
+@app.before_request
+def before_request():
+    if session.get('username') is not None:
+        return
+    if request.path == '/login':
+        return
+    return redirect('/login')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST' and is_valid_user():
+        session['username'] = request.form['username']
+        return redirect(url_for('index'))
+    return render_template('login.html')
+
+
+def is_valid_user():
+    if request.form.get('username') is None:
+        return False
+    return True
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 
 def get_request(payload):
