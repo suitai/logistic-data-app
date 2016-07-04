@@ -11,16 +11,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <section class="banner-section" role="banner">
-            <div class="container">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="text-center" id="banner-text">
-                        <h1><a href="index.html">MyWorx</a></h1>
-                        <p>カロリー消費量を確認しよう！</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        {% include 'banner.html' %}
         <section class="man-section">
             <div class="container">
                 <div class="row">
