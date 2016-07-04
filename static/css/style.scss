@@ -15,12 +15,8 @@
 }
 
 .chart-section {
-    display: box;
-    display: -webkit-box;
-    display: -moz-box;
-    box-align:center;
-    -moz-box-align:center;
-    -moz-box-pack: center;
+    @include display-flex;
+    @include align-items(center);
     canvas {
         margin-left: 30px;
     }
@@ -38,6 +34,48 @@ p {
 .banner-section {
     background-color: #de6a0b;
     min-height: 250px;
+    .man_link {
+        a {
+            color: #FFFFFF;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.man-section {
+    h2 {
+        position: relative;
+        padding: .25em 0 .5em .75em;
+        border-left: 6px solid #de6a0b;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    h2::after {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        content: '';
+        width: 100%;
+        height: 0;
+        border-bottom: 1px solid #cccccc;
+    }
+    h3 {
+        padding-bottom: .5em;
+        border-bottom: 1px solid #cccccc;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    h4 {
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
 
 #banner-text {

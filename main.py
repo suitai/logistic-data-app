@@ -6,8 +6,7 @@ import json
 import sys
 import logging
 import os
-from mylib import graph
-from mylib import personal
+from mylib import graph, personal
 import requests
 import shutil
 
@@ -16,15 +15,18 @@ DEBUG = True
 
 app = Flask(__name__)
 
+
 def get_request(payload):
     payload['acl:consumerKey'] = os.environ["FRAMEWORX_KEY"]
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
+
 
 def write_data(data_type):
     payload = {'rdf:type': "frameworx:" + data_type}
     data = get_request(payload)
     with open(data_type + ".json", 'w') as f:
         json.dump(data.json(), f)
+
 
 def write_map(map_name):
     payload = {'acl:consumerKey': os.environ["FRAMEWORX_KEY"]}
@@ -34,10 +36,12 @@ def write_map(map_name):
             r.raw.decode_content = True
             shutil.copyfileobj(r.raw, f)
 
+
 def read_data(data_type):
     with open(data_type + ".json", 'r') as f:
         data = json.load(f)
     return data
+
 
 def check_auth(username, password):
     return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
@@ -49,6 +53,7 @@ def authenticate():
         401,
         {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
+
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -58,6 +63,7 @@ def requires_auth(f):
         return f(*args, **kwargs)
     return decorated
 
+
 @app.route('/_get_personal_log_data', methods=["POST"])
 @requires_auth
 def _get_personal_log_data():
@@ -66,6 +72,7 @@ def _get_personal_log_data():
     data = personal.get_log_data(workerId, category)
     return jsonify(data=json.dumps(data))
 
+
 @app.route('/_get_personal_summary_data', methods=["POST"])
 @requires_auth
 def _get_personal_summary_data():
@@ -73,30 +80,36 @@ def _get_personal_summary_data():
     data = personal.get_summary_data(workerId)
     return jsonify(data=json.dumps(data))
 
+
 @app.route('/_step_graph', methods=["GET", "POST"])
 @requires_auth
 def _step_graph():
     return jsonify({"test": "aaa"})
+
 
 @app.route('/_item_ranking', methods=["GET"])
 @requires_auth
 def _item_ranking():
     return jsonify(graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"]))
 
+
 @app.route('/_cal_ranking', methods=["GET"])
 @requires_auth
 def _cal_ranking():
     return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie"))
+
 
 @app.route('/_distance_ranking', methods=["GET"])
 @requires_auth
 def _distance_ranking():
     return jsonify(graph.getMoveDistance(os.environ["FRAMEWORX_KEY"]))
 
+
 @app.route('/_step_ranking', methods=["GET"])
 @requires_auth
 def _step_ranking():
     return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step"))
+
 
 @app.route('/_get_key', methods=["GET"])
 @requires_auth
@@ -121,10 +134,18 @@ def index_2():
 def log_page():
     return render_template("log.html")
 
+
 @app.route("/ranking.html")
 @requires_auth
 def ranking_page():
     return render_template("ranking.html")
+
+
+@app.route("/man.html")
+@requires_auth
+def man_page():
+    return render_template("man.html")
+
 
 if __name__ == "__main__":
     app.debug = True
