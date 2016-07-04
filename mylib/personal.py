@@ -232,5 +232,3 @@ def get_summary_data(workerId):
 
     return data
 
-if __name__ == '__main__':
-    pass

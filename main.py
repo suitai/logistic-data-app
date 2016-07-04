@@ -6,8 +6,8 @@ import json
 import sys
 import logging
 import os
-import graph
-import personal
+from mylib import graph
+from mylib import personal
 import requests
 import shutil
 
