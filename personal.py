@@ -12,8 +12,6 @@ def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
     data =  requests.get(URL+path, params=payload)
     print "get:", payload
-    with open("requests.json", 'w') as f:
-        json.dump(data.json(), f)
     return data
 
 
