@@ -151,12 +151,12 @@ def get_position_data(workerId, interval=10):
 
     distance['result'] /= 100
 
-    activity_data = {
+    position_data = {
             u'時間': times[1:],
             u'距離': distance,
             u'位置': positions[1:]}
 
-    return activity_data
+    return position_data
 
 
 def set_data(data, tmp_data, category, member):
