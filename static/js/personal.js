@@ -98,11 +98,21 @@ function get_data(url, post_data){
 
 
 $(function() {
+    var username = 0;
+
     $("#loading").hide();
+
+    $.ajax({
+        url: '/_get_session',
+        type: 'get',
+        data: {key: "username"},
+        contentType: 'application/json',
+    }).done(function(result) {
+        username = result;
+    });
 
     $('#display_log_btn').on('click', function(event) {
         var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
-        var workerId = document.forms.get.workerId.value;
         var category = [];
 
         for (var i = 0; i < all_categories.length; i++){
@@ -112,13 +122,13 @@ $(function() {
         }
 
         $('#canvas_content').html("");
-        if (!workerId) {
+        if (!username) {
             $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
+            console.log("error: invalid username", username);
             return;
         }
         var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
+            workerId: username,
             category: category
         });
         console.log("post:", post_data);
@@ -136,16 +146,15 @@ $(function() {
     });
 
     $('#display_summary_btn').on('click', function(event) {
-        var workerId = document.forms.get.workerId.value;
 
         $('#canvas_content').html("");
-        if (!workerId) {
+        if (!username) {
             $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
+            console.log("error: invalid username", username);
             return;
         }
         var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
+            workerId: username,
         });
         console.log("post:", post_data);
 

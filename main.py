@@ -97,7 +97,7 @@ def requires_auth(f):
 @app.route('/_get_personal_log_data', methods=["POST"])
 @requires_auth
 def _get_personal_log_data():
-    workerId = int(request.json[u'workerId'])
+    workerId = request.json[u'workerId']
     category = request.json[u'category']
     data = personal.get_log_data(workerId, category)
     return jsonify(data=json.dumps(data))
@@ -139,6 +139,13 @@ def _distance_ranking():
 @requires_auth
 def _step_ranking():
     return jsonify(graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step"))
+
+
+@app.route('/_get_session', methods=["GET"])
+@requires_auth
+def _get_session():
+    key = request.args['key']
+    return session.get(key)
 
 
 @app.route('/_get_key', methods=["GET"])
