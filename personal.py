@@ -173,43 +173,25 @@ def set_data(data, tmp_data, category, member):
 
 def get_log_data(workerId, category):
     data = []
-    info = []
-    vital = {'func': get_vital_data, 'category': [u"カロリー", u"歩数", u"脈拍"]}
-    activity = {'func': get_activity_data, 'category': [u"商品数"]}
-    position = {'func': get_position_data, 'category': [u"距離"]}
-    sensor = {'func': get_sensor_data, 'category': [u"気温", u"湿度"]}
 
     print "workerId:", workerId
     print "category:", category
 
     if u"カロリー" in category or u"歩数" in category or u"脈拍" in category:
-        thread = threading.Thread(target=get_vital_data, args=(workerId,))
-        thread.start()
-        vital['thread'] = thread
-        info.append(vital)
+        tmp_data = get_vital_data(workerId)
+        set_data(data, tmp_data, category, [u"カロリー", u"歩数", u"脈拍"])
 
     if u"商品数" in category:
-        thread = threading.Thread(target=get_activity_data, args=(workerId,))
-        thread.start()
-        activity['thread'] = thread
-        info.append(activity)
+        tmp_data = get_activity_data(workerId)
+        set_data(data, tmp_data, category, [u"商品数"])
 
     if u"距離" in category:
-        thread = threading.Thread(target=get_position_data, args=(workerId,))
-        thread.start()
-        position['thread'] = thread
-        info.append(position)
+        tmp_data = get_position_data(workerId)
+        set_data(data, tmp_data, category, [u"距離"])
 
     if u"気温" in category or u"湿度" in category:
-        thread = threading.Thread(target=get_sensor_data, args=(workerId,))
-        thread.start()
-        sensor['thread'] = thread
-        info.append(sensor)
-
-    for i in info:
-        i['thread'].join()
-        tmp_data = i['func'](workerId)
-        set_data(data, tmp_data, category, i['category'])
+        tmp_data = get_sensor_data(workerId)
+        set_data(data, tmp_data, category, [u"気温", u"湿度"])
 
     return data
 
