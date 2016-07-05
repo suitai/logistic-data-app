@@ -95,7 +95,7 @@ function draw_summary_graph(charts) {
     $('#chart_content').append($('<table>').attr('id', "table_summary"));
     $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>最大値</th>/tr>");
     for (c in charts) {
-        $('#table_summary').append("<tr><th>" + c + "</th><th>" + charts[c][0] + "</th><th>" + charts[c][1] +  "</th></tr>");
+        $('#table_summary').append("<tr><td>" + c + "</td><td>" + charts[c][0] + "</td><td>" + charts[c][1] +  "</td></tr>");
     }
     $('#chart_content').append($('</table>'));
     $('#canvas_content').append($('</div>'));
