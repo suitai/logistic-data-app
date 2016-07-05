@@ -1,20 +1,35 @@
 # coding:utf-8
 import requests
 import numpy
+import json
+import redis
+
+red = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 # get calorie or step
 def getVitalData(key, targetData):
+    data = red.get(targetData)
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehouseVital', key)
     jsList = r.json()
     totalVitalDict = {}
+
     for js in jsList:
         workerId = js["frameworx:workerId"]
         data = js["frameworx:" + targetData]
         if (workerId != None) and (data != None) :
             totalVitalDict[workerId] = data
+    red.set(targetData, json.dumps(totalVitalDict), ex=600)
     return totalVitalDict
 
+
 def getTotalItemNumData(key):
+    data = red.get('itemNum')
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehouseActivity', key)
     jsList = r.json()
     totalItemNumDict = {}
@@ -25,14 +40,23 @@ def getTotalItemNumData(key):
             if workerId not in totalItemNumDict :
                 totalItemNumDict[workerId] = 0
             totalItemNumDict[workerId] += data
+
+    red.set('itemNum', json.dumps(totalItemNumDict), ex=600)
+
     return totalItemNumDict
 
+
 def getMoveDistance(key):
+    data = red.get('distance')
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehousePosition', key)
     jsList = r.json()
     workerIdSet = set([])
     totalDistanceDict = {}
     beforePointDict = {}
+
     for js in jsList:
         workerId = js["frameworx:workerId"]
         pointx = js["frameworx:x"]
@@ -45,9 +69,12 @@ def getMoveDistance(key):
         else:
             totalDistanceDict[workerId] += distance
         beforePointDict[workerId]  = [pointx,pointy]
+
+    red.set('distance', json.dumps(totalDistanceDict), ex=600)
+
     return totalDistanceDict
 
 def getRequest(type, key):
     payload = {'rdf:type': type, 'acl:consumerKey':key}
+    print "get:", payload
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
-
