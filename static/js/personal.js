@@ -36,9 +36,9 @@ function draw_radar_graph(chart, ctx) {
     var labels = [];
     var data = [];
 
-    for(d in chart){
-        labels.push(d);
-        data.push(chart[d]);
+    for(c in chart){
+        labels.push(c);
+        data.push(100 * chart[c][0]/chart[c][1]);
     }
 
     var dataset = {
@@ -72,19 +72,26 @@ function draw_log_graph(charts) {
         $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
         $("#chart" + String(i)).attr('width', 250);
         $('#chart_content' + String(i)).append($("<p>" + message + "</p>"));
-        $('#canvas_content').append($('</div>'));
 
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx);
     }
 }
 
-function draw_summary_graph(chart) {
-    $('#canvas_content').append($('<canvas>').attr('id', "chart_summary"));
-    $("#chart_summary").attr('width', 250);
+function draw_summary_graph(charts) {
+    $('#canvas_content').append($('<div>').attr('id', "chart_content"));
+    $('#chart_content').attr('class', "chart-section");
+    $('#chart_content').append($('<canvas>').attr('id', "chart_summary"));
+    $('#chart_content').append($('<table>').attr('id', "table_summary"));
+    $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>最大値</th>/tr>");
+    for (c in charts) {
+        $('#table_summary').append("<tr><th>" + c + "</th><th>" + charts[c][0] + "</th><th>" + charts[c][1] +  "</th></tr>");
+    }
+    $('#chart_content').append($('</table>'));
+    $('#canvas_content').append($('</div>'));
 
     var ctx = $("#chart_summary").get(0).getContext("2d");
-    draw_radar_graph(chart, ctx);
+    draw_radar_graph(charts, ctx);
 }
 
 function get_data(url, post_data){

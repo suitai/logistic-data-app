@@ -173,46 +173,69 @@ def set_data(data, tmp_data, category, member):
 
 def get_log_data(workerId, category):
     data = []
+    info = []
+    vital = {'func': get_vital_data, 'category': [u"カロリー", u"歩数", u"脈拍"]}
+    activity = {'func': get_activity_data, 'category': [u"商品数"]}
+    position = {'func': get_position_data, 'category': [u"距離"]}
+    sensor = {'func': get_sensor_data, 'category': [u"気温", u"湿度"]}
+
     print "workerId:", workerId
     print "category:", category
 
     if u"カロリー" in category or u"歩数" in category or u"脈拍" in category:
-        tmp_data = get_vital_data(workerId)
-        set_data(data, tmp_data, category, [u"カロリー", u"歩数", u"脈拍"])
+        thread = threading.Thread(target=get_vital_data, args=(workerId,))
+        thread.start()
+        vital['thread'] = thread
+        info.append(vital)
 
     if u"商品数" in category:
-        tmp_data = get_activity_data(workerId)
-        set_data(data, tmp_data, category, [u"商品数"])
+        thread = threading.Thread(target=get_activity_data, args=(workerId,))
+        thread.start()
+        activity['thread'] = thread
+        info.append(activity)
 
     if u"距離" in category:
-        tmp_data = get_position_data(workerId)
-        set_data(data, tmp_data, category, [u"距離"])
+        thread = threading.Thread(target=get_position_data, args=(workerId,))
+        thread.start()
+        position['thread'] = thread
+        info.append(position)
 
     if u"気温" in category or u"湿度" in category:
-        tmp_data = get_sensor_data(workerId)
-        set_data(data, tmp_data, category, [u"気温", u"湿度"])
+        thread = threading.Thread(target=get_sensor_data, args=(workerId,))
+        thread.start()
+        sensor['thread'] = thread
+        info.append(sensor)
+
+    for i in info:
+        i['thread'].join()
+        tmp_data = i['func'](workerId)
+        set_data(data, tmp_data, category, i['category'])
 
     return data
 
 
 def get_summary_data(workerId):
     data = {}
-    calorie = 2000.0
-    step = 5000.0
-    itemNum = 500.0
-    distance = 1000.0
 
+    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
+    calorie = float(max(tmp_data.values()))
+    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
+    step = float(max(tmp_data.values()))
+    tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
+    itemNum = float(max(tmp_data.values()))
+    tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
+    distance = float(max(tmp_data.values())/100.0)
+
+    print "calorie", calorie, "step", step, "itemNum", itemNum, "distance", distance
     print "workerId:", workerId
 
     tmp_data = get_vital_data(workerId)
-    data[u'カロリー'] = int(((tmp_data[u'カロリー']['result']/calorie)*100))
-    data[u'歩数'] = int(((tmp_data[u'歩数']['result']/step)*100))
-
+    data[u'カロリー'] = [tmp_data[u'カロリー']['result'], calorie]
+    data[u'歩数'] = [tmp_data[u'歩数']['result'], step]
     tmp_data = get_activity_data(workerId)
-    data[u'商品数'] = int(((tmp_data[u'商品数']['result']/itemNum)*100))
-
+    data[u'商品数'] = [tmp_data[u'商品数']['result'], itemNum]
     tmp_data = get_position_data(workerId)
-    data[u'距離'] = int(((tmp_data[u'距離']['result']/distance)*100))
+    data[u'距離'] = [tmp_data[u'距離']['result'], distance]
 
     return data
 
