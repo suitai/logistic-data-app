@@ -52,6 +52,16 @@ function draw_radar_graph(chart, ctx) {
     var radarChart = new Chart(ctx, {
         type: "radar",
         data: data,
+        options: {
+            scale: {
+                type: "radialLinear",
+                ticks: {
+                    min: 0,
+                    max: 100,
+                    maxTicksLimit: 5
+                }
+            }
+        }
     });
     console.log("draw: summary");
 }
