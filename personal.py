@@ -5,6 +5,7 @@ import json
 import requests
 import dateutil.parser
 import numpy
+import graph
 
 URL = "https://api.frameworxopendata.jp/"
 
