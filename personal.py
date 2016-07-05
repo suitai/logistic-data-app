@@ -6,9 +6,12 @@ import requests
 import dateutil.parser
 import numpy
 import yaml
+import redis
 import graph
 
 URL = "https://api.frameworxopendata.jp/"
+
+red = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
@@ -31,6 +34,10 @@ def read_config(filename="my_worxs.yml"):
 
 
 def get_vital_data(workerId, interval=10):
+    data = red.get('vital_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     calorie = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"kcal"}
     step = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"歩"}
@@ -63,10 +70,16 @@ def get_vital_data(workerId, interval=10):
             u'歩数': step,
             u'脈拍': heartrate}
 
+    red.set('vital_data_' + str(workerId), json.dumps(vital_data), ex=600)
+
     return vital_data
 
 
 def get_sensor_data(workerId, interval=10):
+    data = red.get('sensor_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     temperature = {'log': [], 'title': u"平均", 'result': 0, 'unit': u"℃"}
     humidity = {'log': [], 'title': u"平均", 'result': 0, 'unit': "%"}
@@ -99,10 +112,15 @@ def get_sensor_data(workerId, interval=10):
             u'気温': temperature,
             u'湿度': humidity}
 
+    red.set('sensor_data_' + str(workerId), json.dumps(sensor_data), ex=600)
+
     return sensor_data
 
 
 def get_activity_data(workerId, interval=10):
+    data = red.get('activity_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
@@ -131,10 +149,15 @@ def get_activity_data(workerId, interval=10):
             u'商品数': itemNum,
             u'シェルフ': shelfIds[1:]}
 
+    red.set('activity_data_' + str(workerId), json.dumps(activity_data), ex=600)
+
     return activity_data
 
 
 def get_position_data(workerId, interval=10):
+    data = red.get('position_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     positions = []
@@ -165,6 +188,8 @@ def get_position_data(workerId, interval=10):
             u'時間': times[1:],
             u'距離': distance,
             u'位置': positions[1:]}
+
+    red.set('position_data_' + str(workerId), json.dumps(position_data), ex=600)
 
     return position_data
 
