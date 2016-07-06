@@ -5,9 +5,7 @@ $(function() {
     $(".rank_1st").addClass("on");
     $(".rank_2nd").addClass("on");
     $(".rank_3rd").addClass("on");
-	$('#rank').submit(
-			function(event) {
-				event.preventDefault();
+    $('#display-ranking-btn').on("click", function(){
                 $(".rank_1st").removeClass("on");
                 $(".rank_2nd").removeClass("on");
                 $(".rank_3rd").removeClass("on").onCSSTransitionEnd(function() {
@@ -20,7 +18,7 @@ $(function() {
                     var unit;
                     var sortType;
                     var rankingText;
-                    var targetRanking = $('#ranking-select').children(':selected').attr('value');
+                    var targetRanking = $("input[name='rank-data']:checked").val();
                     switch (targetRanking) {
                     case 'item':
                         url = "_item_ranking";
@@ -85,6 +83,22 @@ $(function() {
                           return self.indexOf(value) === index;
                     });
 
+                    var yourId = $('#rank [name=workerId]').val();
+                    var yourData = obtainedData[yourId];
+                    var yourRank = '*';
+                    var difference =  '*';
+                    for (var i = 0; i < filtersortdata.length; i++){
+                       if (yourData == filtersortdata[i]){
+                    	   yourRank = i +1;
+                    	   difference = filtersortdata[0] - yourData;
+                       }
+                    }
+
+                    console.log(yourId);
+                    console.log(yourData);
+                    console.log(yourRank);
+                    console.log(difference);
+
                     for ( var key in obtainedData) {
                         var datay = obtainedData[key];
                         if (datay == filtersortdata[0]) {
@@ -96,7 +110,9 @@ $(function() {
                         }
                     }
 
-                    $("#rankingtable").attr("style","visibility:visible")
+                    $("#rankingtable").attr("style","visibility:visible");
+                    $("#your-rank").text(yourRank);
+                    $("#difference").text(difference);
                     $("#result").text(rankingText);
                     $("#employee1").text(rank1Id);
                     $("#result1").text(sortdata[0]);

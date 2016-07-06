@@ -5,10 +5,9 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
-        <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/jquery.oncssanimationend.js') }}"></script>
-        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
+         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
@@ -22,18 +21,42 @@
                 </div>
             </div>
         </section>
-	<form id="rank">
-		<div class="rank-group">
-			<select  id="ranking-select" >
-				<option value="item">ピッキング商品数</option>
-				<option value="calorie">消費カロリー</option>
-				<option value="step">歩数</option>
-				<option value="distance">従業員移動距離</option>
-			</select><input type="submit" class="btn btn-info" value="ランキング表示" />
+	<section class="log-section section">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
+					<form id="rank">
+						<div class="input-group ">
+							<span class="input-group-addon" id="basic-addon-rank">👤</span> <input
+								type="text" class="form-control" name="workerId" placeholder="IDを入力してください。"
+								area-describedby="basic-addon1">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" id="display-ranking-btn" type="button">show</button>
+                                    </span>
+						</div>
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active"><input
+								type="radio" id="item-radio" name="rank-data" value="item" autocomplete="off"
+								checked>ピッキング商品数</label>
+							<label class="btn btn-default"><input
+								type="radio" id="calorie-radio" name="rank-data" value="calorie"
+								autocomplete="off">消費カロリー</label>
+							<label class="btn btn-default"><input
+								type="radio" id="step-radio" name="rank-data" value="step"
+								autocomplete="off">歩数</label>
+							<label class="btn btn-default"><input
+								type="radio" id="distance-radio" name="rank-data"
+								value="distance" autocomplete="off">従業員移動距離</label>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
-	</form>
+	</section>
 	<div id="rankingtable" style="visibility: hidden">
 		<section class="ranking-section section">
+			あなたの順位は<p style="display:inline;" id="your-rank">*</p>位です<br>
+			トップとの差は<p style="display:inline;" id="difference">*</p>です<br>
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
