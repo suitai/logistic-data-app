@@ -5,6 +5,7 @@ import json
 import requests
 import dateutil.parser
 import numpy
+import graph
 
 URL = "https://api.frameworxopendata.jp/"
 
@@ -12,8 +13,6 @@ def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
     data =  requests.get(URL+path, params=payload)
     print "get:", payload
-    with open("requests.json", 'w') as f:
-        json.dump(data.json(), f)
     return data
 
 
@@ -95,17 +94,9 @@ def get_sensor_data(workerId, interval=10):
 
 
 def get_activity_data(workerId, interval=10):
-    location = {}
-
-    payload = {'rdf:type': "frameworx:WarehouseLocation"}
-    requests = get_requests(payload)
-    for d in requests.json():
-        location[(d['frameworx:shelfId'])] = numpy.array([int(d['frameworx:x']), int(d['frameworx:y'])])
 
     times = [""]
     itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
-    distance = {'log': [], 'title': u"合計", 'result': 0, 'unit': "m"}
-    locations = [numpy.array([2500, 2500])]
     shelfIds = [""]
 
     payload = {'rdf:type': "frameworx:WarehouseActivity",
@@ -120,23 +111,15 @@ def get_activity_data(workerId, interval=10):
 
             if d["frameworx:shelfId"]:
                 if d["frameworx:shelfId"] != shelfIds[-1]:
-                    if d["frameworx:shelfId"] in location:
-                        distance['result'] += int(numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])/100)
-                        shelfIds.append(d["frameworx:shelfId"])
-                        locations.append(location[d["frameworx:shelfId"]])
-                    else:
-                        print "Can not find the shelfId ", d["frameworx:shelfId"]
+                    shelfIds.append(d["frameworx:shelfId"])
 
             if time != times[-1]:
                 times.append(time)
                 itemNum['log'].append(itemNum['result'])
-                distance['log'].append(distance['result'])
 
     activity_data = {
             u'時間': times[1:],
             u'商品数': itemNum,
-            u'距離': distance,
-            u'座標': locations[1:],
             u'シェルフ': shelfIds[1:]}
 
     return activity_data
@@ -152,7 +135,7 @@ def get_position_data(workerId, interval=10):
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
 
-    for d in sorted(requests.json(), key=lambda x: x['dc:date']):
+    for d in requests.json():
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
             tmp_position = [d['frameworx:x'], d['frameworx:y']]
@@ -165,14 +148,16 @@ def get_position_data(workerId, interval=10):
 
             if time != times[-1]:
                 times.append(time)
-                distance['log'].append(distance['result'])
+                distance['log'].append(distance['result']/100)
 
-    activity_data = {
+    distance['result'] /= 100
+
+    position_data = {
             u'時間': times[1:],
             u'距離': distance,
             u'位置': positions[1:]}
 
-    return activity_data
+    return position_data
 
 
 def set_data(data, tmp_data, category, member):
@@ -189,6 +174,7 @@ def set_data(data, tmp_data, category, member):
 
 def get_log_data(workerId, category):
     data = []
+
     print "workerId:", workerId
     print "category:", category
 
@@ -213,22 +199,26 @@ def get_log_data(workerId, category):
 
 def get_summary_data(workerId):
     data = {}
-    calorie = 2000.0
-    step = 5000.0
-    itemNum = 500.0
-    distance = 1000.0
 
+    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
+    calorie = float(max(tmp_data.values()))
+    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
+    step = float(max(tmp_data.values()))
+    tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
+    itemNum = float(max(tmp_data.values()))
+    tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
+    distance = float(max(tmp_data.values())/100.0)
+
+    print "calorie", calorie, "step", step, "itemNum", itemNum, "distance", distance
     print "workerId:", workerId
 
     tmp_data = get_vital_data(workerId)
-    data[u'カロリー'] = int(((tmp_data[u'カロリー']['result']/calorie)*100))
-    data[u'歩数'] = int(((tmp_data[u'歩数']['result']/step)*100))
-
+    data[u'カロリー'] = [tmp_data[u'カロリー']['result'], calorie]
+    data[u'歩数'] = [tmp_data[u'歩数']['result'], step]
     tmp_data = get_activity_data(workerId)
-    data[u'商品数'] = int(((tmp_data[u'商品数']['result']/itemNum)*100))
-
+    data[u'商品数'] = [tmp_data[u'商品数']['result'], itemNum]
     tmp_data = get_position_data(workerId)
-    data[u'距離'] = int(((tmp_data[u'距離']['result']/distance)*100))
+    data[u'距離'] = [tmp_data[u'距離']['result'], distance]
 
     return data
 

@@ -36,9 +36,9 @@ function draw_radar_graph(chart, ctx) {
     var labels = [];
     var data = [];
 
-    for(d in chart){
-        labels.push(d);
-        data.push(chart[d]);
+    for(c in chart){
+        labels.push(c);
+        data.push(100 * chart[c][0]/chart[c][1]);
     }
 
     var dataset = {
@@ -52,6 +52,16 @@ function draw_radar_graph(chart, ctx) {
     var radarChart = new Chart(ctx, {
         type: "radar",
         data: data,
+        options: {
+            scale: {
+                type: "radialLinear",
+                ticks: {
+                    min: 0,
+                    max: 100,
+                    maxTicksLimit: 5
+                }
+            }
+        }
     });
     console.log("draw: summary");
 }
@@ -72,19 +82,26 @@ function draw_log_graph(charts) {
         $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
         $("#chart" + String(i)).attr('width', 250);
         $('#chart_content' + String(i)).append($("<p>" + message + "</p>"));
-        $('#canvas_content').append($('</div>'));
 
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx);
     }
 }
 
-function draw_summary_graph(chart) {
-    $('#canvas_content').append($('<canvas>').attr('id', "chart_summary"));
-    $("#chart_summary").attr('width', 250);
+function draw_summary_graph(charts) {
+    $('#canvas_content').append($('<div>').attr('id', "chart_content"));
+    $('#chart_content').attr('class', "chart-section");
+    $('#chart_content').append($('<canvas>').attr('id', "chart_summary"));
+    $('#chart_content').append($('<table>').attr('id', "table_summary"));
+    $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>最大値</th>/tr>");
+    for (c in charts) {
+        $('#table_summary').append("<tr><td>" + c + "</td><td>" + charts[c][0] + "</td><td>" + charts[c][1] +  "</td></tr>");
+    }
+    $('#chart_content').append($('</table>'));
+    $('#canvas_content').append($('</div>'));
 
     var ctx = $("#chart_summary").get(0).getContext("2d");
-    draw_radar_graph(chart, ctx);
+    draw_radar_graph(charts, ctx);
 }
 
 function get_data(url, post_data){
@@ -96,44 +113,30 @@ function get_data(url, post_data){
     });
 }
 
+function get_category(){
+    var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
+    var category = [];
 
-$(function() {
-    var username = 0;
-
-    $("#loading").hide();
-
-    $.ajax({
-        url: '/_get_session',
-        type: 'get',
-        data: {key: "username"},
-        contentType: 'application/json',
-    }).done(function(result) {
-        username = result;
-    });
-
-    $('#display_log_btn').on('click', function(event) {
-        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
-        var category = [];
-
-        for (var i = 0; i < all_categories.length; i++){
-            if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
-                category.push(all_categories[i]);
-            }
+    for (var i = 0; i < all_categories.length; i++){
+        if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
+            category.push(all_categories[i]);
         }
+    }
+    return category;
+}
 
+function log_event_fn(workerId) {
+    return function log_event(event) {
         $('#canvas_content').html("");
-        if (!username) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid username", username);
-            return;
-        }
+
+        var category = get_category();
         var post_data = JSON.stringify({
-            workerId: username,
+            workerId: workerId,
             category: category
         });
         console.log("post:", post_data);
 
-        $("#loading").show();
+       $("#loading").show();
 
         event.preventDefault();
         get_data("_get_personal_log_data", post_data).done(function(result) {
@@ -143,18 +146,15 @@ $(function() {
         }).fail(function(result) {
             console.log("error: ", result);
         });
-    });
+    };
+}
 
-    $('#display_summary_btn').on('click', function(event) {
-
+function summary_event_fn(workerId) {
+    return function summary_event(event){
         $('#canvas_content').html("");
-        if (!username) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid username", username);
-            return;
-        }
+
         var post_data = JSON.stringify({
-            workerId: username,
+            workerId: workerId,
         });
         console.log("post:", post_data);
 
@@ -168,5 +168,24 @@ $(function() {
         }).fail(function(result) {
             console.log("error: ", result);
         });
+    };
+}
+
+$(function() {
+    var workerId = -1;
+    $.ajax({
+        url: '/_get_session',
+        type: 'get',
+        data: {key: "username"},
+        contentType: 'application/json',
+    }).done(function(result) {
+        workerId = result;
+        $('#display_log_btn').on('click', log_event_fn(workerId));
+        $('#display_summary_btn').on('click', summary_event_fn(workerId));
     });
+
+    $("#loading").hide();
+    console.log("welcome to personal page");
+
 });
+

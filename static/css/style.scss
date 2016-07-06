@@ -14,6 +14,12 @@
     margin-right: auto;
 }
 
+.loading {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .chart-section {
     @include display-flex;
     @include align-items(center);
@@ -24,6 +30,16 @@
         width: 200px;
         margin-left: 30px;
         font-size: 22px;
+    }
+    th {
+        padding: 6px;
+        background-color: #eee;
+        border: 1px solid #b9b9b9;
+    }
+    td {
+        padding: 6px;
+        background-color: #fff;
+        border: 1px solid #b9b9b9;
     }
 }
 
