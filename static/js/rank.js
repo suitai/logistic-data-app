@@ -44,7 +44,6 @@ $(function() {
                         console.log('error');
                         break;
                     }
-
                     getData(url).done(function(result) {
                         obtainedData = result;
                         $(".rank_1st").addClass("on");
@@ -110,9 +109,26 @@ $(function() {
                         }
                     }
 
+                    var differenceText;
+                    switch (yourRank) {
+                    case 1:
+                    	differenceText='おめでとう！あなたがトップだ！';
+                        break;
+                    case 2:
+                    	differenceText="トップとの差は" + difference+ "です" +
+                    			"<br>惜しい！あと一歩だ！";
+                        break;
+                    case 3:
+                    	differenceText="トップとの差は" + difference+ "です" +
+                    			"<br>トップの背中が見えてきた！";
+                    	break;
+                    default:
+                    	differenceText="トップとの差は" + difference+ "です ";
+                        break;
+                    }
                     $("#rankingtable").attr("style","visibility:visible");
-                    $("#your-rank").text(yourRank);
-                    $("#difference").text(difference);
+                    $("#your-rank").text("あなたの順位は" + yourRank+"位です");
+                    $("#difference").html(differenceText);
                     $("#result").text(rankingText);
                     $("#employee1").text(rank1Id);
                     $("#result1").text(sortdata[0]);

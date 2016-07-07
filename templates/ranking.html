@@ -26,27 +26,30 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
 					<form id="rank">
-						<div class="input-group ">
-							<span class="input-group-addon" id="basic-addon-rank">👤</span> <input
-								type="text" class="form-control" name="workerId" placeholder="IDを入力してください。"
-								area-describedby="basic-addon1">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" id="display-ranking-btn" type="button">show</button>
-                                    </span>
-						</div>
-						<div class="btn-group" data-toggle="buttons">
-							<label class="btn btn-default active"><input
-								type="radio" id="item-radio" name="rank-data" value="item" autocomplete="off"
-								checked>ピッキング商品数</label>
-							<label class="btn btn-default"><input
-								type="radio" id="calorie-radio" name="rank-data" value="calorie"
-								autocomplete="off">消費カロリー</label>
-							<label class="btn btn-default"><input
-								type="radio" id="step-radio" name="rank-data" value="step"
-								autocomplete="off">歩数</label>
-							<label class="btn btn-default"><input
-								type="radio" id="distance-radio" name="rank-data"
-								value="distance" autocomplete="off">従業員移動距離</label>
+						<div class="form-group">
+							<div class="input-group ">
+								<span class="input-group-addon" id="basic-addon-rank">👤</span>
+								<input type="text" class="form-control" name="workerId"
+									placeholder="IDを入力してください。" area-describedby="basic-addon1">
+								<span class="input-group-btn">
+									<button class="btn btn-default" id="display-ranking-btn"
+										type="button">show</button>
+								</span>
+							</div>
+							<br>
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active"><input
+									type="radio" id="item-radio" name="rank-data" value="item"
+									autocomplete="off" checked>ピッキング商品数</label> <label
+									class="btn btn-default"><input type="radio"
+									id="calorie-radio" name="rank-data" value="calorie"
+									autocomplete="off">消費カロリー</label> <label
+									class="btn btn-default"><input type="radio"
+									id="step-radio" name="rank-data" value="step"
+									autocomplete="off">歩数</label> <label class="btn btn-default"><input
+									type="radio" id="distance-radio" name="rank-data"
+									value="distance" autocomplete="off">従業員移動距離</label>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -55,8 +58,10 @@
 	</section>
 	<div id="rankingtable" style="visibility: hidden">
 		<section class="ranking-section section">
-			あなたの順位は<p style="display:inline;" id="your-rank">*</p>位です<br>
-			トップとの差は<p style="display:inline;" id="difference">*</p>です<br>
+			<div class="text-center">
+			<p  class="text-danger" style="display:inline;" ><font id="your-rank" size="7">あなたの順位は*位です</font></p><br>
+			<p  class="text-danger" style="display:inline;" ><font id="difference" size="7">トップとの差は*です</font></p><br>
+			</div>
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
