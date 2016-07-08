@@ -1,7 +1,18 @@
 $(function() {
+    var workerId = -1;
 	var DESC = -1;
 	var ASCE = 1;
 	var chart;
+
+    $.ajax({
+        url: '/_get_session',
+        type: 'get',
+        data: {key: "username"},
+        contentType: 'application/json',
+    }).done(function(result) {
+        workerId = result;
+    });
+
     $(".rank_1st").addClass("on");
     $(".rank_2nd").addClass("on");
     $(".rank_3rd").addClass("on");
