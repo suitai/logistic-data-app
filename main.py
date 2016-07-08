@@ -23,19 +23,23 @@ def before_request():
         return
     if request.path == '/login':
         return
+    if request.path[-4:] == ".css":
+        return
+    if request.path[-3:] == ".js":
+        return
     return redirect('/login')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and is_valid_user():
-        session['username'] = request.form['username']
+        session['username'] = request.form['workerId']
         return redirect(url_for('index'))
     return render_template('login.html')
 
 
 def is_valid_user():
-    if request.form.get('username') is None:
+    if request.form.get('workerId') is None:
         return False
     return True
 
