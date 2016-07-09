@@ -113,17 +113,6 @@ function get_data(url, post_data){
     });
 }
 
-function get_workerId(){
-    var workerId = document.forms.get.workerId.value;
-
-    if (!workerId) {
-        $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-        console.log("error: invalid worker ID", workerId);
-        return;
-    }
-    return workerId;
-}
-
 function get_category(){
     var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
     var category = [];
@@ -136,57 +125,67 @@ function get_category(){
     return category;
 }
 
-function log_event(event) {
-    $('#canvas_content').html("");
+function log_event_fn(workerId) {
+    return function log_event(event) {
+        $('#canvas_content').html("");
 
-    var workerId = get_workerId();
-    var category = get_category();
-    var post_data = JSON.stringify({
-        workerId: workerId,
-        category: category
-    });
-    console.log("post:", post_data);
+        var category = get_category();
+        var post_data = JSON.stringify({
+            workerId: workerId,
+            category: category
+        });
+        console.log("post:", post_data);
 
-    $("#loading").show();
+       $("#loading").show();
 
-    event.preventDefault();
-    get_data("_get_personal_log_data", post_data).done(function(result) {
-        console.log("get:", result['data']);
-        $("#loading").hide();
-        draw_log_graph(JSON.parse(result['data']));
-    }).fail(function(result) {
-        console.log("error: ", result);
-    });
-};
+        event.preventDefault();
+        get_data("_get_personal_log_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_log_graph(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
+        });
+    };
+}
 
-function summary_event(event){
-    $('#canvas_content').html("");
+function summary_event_fn(workerId) {
+    return function summary_event(event){
+        $('#canvas_content').html("");
 
-    var workerId = get_workerId();
-    var post_data = JSON.stringify({
-        workerId: workerId,
-    });
-    console.log("post:", post_data);
+        var post_data = JSON.stringify({
+            workerId: workerId,
+        });
+        console.log("post:", post_data);
 
-    $("#loading").show();
+        $("#loading").show();
 
-    event.preventDefault();
-    get_data("_get_personal_summary_data", post_data).done(function(result) {
-        console.log("get:", result['data']);
-        $("#loading").hide();
-        draw_summary_graph(JSON.parse(result['data']));
-    }).fail(function(result) {
-        console.log("error: ", result);
-    });
-};
+        event.preventDefault();
+        get_data("_get_personal_summary_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_summary_graph(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
+        });
+    };
+}
 
 $(function() {
+    var workerId = -1;
+    $.ajax({
+        url: '/_get_session',
+        type: 'get',
+        data: {key: "username"},
+        contentType: 'application/json',
+    }).done(function(result) {
+        workerId = result;
+        $('#display_log_btn').on('click', log_event_fn(workerId));
+        $('#display_summary_btn').on('click', summary_event_fn(workerId));
+    });
+
     $("#loading").hide();
     console.log("welcome to personal page");
 
-    $('#get').submit(log_event);
-
-    $('#display_log_btn').on('click', log_event);
-
-    $('#display_summary_btn').on('click', summary_event);
 });
+
