@@ -13,10 +13,12 @@ $(function() {
         workerId = result;
     });
 
+    $(".canvas").addClass("on");
     $(".rank_1st").addClass("on");
     $(".rank_2nd").addClass("on");
     $(".rank_3rd").addClass("on");
     $("input[name='rank-data']").change(function() {
+        $(".canvas").removeClass("on");
         $(".rank_1st").removeClass("on");
         $(".rank_2nd").removeClass("on");
         $(".rank_3rd").removeClass("on").onCSSTransitionEnd(function() {
@@ -60,6 +62,7 @@ $(function() {
                 $(".rank_1st").addClass("on");
                 $(".rank_2nd").addClass("on");
                 $(".rank_3rd").addClass("on");
+                $(".canvas").addClass("on");
                 console.log(obtainedData);
             }).fail(function(result) {
                 console.log("error");

@@ -12,12 +12,12 @@
     </head>
     <body>
         {% include 'banner.html' %}
-        	<section class="log-section section">
+        <section class="ranking-section section">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
 					<form id="rank">
-						<div class="form-group">
+						<div class="form-group rank-selector">
 							<div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-default active">
                                     <input type="radio" id="item-radio" name="rank-data" value="item" autocomplete="off" checked>ピッキング商品数
@@ -37,9 +37,7 @@ value="distance" autocomplete="off">従業員移動距離</label>
 				</div>
 			</div>
 		</div>
-	</section>
         <div id="rankingtable" style="visibility: hidden">
-            <section class="ranking-section section">
                 <div class="text-center">
                     <p  class="text-danger" style="display:inline;" ><font id="your-rank" size="7">あなたの順位は*位です</font></p><br>
                     <p  class="text-danger" style="display:inline;" ><font id="difference" size="7">キングとの差は*です</font></p><br>

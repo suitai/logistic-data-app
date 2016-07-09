@@ -217,6 +217,9 @@ p {
 }
 
 .ranking-section {
+    .rank-selector {
+        text-align: center;
+    }
     .rank_award {
         vertical-align: middle;
         .rank_1st {
@@ -266,6 +269,16 @@ p {
     }
     .rank_graph {
         top: 30px;
+        .canvas {
+            opacity: 0;
+            @include transition-property(opacity);
+            @include transition-duration(0.3s);
+            @include transition-timing-function(linear);
+            @include rank_elm(20px);
+        }
+        .canvas.on {
+            opacity: 1;
+        }
     }
 }
 
