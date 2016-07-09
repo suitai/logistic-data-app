@@ -52,42 +52,52 @@
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
-                            <table class="table">
-                                <tr>
-                                    <td></td>
-                                    <td>従業員ID</td>
-                                    <td id="result"></td>
-                                </tr>
-                                <tr class="rank_1st">
-                                    <td><img
-                                        src="{{ url_for('static', filename='images/rank01_01.png') }}"
-                                        width="40" height="40" alt="1位" /></td>
-                                    <td id="employee1"></td>
-                                    <td id="result1"></td>
-                                </tr>
-                                <tr class="rank_2nd">
-                                    <td><img
-                                        src="{{ url_for('static', filename='images/rank01_02.png') }}"
-                                        width="40" height="40" alt="2位" /></td>
-                                    <td id="employee2"></td>
-                                    <td id="result2"></td>
-                                </tr>
-                                <tr class="rank_3rd">
-                                    <td><img
-                                        src="{{ url_for('static', filename='images/rank01_03.png') }}"
-                                        width="40" height="40" alt="3位" /></td>
-                                    <td id="employee3"></td>
-                                    <td id="result3"></td>
-                                </tr>
-                            </table>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 rank_award">
+                            <div class="rank_1st">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_01.png') }}" width="40" height="40" alt="1位" />
+                                        </td>
+                                        <td id="employee1" class="rank_worker_id"></td>
+                                        <td id="result1" class="rank_result"></td>
+                                        <td class="rank_steps">Step(s)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="rank_2nd">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_02.png') }}" width="40" height="40" alt="2位" />
+                                        </td>
+                                        <td id="employee2" class="rank_worker_id"></td>
+                                        <td id="result2" class="rank_result"></td>
+                                        <td class="rank_steps">Step(s)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="rank_3rd">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_03.png') }}" width="40" height="40" alt="3位" />
+                                        </td>
+                                        <td id="employee3" class="rank_worker_id"></td>
+                                        <td id="result3" class="rank_result"></td>
+                                        <td class="rank_units"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 rank_graph">
+                            <div class="canvas" id="canvas_wrapper">
+                                <canvas id="rankingCanvas"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-	<div class="canvas" id="canvas_wrapper">
-		<canvas id="rankingCanvas" width="300" height="250"></canvas>
-	</div>
-</body>
+    </body>
 </html>

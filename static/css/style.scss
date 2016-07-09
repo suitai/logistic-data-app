@@ -182,56 +182,90 @@ p {
     }
 }
 
+@mixin rank_elm($font_size) {
+    table {
+        width: 100%;
+        .rank_img {
+            padding: 10px;
+            width: 15%;
+        }
+        .rank_worker_id {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 20%;
+            text-align: left;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+        .rank_result {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 35%;
+            text-align: right;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+        .rank_units {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 30%;
+            text-align: left;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+    }
+}
+
 .ranking-section {
-    .rank_1st {
-        background-color: #de6a0b;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 30px;
-        margin-bottom: 20px;
-        padding-left: 120px;
-        opacity: 0;
-        @include transition-property(opacity, padding-left);
-        @include transition-duration(0.3s);
-        @include transition-timing-function(linear);
+    .rank_award {
+        vertical-align: middle;
+        .rank_1st {
+            background-color: #de6a0b;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-timing-function(linear);
+            @include rank_elm(30px);
+        }
+        .rank_1st.on {
+            padding-left: 10px;
+            opacity: 1;
+        }
+        .rank_2nd {
+            background-color: #de8842;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-delay(0.1s);
+            @include transition-timing-function(linear);
+            @include rank-elm(25px);
+        }
+        .rank_2nd.on {
+            opacity: 1;
+            padding-left: 10px;
+        }
+        .rank_3rd {
+            background-color: #deab81;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-delay(0.2s);
+            @include transition-timing-function(linear);
+            @include rank_elm(20px);
+        }
+        .rank_3rd.on {
+            opacity: 1;
+            padding-left: 10px;
+        }
     }
-    .rank_1st.on {
-        padding-left: 0px;
-        opacity: 1;
-    }
-    .rank_2nd {
-        background-color: #de8842;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 25px;
-        margin-bottom: 20px;
-        opacity: 0;
-        @include transition-property(opacity);
-        @include transition-duration(0.3s);
-        @include transition-delay(0.1s);
-        @include transition-timing-function(linear);
-    }
-    .rank_2nd.on {
-        opacity: 1;
-    }
-    .rank_3rd {
-        background-color: #deab81;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 20px;
-        margin-bottom: 20px;
-        opacity: 0;
-        @include transition-property(opacity);
-        @include transition-duration(0.3s);
-        @include transition-delay(0.2s);
-        @include transition-timing-function(linear);
-    }
-    .rank_3rd.on {
-        opacity: 1;
-    }
-    .unranked {
-        padding: 10px;
-        font-size: 15px;
+    .rank_graph {
+        top: 30px;
     }
 }
 
