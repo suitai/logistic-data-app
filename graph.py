@@ -2,9 +2,12 @@
 import requests
 import numpy
 import json
+import os
+import urlparse
 import redis
 
-red = redis.Redis(host='127.0.0.1', port=6379, db=0)
+url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+red = redis.Redis(host=url.hostname, port=url.port, password=url.password)
 
 # get calorie or step
 def getVitalData(key, targetData):
