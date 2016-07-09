@@ -12,3 +12,4 @@ wheel==0.26.0
 numpy==1.11.0
 redis==2.10.5
 PyYAML==3.11
+urlparse3==1.0.9
