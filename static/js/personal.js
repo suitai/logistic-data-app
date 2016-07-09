@@ -186,6 +186,5 @@ $(function() {
 
     $("#loading").hide();
     console.log("welcome to personal page");
-
 });
 
