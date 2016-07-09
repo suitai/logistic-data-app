@@ -5,6 +5,7 @@ import json
 import requests
 import dateutil.parser
 import numpy
+import yaml
 import graph
 
 URL = "https://api.frameworxopendata.jp/"
@@ -19,6 +20,14 @@ def get_requests(payload, path="api/v3/datapoints"):
 def get_time(date_org, interval):
     date = dateutil.parser.parse(date_org)
     return str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
+
+
+def read_config(filename="my_worxs.yml"):
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            config = yaml.load(f)
+        print "config: ", config
+        return config
 
 
 def get_vital_data(workerId, interval=10):
@@ -200,14 +209,21 @@ def get_log_data(workerId, category):
 def get_summary_data(workerId):
     data = {}
 
-    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
-    calorie = float(max(tmp_data.values()))
-    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
-    step = float(max(tmp_data.values()))
-    tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
-    itemNum = float(max(tmp_data.values()))
-    tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
-    distance = float(max(tmp_data.values())/100.0)
+    config = read_config()
+    if config:
+        calorie = config['refarence']['calorie']
+        step = config['refarence']['step']
+        itemNum = config['refarence']['itemNum']
+        distance = config['refarence']['distance']
+    else:
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
+        calorie = float(max(tmp_data.values()))
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
+        step = float(max(tmp_data.values()))
+        tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
+        itemNum = float(max(tmp_data.values()))
+        tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
+        distance = float(max(tmp_data.values())/100.0)
 
     print "calorie", calorie, "step", step, "itemNum", itemNum, "distance", distance
     print "workerId:", workerId
