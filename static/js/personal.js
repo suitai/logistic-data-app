@@ -1,4 +1,6 @@
 function draw_line_graph(chart, ctx) {
+    var width = $(window).width();
+
     var colors = {
         "カロリー": {borderColor: "rgba(255,204,51,0.6)",
                      backgroundColor: "rgba(255,204,102,0.4)"},
@@ -25,14 +27,24 @@ function draw_line_graph(chart, ctx) {
         labels: chart['value_x'],
         datasets: [dataset,]
     };
+    var options = {
+        responsive: false,
+    };
+
+    ctx.canvas.width = width * 0.6;
+    ctx.canvas.height = width * 0.3;
+
     var lineChart = new Chart(ctx, {
         type: "line",
         data: data,
+        options: options,
     });
+
     console.log("draw:", chart['label']);
 }
 
 function draw_radar_graph(chart, ctx) {
+    var width = $(window).width();
     var labels = [];
     var data = [];
 
@@ -49,19 +61,25 @@ function draw_radar_graph(chart, ctx) {
         labels: labels,
         datasets: [dataset,]
     };
+    var options = {
+        scale: {
+            type: "radialLinear",
+            ticks: {
+                min: 0,
+                max: 100,
+                maxTicksLimit: 5
+            }
+        },
+        responsive: false,
+    };
+
+    ctx.canvas.width = width * 0.5;
+    ctx.canvas.height = width * 0.5;
+
     var radarChart = new Chart(ctx, {
         type: "radar",
         data: data,
-        options: {
-            scale: {
-                type: "radialLinear",
-                ticks: {
-                    min: 0,
-                    max: 100,
-                    maxTicksLimit: 5
-                }
-            }
-        }
+        options: options,
     });
     console.log("draw: summary");
 }
@@ -80,7 +98,6 @@ function draw_log_graph(charts) {
         $('#canvas_content').append($('<div>').attr('id', "chart_content" + String(i)));
         $('#chart_content' + String(i)).attr('class', "chart-section");
         $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
-        $("#chart" + String(i)).attr('width', 250);
         $('#chart_content' + String(i)).append($("<p>" + message + "</p>"));
 
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
