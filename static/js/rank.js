@@ -93,7 +93,7 @@ $(function() {
                           return self.indexOf(value) === index;
                     });
 
-                    var yourId = $('#rank [name=workerId]').val();
+                    var yourId = workerId;
                     var yourData = obtainedData[yourId];
                     var yourRank = '*';
                     var difference =  '*';
@@ -123,20 +123,21 @@ $(function() {
                     var differenceText;
                     switch (yourRank) {
                     case 1:
-                    	differenceText='おめでとう！あなたがトップだ！';
+                    	differenceText='おめでとう！あなたがキングだ！';
                         break;
                     case 2:
-                    	differenceText="トップとの差は" + difference+ "です" +
+                    	differenceText="キングとの差は" + difference+ "です" +
                     			"<br>惜しい！あと一歩だ！";
                         break;
                     case 3:
-                    	differenceText="トップとの差は" + difference+ "です" +
-                    			"<br>トップの背中が見えてきた！";
+                    	differenceText="キングとの差は" + difference+ "です" +
+                    			"<br>キングの背中が見えてきた！";
                     	break;
                     default:
-                    	differenceText="トップとの差は" + difference+ "です ";
+                    	differenceText="キングとの差は" + difference+ "です ";
                         break;
                     }
+                    console.log(differenceText);
                     $("#rankingtable").attr("style","visibility:visible");
                     $("#your-rank").text("あなたの順位は" + yourRank+"位です");
                     $("#difference").html(differenceText);
