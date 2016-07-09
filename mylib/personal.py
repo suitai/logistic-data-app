@@ -6,12 +6,14 @@ import requests
 import dateutil.parser
 import numpy
 import yaml
+import urlparse
 import redis
 import graph
 
 URL = "https://api.frameworxopendata.jp/"
 
-red = redis.Redis(host='127.0.0.1', port=6379, db=0)
+redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+red = redis.Redis(host=redis_url.hostname, port=redis_url.port, password=redis_url.password)
 
 def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
