@@ -192,6 +192,6 @@ if __name__ == "__main__":
     app.debug = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     if DEBUG:
-        app.run(host="0.0.0.0", debug=True)
+        app.run(host="0.0.0.0", debug=True, threaded=True)
     else:
-        app.run(debug=True)
+        app.run(debug=True, threaded=True)
