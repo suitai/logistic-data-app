@@ -184,6 +184,8 @@ $(function() {
     $("#loading").hide();
     console.log("welcome to personal page");
 
+    $('#get').submit(log_event);
+
     $('#display_log_btn').on('click', log_event);
 
     $('#display_summary_btn').on('click', summary_event);
