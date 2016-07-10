@@ -148,7 +148,7 @@ function draw_map(location) {
             ctx.fill();
         }
         for (var i = 0; i < p.length; i++) {
-            var x = (p[i]['x'] + 200) * ratio;
+            var x = (p[i]['x'] + 400) * ratio;
             var y = (img.height - p[i]['y'] - 950) * ratio;
             var id = p[i]['id']
             ctx.beginPath();
