@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, session, redirect, render_template, jsonify, request, Response, url_for
+from flask import Flask, session, redirect, render_template, jsonify, request, Response, url_for, send_file
 from functools import wraps
 import json
 import sys
@@ -62,11 +62,11 @@ def write_data(data_type):
         json.dump(data.json(), f)
 
 
-def write_map(map_name):
+def write_map(filename, dirname=""):
     payload = {'acl:consumerKey': os.environ["FRAMEWORX_KEY"]}
-    r = requests.get("https://api.frameworxopendata.jp/api/v3/files/" + map_name, params=payload, stream=True)
+    r = requests.get("https://api.frameworxopendata.jp/api/v3/files/" + filename, params=payload, stream=True)
     if r.status_code == 200:
-        with open(map_name, 'wb') as f:
+        with open(os.path.join(dirname, filename), 'wb') as f:
             r.raw.decode_content = True
             shutil.copyfileobj(r.raw, f)
 
@@ -114,6 +114,22 @@ def _get_personal_summary_data():
     data = personal.get_summary_data(workerId)
     return jsonify(data=json.dumps(data))
 
+
+@app.route('/_get_personal_map_data', methods=["POST"])
+@requires_auth
+def _get_personal_map_data():
+    workerId = int(request.json[u'workerId'])
+    data = personal.get_map_data(workerId)
+    return jsonify(data=json.dumps(data))
+
+@app.route('/image')
+def image():
+    dirname = "static/images/"
+    filename = "warehouse_map_1.jpg"
+    path = os.path.join(dirname, filename)
+    if not os.path.exists(path):
+        write_map(filename, dirname)
+    return send_file(path, mimetype='image/jpg')
 
 @app.route('/_step_graph', methods=["GET", "POST"])
 @requires_auth
