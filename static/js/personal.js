@@ -127,7 +127,8 @@ function draw_map(location) {
 
     var ctx = $("#map").get(0).getContext("2d");
     var img = new Image();
-    var l = location['位置']
+    var l = location['座標']
+    var p = location['位置']
     var width = $(window).width() * 0.9;
 
     img.src = "image";
@@ -139,11 +140,20 @@ function draw_map(location) {
         ctx.drawImage(img, 0, 0, width, width);
         for (var i = 0; i < l.length; i++) {
             var x = (l[i]['x'] + 470) * ratio;
-            var y = (img.width - l[i]['y'] - 1330) * ratio;
+            var y = (img.height - l[i]['y'] - 1330) * ratio;
             var id = l[i]['id']
             ctx.beginPath();
             ctx.arc(x, y, 5, 0, Math.PI*2, true);
             ctx.fillStyle = "#de6a0b"
+            ctx.fill();
+        }
+        for (var i = 0; i < p.length; i++) {
+            var x = (p[i]['x'] + 200) * ratio;
+            var y = (img.height - p[i]['y'] - 950) * ratio;
+            var id = p[i]['id']
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI*2, true);
+            ctx.fillStyle = "#66cc00"
             ctx.fill();
         }
     }
