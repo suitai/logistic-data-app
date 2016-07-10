@@ -196,6 +196,31 @@ def get_position_data(workerId, interval=10):
     return position_data
 
 
+def get_location_data(workerId):
+    data = red.get('location_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+    location_data = []
+
+    tmp_data = get_activity_data(workerId)
+
+    payload = {'rdf:type': "frameworx:WarehouseLocation"}
+    requests = get_requests(payload)
+
+    for l in tmp_data[u"シェルフ"]:
+        location = {}
+        for d in requests.json():
+            if d['frameworx:shelfId'] == l:
+                location['id'] = l
+                location['x'] = d['frameworx:x']
+                location['y'] = d['frameworx:y']
+                location_data.append(location)
+
+    red.set('location_data_' + str(workerId), json.dumps(location_data), ex=600)
+
+    return location_data
+
+
 def set_data(data, tmp_data, category, member):
     for c in category:
         if c in member:
@@ -265,3 +290,8 @@ def get_summary_data(workerId):
 
     return data
 
+def get_map_data(workerId):
+    data = {}
+    data[u'位置'] = get_location_data(workerId)
+
+    return data
