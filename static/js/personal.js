@@ -121,6 +121,46 @@ function draw_summary_graph(charts) {
     draw_radar_graph(charts, ctx);
 }
 
+function draw_map(location) {
+    $('#canvas_content').append($('<div>').attr('id', "map_content"));
+    $('#map_content').append($('<canvas>').attr('id', "map"));
+
+    var ctx = $("#map").get(0).getContext("2d");
+    var img = new Image();
+    var l = location['座標']
+    var p = location['位置']
+    var width = $(window).width() * 0.9;
+
+    img.src = "image";
+    img.onload = function() {
+        console.log("image:", img.width, img.height);
+        var ratio = width / img.width;
+        ctx.canvas.width = width;
+        ctx.canvas.height = width;
+        ctx.drawImage(img, 0, 0, width, width);
+        for (var i = 0; i < l.length; i++) {
+            var x = (l[i]['x'] + 470) * ratio;
+            var y = (img.height - l[i]['y'] - 1330) * ratio;
+            var id = l[i]['id']
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI*2, true);
+            ctx.fillStyle = "#de6a0b"
+            ctx.fill();
+        }
+        for (var i = 0; i < p.length; i++) {
+            var x = (p[i]['x'] + 400) * ratio;
+            var y = (img.height - p[i]['y'] - 950) * ratio;
+            var id = p[i]['id']
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI*2, true);
+            ctx.fillStyle = "#66cc00"
+            ctx.fill();
+        }
+    }
+
+    console.log("draw done.");
+}
+
 function get_data(url, post_data){
     return $.ajax({
         url: url,
@@ -188,6 +228,29 @@ function summary_event_fn(workerId) {
     };
 }
 
+function map_event_fn(workerId) {
+    return function summary_event(event){
+        $('#canvas_content').html("");
+
+        var post_data = JSON.stringify({
+            workerId: workerId,
+        });
+
+        console.log("post:", post_data);
+
+        $("#loading").show();
+
+        event.preventDefault();
+        get_data("_get_personal_map_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_map(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
+        });
+    };
+}
+
 $(function() {
     var workerId = -1;
     $.ajax({
@@ -199,10 +262,10 @@ $(function() {
         workerId = result;
         $('#display_log_btn').on('click', log_event_fn(workerId));
         $('#display_summary_btn').on('click', summary_event_fn(workerId));
+        $('#display_map_btn').on('click', map_event_fn(workerId));
     });
 
     $("#loading").hide();
     console.log("welcome to personal page");
-
 });
 

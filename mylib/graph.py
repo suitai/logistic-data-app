@@ -82,4 +82,5 @@ def getMoveDistance(key):
 
 def getRequest(type, key):
     payload = {'rdf:type': type, 'acl:consumerKey':key}
+    print "get:", payload
     return requests.get("https://api.frameworxopendata.jp/api/v3/datapoints", params=payload)
