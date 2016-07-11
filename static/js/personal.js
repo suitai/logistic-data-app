@@ -110,7 +110,7 @@ function draw_summary_graph(charts) {
     $('#chart_content').attr('class', "chart-section");
     $('#chart_content').append($('<canvas>').attr('id', "chart_summary"));
     $('#chart_content').append($('<table>').attr('id', "table_summary"));
-    $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>基準値</th>/tr>");
+    $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>基準値</th></tr>");
     for (c in charts) {
         $('#table_summary').append("<tr><td>" + c + "</td><td>" + charts[c][0] + "</td><td>" + charts[c][1] +  "</td></tr>");
     }
