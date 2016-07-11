@@ -15,6 +15,12 @@
   margin-right: auto;
 }
 
+.loading {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* line 17, ../sass/style.scss */
 .loading {
   text-align: center;
@@ -39,6 +45,23 @@
   margin-left: 30px;
   font-size: 22px;
 }
+
+.chart-section table {
+  margin-left: 30px;
+}
+
+.chart-section th {
+  padding: 6px;
+  background-color: #eee;
+  border: 1px solid #b9b9b9;
+}
+
+.chart-section td {
+  padding: 6px;
+  background-color: #fff;
+  border: 1px solid #b9b9b9;
+}
+
 /* line 34, ../sass/style.scss */
 .chart-section th {
   padding: 6px;

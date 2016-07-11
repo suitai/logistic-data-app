@@ -5,9 +5,15 @@ import json
 import requests
 import dateutil.parser
 import numpy
+import yaml
+import urlparse
+import redis
 import graph
 
 URL = "https://api.frameworxopendata.jp/"
+
+redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+red = redis.Redis(host=redis_url.hostname, port=redis_url.port, password=redis_url.password)
 
 def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
@@ -21,7 +27,19 @@ def get_time(date_org, interval):
     return str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
 
 
+def read_config(filename="my_worxs.yml"):
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            config = yaml.load(f)
+        print "config: ", config
+        return config
+
+
 def get_vital_data(workerId, interval=10):
+    data = red.get('vital_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     calorie = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"kcal"}
     step = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"歩"}
@@ -54,10 +72,16 @@ def get_vital_data(workerId, interval=10):
             u'歩数': step,
             u'脈拍': heartrate}
 
+    red.set('vital_data_' + str(workerId), json.dumps(vital_data), ex=600)
+
     return vital_data
 
 
 def get_sensor_data(workerId, interval=10):
+    data = red.get('sensor_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     temperature = {'log': [], 'title': u"平均", 'result': 0, 'unit': u"℃"}
     humidity = {'log': [], 'title': u"平均", 'result': 0, 'unit': "%"}
@@ -90,10 +114,15 @@ def get_sensor_data(workerId, interval=10):
             u'気温': temperature,
             u'湿度': humidity}
 
+    red.set('sensor_data_' + str(workerId), json.dumps(sensor_data), ex=600)
+
     return sensor_data
 
 
 def get_activity_data(workerId, interval=10):
+    data = red.get('activity_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
@@ -122,10 +151,15 @@ def get_activity_data(workerId, interval=10):
             u'商品数': itemNum,
             u'シェルフ': shelfIds[1:]}
 
+    red.set('activity_data_' + str(workerId), json.dumps(activity_data), ex=600)
+
     return activity_data
 
 
 def get_position_data(workerId, interval=10):
+    data = red.get('position_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     positions = []
@@ -156,6 +190,8 @@ def get_position_data(workerId, interval=10):
             u'時間': times[1:],
             u'距離': distance,
             u'位置': positions[1:]}
+
+    red.set('position_data_' + str(workerId), json.dumps(position_data), ex=600)
 
     return position_data
 
@@ -200,14 +236,21 @@ def get_log_data(workerId, category):
 def get_summary_data(workerId):
     data = {}
 
-    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
-    calorie = float(max(tmp_data.values()))
-    tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
-    step = float(max(tmp_data.values()))
-    tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
-    itemNum = float(max(tmp_data.values()))
-    tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
-    distance = float(max(tmp_data.values())/100.0)
+    config = read_config()
+    if config:
+        calorie = config['reference']['calorie']
+        step = config['reference']['step']
+        itemNum = config['reference']['itemNum']
+        distance = config['reference']['distance']
+    else:
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
+        calorie = float(max(tmp_data.values()))
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
+        step = float(max(tmp_data.values()))
+        tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
+        itemNum = float(max(tmp_data.values()))
+        tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
+        distance = float(max(tmp_data.values())/100.0)
 
     print "calorie", calorie, "step", step, "itemNum", itemNum, "distance", distance
     print "workerId:", workerId
