@@ -14,17 +14,17 @@
         <section class="log-section section">
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
-                        <form id="get">
-                            <div class="form-group">
+                    <form id="get">
+                        <div class="form-group">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 log-btn-group">
                                 <div class="input-group input-group-lg log-input-id">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" id="display_log_btn" type="button">Log</button>
-                                    </span>
-                                    <span class="input-group-btn">
                                         <button class="btn btn-default" id="display_summary_btn" type="button">Summary</button>
                                     </span>
                                 </div>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 log-btn-group">
                                 <div class="btn-group log-select-output" data-toggle="buttons-radio" role="group" aria-label="...">
                                      <button type="button" id="カロリーボタン" class="btn btn-default active" aria-pressed="true">カロリー消費量</button>
                                      <button type="button" id="歩数ボタン" class="btn btn-default active" aria-pressed="true">歩数</button>
@@ -34,8 +34,10 @@
                                      <button type="button" id="気温ボタン" class="btn btn-default" aria-pressed="false">気温</button>
                                      <button type="button" id="湿度ボタン" class="btn btn-default" aria-pressed="false">湿度</button>
                                  </div>
-                            </div>
-                        </form>
+                             </div>
+                        </div>
+                    </form>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
                         <div class="loading" id="loading">
                             <img src="{{url_for('static', filename='images/ajax-loader.gif')}}">
                         </div>

@@ -219,32 +219,36 @@ p {
 }
 
 /* line 169, ../sass/style.scss */
+.log-section .log-btn-group {
+  text-align: center;
+}
+/* line 172, ../sass/style.scss */
 .log-section .log-input-id {
   margin-top: 30px;
   margin-left: 20px;
   margin-right: 20px;
 }
-/* line 174, ../sass/style.scss */
+/* line 177, ../sass/style.scss */
 .log-section .log-select-output {
   margin-top: 30px;
   margin-left: 20px;
   margin-right: 20px;
 }
-/* line 179, ../sass/style.scss */
+/* line 182, ../sass/style.scss */
 .log-section h2 {
   text-align: center;
   color: #de6a0b;
 }
 
-/* line 220, ../sass/style.scss */
+/* line 223, ../sass/style.scss */
 .ranking-section .rank-selector {
   text-align: center;
 }
-/* line 223, ../sass/style.scss */
+/* line 226, ../sass/style.scss */
 .ranking-section .rank_award {
   vertical-align: middle;
 }
-/* line 225, ../sass/style.scss */
+/* line 228, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st {
   background-color: #de6a0b;
   padding-left: 120px;
@@ -263,16 +267,16 @@ p {
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
 }
-/* line 186, ../sass/style.scss */
+/* line 189, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st table {
   width: 100%;
 }
-/* line 188, ../sass/style.scss */
+/* line 191, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st table .rank_img {
   padding: 10px;
   width: 15%;
 }
-/* line 192, ../sass/style.scss */
+/* line 195, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st table .rank_worker_id {
   padding: 10px;
   color: #FFFFFF;
@@ -281,7 +285,7 @@ p {
   font-size: 30px;
   vertical-align: middle;
 }
-/* line 200, ../sass/style.scss */
+/* line 203, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st table .rank_result {
   padding: 10px;
   color: #FFFFFF;
@@ -290,7 +294,7 @@ p {
   font-size: 30px;
   vertical-align: middle;
 }
-/* line 208, ../sass/style.scss */
+/* line 211, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st table .rank_units {
   padding: 10px;
   color: #FFFFFF;
@@ -299,12 +303,12 @@ p {
   font-size: 30px;
   vertical-align: middle;
 }
-/* line 235, ../sass/style.scss */
+/* line 238, ../sass/style.scss */
 .ranking-section .rank_award .rank_1st.on {
   padding-left: 10px;
   opacity: 1;
 }
-/* line 239, ../sass/style.scss */
+/* line 242, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd {
   background-color: #de8842;
   padding-left: 120px;
@@ -327,16 +331,16 @@ p {
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
 }
-/* line 186, ../sass/style.scss */
+/* line 189, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd table {
   width: 100%;
 }
-/* line 188, ../sass/style.scss */
+/* line 191, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd table .rank_img {
   padding: 10px;
   width: 15%;
 }
-/* line 192, ../sass/style.scss */
+/* line 195, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd table .rank_worker_id {
   padding: 10px;
   color: #FFFFFF;
@@ -345,7 +349,7 @@ p {
   font-size: 25px;
   vertical-align: middle;
 }
-/* line 200, ../sass/style.scss */
+/* line 203, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd table .rank_result {
   padding: 10px;
   color: #FFFFFF;
@@ -354,7 +358,7 @@ p {
   font-size: 25px;
   vertical-align: middle;
 }
-/* line 208, ../sass/style.scss */
+/* line 211, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd table .rank_units {
   padding: 10px;
   color: #FFFFFF;
@@ -363,12 +367,12 @@ p {
   font-size: 25px;
   vertical-align: middle;
 }
-/* line 250, ../sass/style.scss */
+/* line 253, ../sass/style.scss */
 .ranking-section .rank_award .rank_2nd.on {
   opacity: 1;
   padding-left: 10px;
 }
-/* line 254, ../sass/style.scss */
+/* line 257, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd {
   background-color: #deab81;
   padding-left: 120px;
@@ -391,16 +395,16 @@ p {
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
 }
-/* line 186, ../sass/style.scss */
+/* line 189, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd table {
   width: 100%;
 }
-/* line 188, ../sass/style.scss */
+/* line 191, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd table .rank_img {
   padding: 10px;
   width: 15%;
 }
-/* line 192, ../sass/style.scss */
+/* line 195, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd table .rank_worker_id {
   padding: 10px;
   color: #FFFFFF;
@@ -409,7 +413,7 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 200, ../sass/style.scss */
+/* line 203, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd table .rank_result {
   padding: 10px;
   color: #FFFFFF;
@@ -418,7 +422,7 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 208, ../sass/style.scss */
+/* line 211, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd table .rank_units {
   padding: 10px;
   color: #FFFFFF;
@@ -427,16 +431,16 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 265, ../sass/style.scss */
+/* line 268, ../sass/style.scss */
 .ranking-section .rank_award .rank_3rd.on {
   opacity: 1;
   padding-left: 10px;
 }
-/* line 270, ../sass/style.scss */
+/* line 273, ../sass/style.scss */
 .ranking-section .rank_graph {
   top: 30px;
 }
-/* line 272, ../sass/style.scss */
+/* line 275, ../sass/style.scss */
 .ranking-section .rank_graph .canvas {
   opacity: 0;
   -moz-transition-property: opacity;
@@ -452,16 +456,16 @@ p {
   -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
 }
-/* line 186, ../sass/style.scss */
+/* line 189, ../sass/style.scss */
 .ranking-section .rank_graph .canvas table {
   width: 100%;
 }
-/* line 188, ../sass/style.scss */
+/* line 191, ../sass/style.scss */
 .ranking-section .rank_graph .canvas table .rank_img {
   padding: 10px;
   width: 15%;
 }
-/* line 192, ../sass/style.scss */
+/* line 195, ../sass/style.scss */
 .ranking-section .rank_graph .canvas table .rank_worker_id {
   padding: 10px;
   color: #FFFFFF;
@@ -470,7 +474,7 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 200, ../sass/style.scss */
+/* line 203, ../sass/style.scss */
 .ranking-section .rank_graph .canvas table .rank_result {
   padding: 10px;
   color: #FFFFFF;
@@ -479,7 +483,7 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 208, ../sass/style.scss */
+/* line 211, ../sass/style.scss */
 .ranking-section .rank_graph .canvas table .rank_units {
   padding: 10px;
   color: #FFFFFF;
@@ -488,7 +492,7 @@ p {
   font-size: 20px;
   vertical-align: middle;
 }
-/* line 279, ../sass/style.scss */
+/* line 282, ../sass/style.scss */
 .ranking-section .rank_graph .canvas.on {
   opacity: 1;
 }
