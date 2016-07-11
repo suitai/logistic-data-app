@@ -1,4 +1,6 @@
 function draw_line_graph(chart, ctx) {
+    var width = $(window).width();
+
     var colors = {
         "カロリー": {borderColor: "rgba(255,204,51,0.6)",
                      backgroundColor: "rgba(255,204,102,0.4)"},
@@ -25,20 +27,30 @@ function draw_line_graph(chart, ctx) {
         labels: chart['value_x'],
         datasets: [dataset,]
     };
+    var options = {
+        responsive: false,
+    };
+
+    ctx.canvas.width = width * 0.6;
+    ctx.canvas.height = width * 0.3;
+
     var lineChart = new Chart(ctx, {
         type: "line",
         data: data,
+        options: options,
     });
+
     console.log("draw:", chart['label']);
 }
 
 function draw_radar_graph(chart, ctx) {
+    var width = $(window).width();
     var labels = [];
     var data = [];
 
-    for(d in chart){
-        labels.push(d);
-        data.push(chart[d]);
+    for(c in chart){
+        labels.push(c);
+        data.push(100 * chart[c][0]/chart[c][1]);
     }
 
     var dataset = {
@@ -49,9 +61,25 @@ function draw_radar_graph(chart, ctx) {
         labels: labels,
         datasets: [dataset,]
     };
+    var options = {
+        scale: {
+            type: "radialLinear",
+            ticks: {
+                min: 0,
+                max: 100,
+                maxTicksLimit: 5
+            }
+        },
+        responsive: false,
+    };
+
+    ctx.canvas.width = width * 0.5;
+    ctx.canvas.height = width * 0.5;
+
     var radarChart = new Chart(ctx, {
         type: "radar",
         data: data,
+        options: options,
     });
     console.log("draw: summary");
 }
@@ -70,21 +98,67 @@ function draw_log_graph(charts) {
         $('#canvas_content').append($('<div>').attr('id', "chart_content" + String(i)));
         $('#chart_content' + String(i)).attr('class', "chart-section");
         $('#chart_content' + String(i)).append($('<canvas>').attr('id', "chart" + String(i)));
-        $("#chart" + String(i)).attr('width', 250);
         $('#chart_content' + String(i)).append($("<p>" + message + "</p>"));
-        $('#canvas_content').append($('</div>'));
 
         var ctx = $("#chart" + String(i)).get(0).getContext("2d");
         draw_line_graph(charts[i], ctx);
     }
 }
 
-function draw_summary_graph(chart) {
-    $('#canvas_content').append($('<canvas>').attr('id', "chart_summary"));
-    $("#chart_summary").attr('width', 250);
+function draw_summary_graph(charts) {
+    $('#canvas_content').append($('<div>').attr('id', "chart_content"));
+    $('#chart_content').attr('class', "chart-section");
+    $('#chart_content').append($('<canvas>').attr('id', "chart_summary"));
+    $('#chart_content').append($('<table>').attr('id', "table_summary"));
+    $('#table_summary').append("<tr><th>項目</th><th>数値</th><th>基準値</th></tr>");
+    for (c in charts) {
+        $('#table_summary').append("<tr><td>" + c + "</td><td>" + charts[c][0] + "</td><td>" + charts[c][1] +  "</td></tr>");
+    }
+    $('#chart_content').append($('</table>'));
+    $('#canvas_content').append($('</div>'));
 
     var ctx = $("#chart_summary").get(0).getContext("2d");
-    draw_radar_graph(chart, ctx);
+    draw_radar_graph(charts, ctx);
+}
+
+function draw_map(location) {
+    $('#canvas_content').append($('<div>').attr('id', "map_content"));
+    $('#map_content').append($('<canvas>').attr('id', "map"));
+
+    var ctx = $("#map").get(0).getContext("2d");
+    var img = new Image();
+    var l = location['座標']
+    var p = location['位置']
+    var width = $(window).width() * 0.9;
+
+    img.src = "image";
+    img.onload = function() {
+        console.log("image:", img.width, img.height);
+        var ratio = width / img.width;
+        ctx.canvas.width = width;
+        ctx.canvas.height = width;
+        ctx.drawImage(img, 0, 0, width, width);
+        for (var i = 0; i < l.length; i++) {
+            var x = (l[i]['x'] + 470) * ratio;
+            var y = (img.height - l[i]['y'] - 1330) * ratio;
+            var id = l[i]['id']
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI*2, true);
+            ctx.fillStyle = "#de6a0b"
+            ctx.fill();
+        }
+        for (var i = 0; i < p.length; i++) {
+            var x = (p[i]['x'] + 400) * ratio;
+            var y = (img.height - p[i]['y'] - 950) * ratio;
+            var id = p[i]['id']
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI*2, true);
+            ctx.fillStyle = "#66cc00"
+            ctx.fill();
+        }
+    }
+
+    console.log("draw done.");
 }
 
 function get_data(url, post_data){
@@ -96,34 +170,30 @@ function get_data(url, post_data){
     });
 }
 
+function get_category(){
+    var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
+    var category = [];
 
-$(function() {
-    $("#loading").hide();
-
-    $('#display_log_btn').on('click', function(event) {
-        var all_categories = ["カロリー", "歩数", "脈拍", "気温", "湿度", "商品数", "距離"];
-        var workerId = document.forms.get.workerId.value;
-        var category = [];
-
-        for (var i = 0; i < all_categories.length; i++){
-            if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
-                category.push(all_categories[i]);
-            }
+    for (var i = 0; i < all_categories.length; i++){
+        if ($('#' + all_categories[i] + 'ボタン').attr('aria-pressed') == "true"){
+            category.push(all_categories[i]);
         }
+    }
+    return category;
+}
 
+function log_event_fn(workerId) {
+    return function log_event(event) {
         $('#canvas_content').html("");
-        if (!workerId) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
-            return;
-        }
+
+        var category = get_category();
         var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
+            workerId: workerId,
             category: category
         });
         console.log("post:", post_data);
 
-        $("#loading").show();
+       $("#loading").show();
 
         event.preventDefault();
         get_data("_get_personal_log_data", post_data).done(function(result) {
@@ -133,19 +203,15 @@ $(function() {
         }).fail(function(result) {
             console.log("error: ", result);
         });
-    });
+    };
+}
 
-    $('#display_summary_btn').on('click', function(event) {
-        var workerId = document.forms.get.workerId.value;
-
+function summary_event_fn(workerId) {
+    return function summary_event(event){
         $('#canvas_content').html("");
-        if (!workerId) {
-            $('#canvas_content').append("<h2>Please set your worker ID.</h2>");
-            console.log("error: invalid worker ID", workerId);
-            return;
-        }
+
         var post_data = JSON.stringify({
-            workerId: document.forms.get.workerId.value,
+            workerId: workerId,
         });
         console.log("post:", post_data);
 
@@ -159,5 +225,48 @@ $(function() {
         }).fail(function(result) {
             console.log("error: ", result);
         });
+    };
+}
+
+function map_event_fn(workerId) {
+    return function summary_event(event){
+        $('#canvas_content').html("");
+
+        var post_data = JSON.stringify({
+            workerId: workerId,
+        });
+
+        console.log("post:", post_data);
+
+        $("#loading").show();
+
+        event.preventDefault();
+        get_data("_get_personal_map_data", post_data).done(function(result) {
+            console.log("get:", result['data']);
+            $("#loading").hide();
+            draw_map(JSON.parse(result['data']));
+        }).fail(function(result) {
+            console.log("error: ", result);
+        });
+    };
+}
+
+$(function() {
+    var workerId = -1;
+    $.ajax({
+        url: '/_get_session',
+        type: 'get',
+        data: {key: "username"},
+        contentType: 'application/json',
+    }).done(function(result) {
+        workerId = result;
+        $('#display_log_btn').on('click', log_event_fn(workerId));
+        $('#display_summary_btn').on('click', summary_event_fn(workerId));
+        $('#display_map_btn').on('click', map_event_fn(workerId));
     });
+
+    $("#loading").hide();
+    console.log("welcome to personal page");
+
 });
+

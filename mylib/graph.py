@@ -1,20 +1,38 @@
 # coding:utf-8
 import requests
 import numpy
+import json
+import os
+import urlparse
+import redis
+
+url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+red = redis.Redis(host=url.hostname, port=url.port, password=url.password)
 
 # get calorie or step
 def getVitalData(key, targetData):
+    data = red.get(targetData)
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehouseVital', key)
     jsList = r.json()
     totalVitalDict = {}
+
     for js in jsList:
         workerId = js["frameworx:workerId"]
         data = js["frameworx:" + targetData]
         if (workerId != None) and (data != None) :
             totalVitalDict[workerId] = data
+    red.set(targetData, json.dumps(totalVitalDict), ex=600)
     return totalVitalDict
 
+
 def getTotalItemNumData(key):
+    data = red.get('itemNum')
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehouseActivity', key)
     jsList = r.json()
     totalItemNumDict = {}
@@ -25,14 +43,23 @@ def getTotalItemNumData(key):
             if workerId not in totalItemNumDict :
                 totalItemNumDict[workerId] = 0
             totalItemNumDict[workerId] += data
+
+    red.set('itemNum', json.dumps(totalItemNumDict), ex=600)
+
     return totalItemNumDict
 
+
 def getMoveDistance(key):
+    data = red.get('distance')
+    if data:
+        return json.loads(data)
+
     r = getRequest('frameworx:WarehousePosition', key)
     jsList = r.json()
     workerIdSet = set([])
     totalDistanceDict = {}
     beforePointDict = {}
+
     for js in jsList:
         workerId = js["frameworx:workerId"]
         pointx = js["frameworx:x"]
@@ -45,6 +72,9 @@ def getMoveDistance(key):
         else:
             totalDistanceDict[workerId] += distance
         beforePointDict[workerId]  = [pointx,pointy]
+
+    red.set('distance', json.dumps(totalDistanceDict), ex=600)
+
     return totalDistanceDict
 
 def getRequest(type, key):

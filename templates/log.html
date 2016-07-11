@@ -10,16 +10,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <section class="banner-section" role="banner">
-            <div class="container">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="text-center" id="banner-text">
-                        <h1><a href="index.html">MyWorx</a></h1>
-                        <p>カロリー消費量を確認しよう！</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        {% include 'banner.html' %}
         <section class="log-section section">
             <div class="container">
                 <div class="row">
@@ -27,10 +18,14 @@
                         <form id="get">
                             <div class="form-group">
                                 <div class="input-group input-group-lg log-input-id">
-                                    <span class="input-group-addon" id="basic-addon1">👤</span>
-                                    <input type="text" class="form-control" id="condition-value" name="workerId" placeholder="IDを入力してください。" area-describedby="basic-addon1">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" id="display_log_btn" type="button">Go</button>
+                                        <button class="btn btn-default" id="display_log_btn" type="button">Log</button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" id="display_summary_btn" type="button">Summary</button>
+                                    </span>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" id="display_map_btn" type="button">Map</button>
                                     </span>
                                 </div>
                                 <div class="btn-group log-select-output" data-toggle="buttons-radio" role="group" aria-label="...">

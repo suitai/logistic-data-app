@@ -14,13 +14,15 @@
     margin-right: auto;
 }
 
+.loading {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .chart-section {
-    display: box;
-    display: -webkit-box;
-    display: -moz-box;
-    box-align:center;
-    -moz-box-align:center;
-    -moz-box-pack: center;
+    @include display-flex;
+    @include align-items(center);
     canvas {
         margin-left: 30px;
     }
@@ -29,6 +31,21 @@
         margin-left: 30px;
         font-size: 22px;
     }
+    th {
+        padding: 6px;
+        background-color: #eee;
+        border: 1px solid #b9b9b9;
+    }
+    td {
+        padding: 6px;
+        background-color: #fff;
+        border: 1px solid #b9b9b9;
+    }
+}
+
+.login-section {
+    background-color: #de6a0b;
+    height: 100%;
 }
 
 p {
@@ -38,6 +55,52 @@ p {
 .banner-section {
     background-color: #de6a0b;
     min-height: 250px;
+    .login {
+        color: #FFFFFF;
+    }
+    .man_link {
+        color: #FFFFFF;
+        a {
+            color: #FFFFFF;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.man-section {
+    h2 {
+        position: relative;
+        padding: .25em 0 .5em .75em;
+        border-left: 6px solid #de6a0b;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    h2::after {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        content: '';
+        width: 100%;
+        height: 0;
+        border-bottom: 1px solid #cccccc;
+    }
+    h3 {
+        padding-bottom: .5em;
+        border-bottom: 1px solid #cccccc;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    h4 {
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
 
 #banner-text {
@@ -119,56 +182,103 @@ p {
     }
 }
 
+@mixin rank_elm($font_size) {
+    table {
+        width: 100%;
+        .rank_img {
+            padding: 10px;
+            width: 15%;
+        }
+        .rank_worker_id {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 20%;
+            text-align: left;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+        .rank_result {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 35%;
+            text-align: right;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+        .rank_units {
+            padding: 10px;
+            color: #FFFFFF;
+            width: 30%;
+            text-align: left;
+            font-size: $font_size;
+            vertical-align: middle;
+        }
+    }
+}
+
 .ranking-section {
-    .rank_1st {
-        background-color: #de6a0b;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 30px;
-        margin-bottom: 20px;
-        padding-left: 120px;
-        opacity: 0;
-        @include transition-property(opacity, padding-left);
-        @include transition-duration(0.3s);
-        @include transition-timing-function(linear);
+    .rank-selector {
+        text-align: center;
     }
-    .rank_1st.on {
-        padding-left: 0px;
-        opacity: 1;
+    .rank_award {
+        vertical-align: middle;
+        .rank_1st {
+            background-color: #de6a0b;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-timing-function(linear);
+            @include rank_elm(30px);
+        }
+        .rank_1st.on {
+            padding-left: 10px;
+            opacity: 1;
+        }
+        .rank_2nd {
+            background-color: #de8842;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-delay(0.1s);
+            @include transition-timing-function(linear);
+            @include rank-elm(25px);
+        }
+        .rank_2nd.on {
+            opacity: 1;
+            padding-left: 10px;
+        }
+        .rank_3rd {
+            background-color: #deab81;
+            padding-left: 120px;
+            margin-bottom: 20px;
+            opacity: 0;
+            @include transition-property(opacity, padding-left);
+            @include transition-duration(0.3s);
+            @include transition-delay(0.2s);
+            @include transition-timing-function(linear);
+            @include rank_elm(20px);
+        }
+        .rank_3rd.on {
+            opacity: 1;
+            padding-left: 10px;
+        }
     }
-    .rank_2nd {
-        background-color: #de8842;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 25px;
-        margin-bottom: 20px;
-        opacity: 0;
-        @include transition-property(opacity);
-        @include transition-duration(0.3s);
-        @include transition-delay(0.1s);
-        @include transition-timing-function(linear);
-    }
-    .rank_2nd.on {
-        opacity: 1;
-    }
-    .rank_3rd {
-        background-color: #deab81;
-        color: #FFFFFF;
-        padding: 10px;
-        font-size: 20px;
-        margin-bottom: 20px;
-        opacity: 0;
-        @include transition-property(opacity);
-        @include transition-duration(0.3s);
-        @include transition-delay(0.2s);
-        @include transition-timing-function(linear);
-    }
-    .rank_3rd.on {
-        opacity: 1;
-    }
-    .unranked {
-        padding: 10px;
-        font-size: 15px;
+    .rank_graph {
+        top: 30px;
+        .canvas {
+            opacity: 0;
+            @include transition-property(opacity);
+            @include transition-duration(0.3s);
+            @include transition-timing-function(linear);
+            @include rank_elm(20px);
+        }
+        .canvas.on {
+            opacity: 1;
+        }
     }
 }
 
