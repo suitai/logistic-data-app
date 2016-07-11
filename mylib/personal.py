@@ -263,10 +263,10 @@ def get_summary_data(workerId):
 
     config = read_config()
     if config:
-        calorie = config['refarence']['calorie']
-        step = config['refarence']['step']
-        itemNum = config['refarence']['itemNum']
-        distance = config['refarence']['distance']
+        calorie = config['reference']['calorie']
+        step = config['reference']['step']
+        itemNum = config['reference']['itemNum']
+        distance = config['reference']['distance']
     else:
         tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
         calorie = float(max(tmp_data.values()))
