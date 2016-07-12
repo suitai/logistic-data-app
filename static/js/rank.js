@@ -36,22 +36,26 @@ $(function() {
             case 'item':
                 url = "_item_ranking";
                 sortType = DESC;
-                rankingText = "ピッキング商品数(個)";
+                rankingText = "商品数(個)";
+                rankingUnit = "個";
                 break;
             case 'calorie':
                 url = "_cal_ranking";
                 sortType = DESC;
-                rankingText = "消費カロリー(KCal)";
+                rankingText = "消費カロリー(kcal)";
+                rankingUnit = "kcal";
                 break;
             case 'step':
                 url = "_step_ranking";
                 sortType = DESC;
-                rankingText = "歩数(歩)";
+                rankingText = "歩数(step)";
+                rankingUnit = "step";
                 break;
             case 'distance':
                 url = "_distance_ranking";
                 sortType = DESC;
-                rankingText = "従業員移動距離";
+                rankingText = "距離(m)";
+                rankingUnit = "m";
                 break;
             default:
                 console.log('error');
@@ -143,6 +147,7 @@ $(function() {
             console.log(differenceText);
             $("#rankingtable").attr("style","visibility:visible");
             $("#your-rank").text("あなたの順位は" + yourRank+"位です");
+            $(".rank_steps").text(rankingUnit);
             $("#difference").html(differenceText);
             $("#result").text(rankingText);
             $("#employee1").text(rank1Id);

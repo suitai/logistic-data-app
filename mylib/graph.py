@@ -73,6 +73,9 @@ def getMoveDistance(key):
             totalDistanceDict[workerId] += distance
         beforePointDict[workerId]  = [pointx,pointy]
 
+    for key in totalDistanceDict.keys():
+        totalDistanceDict[key] /= 100
+
     red.set('distance', json.dumps(totalDistanceDict), ex=600)
 
     return totalDistanceDict
