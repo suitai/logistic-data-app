@@ -31,6 +31,9 @@
         margin-left: 30px;
         font-size: 22px;
     }
+    table {
+        margin-left: 30px;
+    }
     th {
         padding: 6px;
         background-color: #eee;
@@ -208,7 +211,7 @@ p {
             font-size: $font_size;
             vertical-align: middle;
         }
-        .rank_units {
+        .rank_steps {
             padding: 10px;
             color: #FFFFFF;
             width: 30%;
