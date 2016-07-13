@@ -19,12 +19,24 @@
                         <h2>MyWrox 利用ガイド</h2>
                         <h3>はじめに</h3>
                         <p>このページでは、MyWorxの使い方について説明します。</p>
+                        <h3>ログイン</h3>
+                        <p>ログイン画面です。従業員IDを入力し、ログインします。</p>
+                        <img src="{{ url_for('static', filename='images/man/login.png') }}">
+                        <p>ログインが完了すると、メニュー画面が表示されます。</p>
+                        <img src="{{ url_for('static', filename='images/man/menu.png') }}">
                         <h3>MyWorxを使ってできること</h3>
-                        <p>Frameworxでの活動記録を閲覧したり、Frameworx内での各種活動のランキングを確認できます。</p>
-                        <h4>ログ表示</h4>
-                        <p></p>
+                        <h4>作業ログの確認</h4>
+                        <p>「作業ログの確認」では、Frameworxでの個人の活動記録を閲覧することができます。</p>
+                        <p>Frameworxでの活動記録を閲覧でき、Frameworx内での各種活動のランキングを確認することもできます。</p>
+                        <p>Logボタンを押すことで、勤務時間中の「カロリー消費量」「歩数」「脈拍」「商品数」「距離」「気温」「湿度」を時系列グラフで見ることができます。</p>
+                        <img src="{{ url_for('static', filename='images/man/show_log.png') }}">
+                        <p>Summaryボタンを押すことで、勤務時間中の「カロリー消費量」「歩数」「商品数」「距離」のサマリーを見ることができます。規準値に対してどの項目を改善すればよいのかを確認できます。</p>
+                        <img src="{{ url_for('static', filename='images/man/show_summary.png') }}">
+                        <p>Mapボタンを押すことで、勤務時間中の移動履歴を確認できます。</p>
+                        <img src="{{ url_for('static', filename='images/man/show_map.png') }}">
                         <h4>ランキング表示</h4>
-                        <p></p>
+                        <p>「ランキング表示」では、Frameworx社で働く全従業員の作業ログを比較し、「商品数」「消費カロリー」「歩数」「距離」の観点で上位3名に対して表彰します。また、1位との差を確認することができるため、明日以降1位を目指す際の参考となります。</p>
+                        <img src="{{ url_for('static', filename='images/man/ranking.png') }}">
                         <h3>問い合わせ先</h3>
                         <p>不具合やご不明な点がありましたら、以下からお問い合わせください。</p>
                     </div>
