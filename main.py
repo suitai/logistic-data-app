@@ -10,8 +10,8 @@ from mylib import graph, personal
 import requests
 import shutil
 
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'XXXXXX'
@@ -78,7 +78,10 @@ def read_data(data_type):
 
 
 def check_auth(username, password):
-    return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
+    if DEBUG:
+        return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
+    else:
+        return True
 
 
 def authenticate():
@@ -210,4 +213,4 @@ if __name__ == "__main__":
     if DEBUG:
         app.run(host="0.0.0.0", debug=True, threaded=True)
     else:
-        app.run(debug=True, threaded=True)
+        app.run(threaded=True)
