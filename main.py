@@ -78,10 +78,7 @@ def read_data(data_type):
 
 
 def check_auth(username, password):
-    if DEBUG:
-        return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
-    else:
-        return True
+    return username == os.environ["APP_USER"] and password == os.environ["APP_PASS"]
 
 
 def authenticate():
@@ -94,9 +91,10 @@ def authenticate():
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return authenticate()
+        if DEBUG:
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                return authenticate()
         return f(*args, **kwargs)
     return decorated
 
