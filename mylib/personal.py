@@ -5,15 +5,20 @@ import json
 import requests
 import dateutil.parser
 import numpy
+import yaml
+import urlparse
+import redis
+import graph
 
 URL = "https://api.frameworxopendata.jp/"
+
+redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+red = redis.Redis(host=redis_url.hostname, port=redis_url.port, password=redis_url.password)
 
 def get_requests(payload, path="api/v3/datapoints"):
     payload['acl:consumerKey'] = os.environ['FRAMEWORX_KEY']
     data =  requests.get(URL+path, params=payload)
     print "get:", payload
-    with open("requests.json", 'w') as f:
-        json.dump(data.json(), f)
     return data
 
 
@@ -22,7 +27,19 @@ def get_time(date_org, interval):
     return str(date.hour).zfill(2) + ":" + str((date.minute//interval)*interval).zfill(2)
 
 
+def read_config(filename="my_worxs.yml"):
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            config = yaml.load(f)
+        print "config: ", config
+        return config
+
+
 def get_vital_data(workerId, interval=10):
+    data = red.get('vital_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     calorie = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"kcal"}
     step = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"歩"}
@@ -55,10 +72,16 @@ def get_vital_data(workerId, interval=10):
             u'歩数': step,
             u'脈拍': heartrate}
 
+    red.set('vital_data_' + str(workerId), json.dumps(vital_data), ex=600)
+
     return vital_data
 
 
 def get_sensor_data(workerId, interval=10):
+    data = red.get('sensor_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+
     times = [""]
     temperature = {'log': [], 'title': u"平均", 'result': 0, 'unit': u"℃"}
     humidity = {'log': [], 'title': u"平均", 'result': 0, 'unit': "%"}
@@ -91,21 +114,18 @@ def get_sensor_data(workerId, interval=10):
             u'気温': temperature,
             u'湿度': humidity}
 
+    red.set('sensor_data_' + str(workerId), json.dumps(sensor_data), ex=600)
+
     return sensor_data
 
 
 def get_activity_data(workerId, interval=10):
-    location = {}
-
-    payload = {'rdf:type': "frameworx:WarehouseLocation"}
-    requests = get_requests(payload)
-    for d in requests.json():
-        location[(d['frameworx:shelfId'])] = numpy.array([int(d['frameworx:x']), int(d['frameworx:y'])])
+    data = red.get('activity_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     itemNum = {'log': [], 'title': u"合計", 'result': 0, 'unit': u"個"}
-    distance = {'log': [], 'title': u"合計", 'result': 0, 'unit': "m"}
-    locations = [numpy.array([2500, 2500])]
     shelfIds = [""]
 
     payload = {'rdf:type': "frameworx:WarehouseActivity",
@@ -120,29 +140,26 @@ def get_activity_data(workerId, interval=10):
 
             if d["frameworx:shelfId"]:
                 if d["frameworx:shelfId"] != shelfIds[-1]:
-                    if d["frameworx:shelfId"] in location:
-                        distance['result'] += int(numpy.linalg.norm(location[(d['frameworx:shelfId'])] - locations[-1])/100)
-                        shelfIds.append(d["frameworx:shelfId"])
-                        locations.append(location[d["frameworx:shelfId"]])
-                    else:
-                        print "Can not find the shelfId ", d["frameworx:shelfId"]
+                    shelfIds.append(d["frameworx:shelfId"])
 
             if time != times[-1]:
                 times.append(time)
                 itemNum['log'].append(itemNum['result'])
-                distance['log'].append(distance['result'])
 
     activity_data = {
             u'時間': times[1:],
             u'商品数': itemNum,
-            u'距離': distance,
-            u'座標': locations[1:],
             u'シェルフ': shelfIds[1:]}
+
+    red.set('activity_data_' + str(workerId), json.dumps(activity_data), ex=600)
 
     return activity_data
 
 
 def get_position_data(workerId, interval=10):
+    data = red.get('position_data_' + str(workerId))
+    if data:
+        return json.loads(data)
 
     times = [""]
     positions = []
@@ -152,27 +169,56 @@ def get_position_data(workerId, interval=10):
                'frameworx:workerId': workerId}
     requests = get_requests(payload)
 
-    for d in sorted(requests.json(), key=lambda x: x['dc:date']):
+    for d in requests.json():
         if d['dc:date']:
             time = get_time(d['dc:date'], interval)
-            tmp_position = [d['frameworx:x'], d['frameworx:y']]
+            tmp_position = {'x': d['frameworx:x'], 'y': d['frameworx:y']}
 
             if len(positions) == 0:
                 positions.append(tmp_position)
 
-            distance['result'] += int(numpy.sqrt((tmp_position[0] - positions[-1][0]) ** 2 + (tmp_position[1] - positions[-1][1]) ** 2))
+            distance['result'] += int(numpy.sqrt((tmp_position['x'] - positions[-1]['x']) ** 2 + (tmp_position['y'] - positions[-1]['y']) ** 2))
             positions.append(tmp_position)
 
             if time != times[-1]:
                 times.append(time)
-                distance['log'].append(distance['result'])
+                distance['log'].append(distance['result']/100)
 
-    activity_data = {
+    distance['result'] /= 100
+
+    position_data = {
             u'時間': times[1:],
             u'距離': distance,
             u'位置': positions[1:]}
 
-    return activity_data
+    red.set('position_data_' + str(workerId), json.dumps(position_data), ex=600)
+
+    return position_data
+
+
+def get_location_data(workerId):
+    data = red.get('location_data_' + str(workerId))
+    if data:
+        return json.loads(data)
+    location_data = []
+
+    tmp_data = get_activity_data(workerId)
+
+    payload = {'rdf:type': "frameworx:WarehouseLocation"}
+    requests = get_requests(payload)
+
+    for l in tmp_data[u"シェルフ"]:
+        location = {}
+        for d in requests.json():
+            if d['frameworx:shelfId'] == l:
+                location['id'] = l
+                location['x'] = d['frameworx:x']
+                location['y'] = d['frameworx:y']
+                location_data.append(location)
+
+    red.set('location_data_' + str(workerId), json.dumps(location_data), ex=600)
+
+    return location_data
 
 
 def set_data(data, tmp_data, category, member):
@@ -189,6 +235,7 @@ def set_data(data, tmp_data, category, member):
 
 def get_log_data(workerId, category):
     data = []
+
     print "workerId:", workerId
     print "category:", category
 
@@ -213,24 +260,41 @@ def get_log_data(workerId, category):
 
 def get_summary_data(workerId):
     data = {}
-    calorie = 2000.0
-    step = 5000.0
-    itemNum = 500.0
-    distance = 1000.0
 
+    config = read_config()
+    if config:
+        calorie = config['reference']['calorie']
+        step = config['reference']['step']
+        itemNum = config['reference']['itemNum']
+        distance = config['reference']['distance']
+    else:
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "calorie")
+        calorie = float(max(tmp_data.values()))
+        tmp_data = graph.getVitalData(os.environ["FRAMEWORX_KEY"], "step")
+        step = float(max(tmp_data.values()))
+        tmp_data = graph.getTotalItemNumData(os.environ["FRAMEWORX_KEY"])
+        itemNum = float(max(tmp_data.values()))
+        tmp_data = graph.getMoveDistance(os.environ["FRAMEWORX_KEY"])
+        distance = float(max(tmp_data.values())/100.0)
+
+    print "calorie", calorie, "step", step, "itemNum", itemNum, "distance", distance
     print "workerId:", workerId
 
     tmp_data = get_vital_data(workerId)
-    data[u'カロリー'] = int(((tmp_data[u'カロリー']['result']/calorie)*100))
-    data[u'歩数'] = int(((tmp_data[u'歩数']['result']/step)*100))
-
+    data[u'カロリー'] = [tmp_data[u'カロリー']['result'], calorie]
+    data[u'歩数'] = [tmp_data[u'歩数']['result'], step]
     tmp_data = get_activity_data(workerId)
-    data[u'商品数'] = int(((tmp_data[u'商品数']['result']/itemNum)*100))
-
+    data[u'商品数'] = [tmp_data[u'商品数']['result'], itemNum]
     tmp_data = get_position_data(workerId)
-    data[u'距離'] = int(((tmp_data[u'距離']['result']/distance)*100))
+    data[u'距離'] = [tmp_data[u'距離']['result'], distance]
 
     return data
 
-if __name__ == '__main__':
-    pass
+def get_map_data(workerId):
+    print "get_map_data @ ", workerId
+
+    data = {}
+    data[u'座標'] = get_location_data(workerId)
+    data[u'位置'] = get_position_data(workerId)[u'位置']
+
+    return data

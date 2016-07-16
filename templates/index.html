@@ -11,16 +11,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <section class="banner-section" role="banner">
-            <div class="container">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="text-center" id="banner-text">
-                        <h1><a href="index.html">MyWorx</a></h1>
-                        <p>カロリー消費量を確認しよう！</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        {% include 'banner.html' %}
         <section class="features section">
             <div class="container">
                 <div class="row">
@@ -33,10 +24,10 @@
                                     </a>
                                 </div>
                             </div>
-                            <h5>カロリー消費量の確認</h5>
+                            <h5>作業ログの確認</h5>
                             <p>
-                                あなたのカロリー消費量を確認しませんか？<br>
-                                1日のカロリー消費量を確認して、仕事であなたの運動量を振り返ってみましょう。
+                                1日の作業ログを確認しませんか？<br>
+                                作業ログを確認して、Frameworxでのあなたの作業を振り返ってみましょう。
                             </p>
                         </div>
                     </div>
@@ -49,9 +40,11 @@
                                     </a>
                                 </div>
                             </div>
-                            <h5>カロリー消費量ランキング</h5>
+                            <h5>ランキング</h5>
                             <p>
-                                あなたのカロリー消費量と他の方のカロリー消費量を比べてみましょう。
+                                あなたの作業ログと、他のFrameworxで働く方の作業ログを比べることができます。<br>
+                                Frameworx内で1位を目指しましょう。
+                                そして、めざせ夢の四冠王！<br>
                             </p>
                         </div>
                     </div>

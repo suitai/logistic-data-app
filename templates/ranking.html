@@ -5,73 +5,92 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/rank.js') }}"></script>
-        <script type="text/javascript" 	src="{{ url_for('static', filename='external/js/bootstrap-select.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='external/js/jquery.oncssanimationend.js') }}"></script>
-        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap-select.min.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='external/js/bootstrap.min.js') }}"></script>
+         <link rel="stylesheet" 	href="{{ url_for('static', filename='external/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <section class="banner-section" role="banner">
-            <div class="container">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="text-center" id="banner-text">
-                        <h1><a href="index.html">MyWorx</a></h1>
-                        <p>カロリー消費量を確認しよう！</p>
+        {% include 'banner.html' %}
+        <section class="ranking-section section">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 log-bg">
+					<form id="rank">
+						<div class="form-group rank-selector">
+							<div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <input type="radio" id="item-radio" name="rank-data" value="item" autocomplete="off">商品数
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" id="calorie-radio" name="rank-data" value="calorie" autocomplete="off">消費カロリー
+                                </label>
+                                <label
+class="btn btn-default"><input type="radio"
+id="step-radio" name="rank-data" value="step"
+autocomplete="off">歩数</label> <label class="btn btn-default"><input
+type="radio" id="distance-radio" name="rank-data"
+value="distance" autocomplete="off">距離</label>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+        <div id="rankingtable" style="visibility: hidden">
+                <div class="text-center">
+                    <p  class="text-danger" style="display:inline;" ><font id="your-rank" size="7">あなたの順位は*位です</font></p><br>
+                    <p  class="text-danger" style="display:inline;" ><font id="difference" size="7">キングとの差は*です</font></p><br>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 rank_award">
+                            <div class="rank_1st">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_01.png') }}" width="40" height="40" alt="1位" />
+                                        </td>
+                                        <td id="employee1" class="rank_worker_id"></td>
+                                        <td id="result1" class="rank_result"></td>
+                                        <td class="rank_steps">step</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="rank_2nd">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_02.png') }}" width="40" height="40" alt="2位" />
+                                        </td>
+                                        <td id="employee2" class="rank_worker_id"></td>
+                                        <td id="result2" class="rank_result"></td>
+                                        <td class="rank_steps">step</td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="rank_3rd">
+                                <table>
+                                    <tr>
+                                        <td class="rank_img">
+                                            <img src="{{ url_for('static', filename='images/rank01_03.png') }}" width="40" height="40" alt="3位" />
+                                        </td>
+                                        <td id="employee3" class="rank_worker_id"></td>
+                                        <td id="result3" class="rank_result"></td>
+                                        <td class="rank_steps">step</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 rank_graph">
+                            <div class="canvas" id="canvas_wrapper">
+                                <canvas id="rankingCanvas"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-	<form id="rank">
-		<div class="rank-group">
-			<select  id="ranking-select" >
-				<option value="item">ピッキング商品数</option>
-				<option value="calorie">消費カロリー</option>
-				<option value="step">歩数</option>
-				<option value="distance">従業員移動距離</option>
-			</select><input type="submit" class="btn btn-info" value="ランキング表示" />
-		</div>
-	</form>
-	<div id="rankingtable" style="visibility: hidden">
-		<section class="ranking-section section">
-			<div class="container">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 unranked">
-						<table class="table">
-							<tr>
-								<td></td>
-								<td>従業員ID</td>
-								<td id="result"></td>
-							</tr>
-							<tr class="rank_1st">
-								<td><img
-									src="{{ url_for('static', filename='images/rank01_01.png') }}"
-									width="40" height="40" alt="1位" /></td>
-								<td id="employee1"></td>
-								<td id="result1"></td>
-							</tr>
-							<tr class="rank_2nd">
-								<td><img
-									src="{{ url_for('static', filename='images/rank01_02.png') }}"
-									width="40" height="40" alt="2位" /></td>
-								<td id="employee2"></td>
-								<td id="result2"></td>
-							</tr>
-							<tr class="rank_3rd">
-								<td><img
-									src="{{ url_for('static', filename='images/rank01_03.png') }}"
-									width="40" height="40" alt="3位" /></td>
-								<td id="employee3"></td>
-								<td id="result3"></td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
-	<div class="canvas" id="canvas_wrapper">
-		<canvas id="rankingCanvas" width="300" height="250"></canvas>
-	</div>
-</body>
+    </body>
 </html>
