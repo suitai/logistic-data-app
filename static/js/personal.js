@@ -182,6 +182,20 @@ function get_category(){
     return category;
 }
 
+function disable_display_btn()
+{
+   $("#display_log_btn").prop('disabled', true);
+   $("#display_summary_btn").prop('disabled', true);
+   $("#display_map_btn").prop('disabled', true);
+}
+
+function enable_display_btn()
+{
+    $("#display_log_btn").prop('disabled', false);
+    $("#display_summary_btn").prop('disabled', false);
+    $("#display_map_btn").prop('disabled', false);
+}
+
 function log_event_fn(workerId) {
     return function log_event(event) {
         $('#canvas_content').html("");
@@ -193,12 +207,14 @@ function log_event_fn(workerId) {
         });
         console.log("post:", post_data);
 
-       $("#loading").show();
+        $("#loading").show();
+        disable_display_btn();
 
         event.preventDefault();
         get_data("_get_personal_log_data", post_data).done(function(result) {
             console.log("get:", result['data']);
             $("#loading").hide();
+            enable_display_btn();
             draw_log_graph(JSON.parse(result['data']));
         }).fail(function(result) {
             console.log("error: ", result);
@@ -216,11 +232,13 @@ function summary_event_fn(workerId) {
         console.log("post:", post_data);
 
         $("#loading").show();
+        disable_display_btn();
 
         event.preventDefault();
         get_data("_get_personal_summary_data", post_data).done(function(result) {
             console.log("get:", result['data']);
             $("#loading").hide();
+            enable_display_btn();
             draw_summary_graph(JSON.parse(result['data']));
         }).fail(function(result) {
             console.log("error: ", result);
@@ -239,11 +257,13 @@ function map_event_fn(workerId) {
         console.log("post:", post_data);
 
         $("#loading").show();
+        disable_display_btn();
 
         event.preventDefault();
         get_data("_get_personal_map_data", post_data).done(function(result) {
             console.log("get:", result['data']);
             $("#loading").hide();
+            enable_display_btn();
             draw_map(JSON.parse(result['data']));
         }).fail(function(result) {
             console.log("error: ", result);
