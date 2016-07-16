@@ -5,6 +5,8 @@
 [フレームワークス物流オープンデータ活用コンテスト](http://contest.frameworxopendata.jp/)
 向けのアプリです。
 
+[heroku](http://myworx.herokuapp.com/)
+
 # アプリ説明
 
 その日の仕事量(ピッキングした商品数)、カロリー消費量、歩数、移動距離、
